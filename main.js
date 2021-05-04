@@ -13,6 +13,7 @@ function createWindow() {
         width:1366, minWidth:600,
         height: 768, minHeight: 768,
         backgroundColor: "#333333",
+        frame: false,
         webPreferences: {
             nodeIntegration: false,
             worldSafeExecuteJavaScript: true,
