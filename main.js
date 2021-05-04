@@ -2,7 +2,7 @@ const {
     app,
     BrowserWindow,
     ipcMain,
-    Notification
+    // Notification
 } = require('electron');
 const path = require('path')
 
@@ -23,7 +23,14 @@ function createWindow() {
     })
     win.webContents.openDevTools();
     win.loadFile('./index.html')
+    return win;
 }
+
+let window;
+app.whenReady().then(() => {
+    window = createWindow();
+})
+
 
 if(isDev) {
     require('electron-reload')(__dirname, {
@@ -31,8 +38,22 @@ if(isDev) {
     })
 }
 
-ipcMain.on('notify', (e, message) => {
-    new Notification({title: 'Notification', body: message}).show()
+ipcMain.on('windowState', (e, msg) => {
+    switch(msg) {
+        case 'close':
+            app.quit();
+            break;
+        case 'minimize':
+            window.minimize();
+            break;
+        case 'maximize':
+            if(window.isMaximized()) window.restore();
+            else window.maximize();
+            break; 
+    }
+
 })
 
-app.whenReady().then(createWindow)
+// ipcMain.on('notify', (e, message) => {
+//     new Notification({title: 'Notification', body: message}).show()
+// })
