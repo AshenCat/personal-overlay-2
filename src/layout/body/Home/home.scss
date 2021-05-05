@@ -1,0 +1,35 @@
+.home {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    
+    .calendar {
+        flex: 1 1 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .calendar-container {
+            position: relative;
+            z-index: 0;
+            display: flex;
+            flex-flow: column;
+            justify-content: center;
+            width: 80%;
+            max-width: 1000px;
+            min-width: 600px;
+            height: 100%;
+        }
+    }
+
+    // .events-section {
+    //     width: 275px;
+    //     #external-events {
+    //         background-color: #333;
+    //         margin: 20px;
+    //         .fc-event {
+    //             margin: 3px 6px;
+    //         }
+    //     }
+    // }
+}
