@@ -1,5 +1,5 @@
 .drawer {
-    width: 72px;
+    width: 60px;
     overflow-x: hidden;
     // height: 100%;
     background-color: #333;
@@ -11,6 +11,7 @@
             margin: 6px 0;
             .figure {
                 margin: 0;
+                padding: 10px 0;
                 display: flex;
                 align-items: center;
                 justify-content: center;

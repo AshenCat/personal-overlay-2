@@ -68,17 +68,28 @@ function EventModalProvider(props) {
                 <div className="modal" ref={wrapperRef}>
                     <div className="title"><h3>Add Event</h3></div>
                     <div className="content">
-                        <div>
+                        <div className="input-group">
                             <label>Title: </label>
                             <input placeholder="Title" value={title} onChange={e=>setTitle(e.target.value)}/>
                         </div>
-                        <div>
+                        <div className="input-group">
                             <label>Start Date: </label>
-                            <DateTime value={start} onChange={date=>setStart(date)} />
+                            <DateTime 
+                                value={start} 
+                                onChange={date=>setStart(date)} 
+                                inputProps={{
+                                    className: "datetime-input"
+                                }}/>
                         </div>
-                        <div>
+                        <div className="input-group">
                             <label>End Date: </label>
-                            <DateTime value={end} onChange={date=>setEnd(date)} />
+                            <DateTime 
+                                value={end} 
+                                onChange={date=>setEnd(date)} 
+                                className="datetime-input-container"
+                                inputProps={{
+                                    className: "datetime-input"
+                                }}/>
                         </div>
                     </div>
                     <div className="actions">
