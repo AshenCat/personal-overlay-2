@@ -5,7 +5,7 @@ import './drawer.scss'
 
 function Drawer(props) {
     const [selected, setSelected] = React.useState('home')
-    const fontSize=50;
+    const fontSize=40;
 
     const onSelect = (id) => {
         document.getElementById(selected).classList.remove('active');
