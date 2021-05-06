@@ -6,13 +6,16 @@ import interactionPlugin from "@fullcalendar/interaction"
 import { useEventModalContext } from '../../../context/EventModal/EventModalContext';
 
 import './home.scss'
+import Button from '../../../components/button/Button';
 
 function Home() {
     const calendarRef = React.useRef(null);
+    const [events, setEvents] = React.useState([]); 
+
     const {setEventModalOpen, setCalendarRef, setStart, setEnd} = useEventModalContext();
 
     const handleDateClick = (info) => {
-        console.log(info)
+        // console.log(info)
         setStart(info.date)
         setEnd(info.date)
         setCalendarRef(calendarRef);
@@ -20,11 +23,24 @@ function Home() {
     }
 
     const handleEventAdd = async (data) => {
+        console.log(data)
         return undefined;
+    }
+
+    const displayEvents = () => {
+        return (
+            <div></div>
+        )
     }
 
     return (
         <div className="home">
+            <div className="events-section">
+                <div className="unassigned-events">
+                    <h4>Draggable Events</h4>
+                    <Button>Add Set</Button>
+                </div>
+            </div>
             <div className="calendar">
                 <div className="calendar-container">
                     <FullCalendar
