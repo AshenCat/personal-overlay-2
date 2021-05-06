@@ -6,15 +6,15 @@ function Titlebar() {
 
     const onMinimize = () => {
         console.log('min')
-        electron.windowApi.windowState('minimize')
+        api.send('windowState','minimize')
     }
     const onMaximize = () => {
         console.log('max')
-        electron.windowApi.windowState('maximize')
+        api.send('windowState','maximize')
     }
     const onClose = () => {
-        console.log('clsoe')
-        electron.windowApi.windowState('close')
+        console.log('close')
+        api.send('windowState','close')
     }
 
     return (
