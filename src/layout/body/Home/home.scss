@@ -42,3 +42,10 @@
 .fc .fc-popover {
     color: black;
 }
+
+.fc .fc-daygrid-day {
+    &:hover {
+        background-color: #ffffff22;
+        cursor: pointer;
+    }
+}
