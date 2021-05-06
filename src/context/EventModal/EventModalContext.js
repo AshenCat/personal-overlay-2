@@ -3,6 +3,7 @@ import Button from '../../components/button/Button';
 import './eventmodalcontext.scss'
 import DateTime from 'react-datetime'
 import moment from 'moment';
+import Modal from '../../components/modal/Modal';
 
 const EventModalContext = React.createContext();
 
@@ -16,32 +17,6 @@ export const useEventModalContext = () => {
 
 function EventModalProvider(props) {
     const [open, setEventModalOpen] = React.useState(false);
-    const wrapperRef = React.useRef(null);
-
-    function useOutsideAlerter(ref) {
-        React.useEffect(() => {
-            /**
-             * Alert if clicked on outside of element
-             */
-            function handleClickOutside(event) {
-                if (ref.current && !ref.current.contains(event.target)) {
-                    try {
-                        setEventModalOpen(false);
-                    } catch(err) {
-                        console.log('no error here')
-                    }
-                }
-            }
-    
-            // Bind the event listener
-            document.addEventListener("mousedown", handleClickOutside);
-            return () => {
-                // Unbind the event listener on clean up
-                document.removeEventListener("mousedown", handleClickOutside);
-            };
-        }, [ref]);
-    }
-    useOutsideAlerter(wrapperRef);
 
     const [title, setTitle] = React.useState("");
     const [start, setStart] = React.useState("");
@@ -64,9 +39,8 @@ function EventModalProvider(props) {
     return (
         <EventModalContext.Provider value={{setEventModalOpen, setCalendarRef, setStart, setEnd}}>
             {props.children}
-            <div className={open ? "backdrop show" : "backdrop"}>
-                <div className="modal" ref={wrapperRef}>
-                    <div className="title"><h3>Add Event</h3></div>
+            <Modal open={open} setEventModalOpen={setEventModalOpen}>
+                <div className="title"><h3>Add Event</h3></div>
                     <div className="content">
                         <div className="input-group">
                             <label>Title: </label>
@@ -94,10 +68,9 @@ function EventModalProvider(props) {
                     </div>
                     <div className="actions">
                         <Button onClick={()=>setEventModalOpen(false)}>Cancel</Button>
-                        <Button backgroundColor="#1177BB" color="white" onClick={onSubmit}>Submit</Button>
+                        <Button style={{backgroundColor:"#1177BB", color:"white"}} onClick={onSubmit}>Submit</Button>
                     </div>
-                </div>
-            </div>
+            </Modal>
         </EventModalContext.Provider>
     )
 }
