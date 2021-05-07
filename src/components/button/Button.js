@@ -6,10 +6,7 @@ function Button(props) {
         <button
             onClick={props.onClick}
             className={`button ${props.className ? props.className : ""}`}
-            style={{
-                backgroundColor: props.backgroundColor ? props.backgroundColor : "",
-                color: props.color ? props.color : "",
-            }}>
+            style={props.style}>
                 {props.children}
         </button>
     )

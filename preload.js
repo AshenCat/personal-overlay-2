@@ -20,6 +20,10 @@ contextBridge.exposeInMainWorld('api', {
             ipcRenderer.on(channel, (event, ...args) => func(...args))
         }
     },
+    removeAllListeners: (channel) => {
+        if ([...m2rChannels, ...r2mChannels].includes(channel))
+            ipcRenderer.removeAllListeners(channel)
+    },
     onDbErr: (func) => {
         ipcRenderer.once('dbfailed', (event, arg) => {
             // console.log(arg)
