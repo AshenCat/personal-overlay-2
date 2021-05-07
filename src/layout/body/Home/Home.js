@@ -7,11 +7,11 @@ import { useEventModalContext } from '../../../context/EventModal/EventModalCont
 
 import './home.scss'
 import Button from '../../../components/button/Button';
-import moment from 'moment';
 
 function Home() {
     const calendarRef = React.useRef(null);
-    const [events, setEvents] = React.useState([]); 
+    const [events, setEvents] = React.useState([]);
+    // const [viewDate, setViewDate] = React.useState(moment())
 
     const {setEventModalOpen, setCalendarRef, setStart, setEnd} = useEventModalContext();
 
@@ -24,13 +24,15 @@ function Home() {
     }
 
     const handleEventAdd = (data) => {
-        // console.log('eventAdd')
-        // console.log(data.event.toJSON())
         api.send('onEventAdd', data.event.toJSON())
     }
 
-    const handleDateSet = (data) => {
-        // load events on start;; moment(data.start).toISOstring()
+    const handleDatesSet = (data) => {
+        console.log(data)
+        api.send('LoadCalendarEvents', {
+            monthStart: data.startStr,
+            monthEnd: data.endStr,
+        });
     }
 
     const displayEvents = () => {
@@ -40,17 +42,8 @@ function Home() {
     }
 
     React.useEffect(() => {
-        // console.log(moment().add('-1','month').toDate())
-        api.send('LoadCalendarEvents', {
-            monthBefore: moment().add('-1','month').toDate(),
-            current: calendarRef.current.getApi().getDate(),
-            monthAfter: moment().add('1','month').toDate(),
-        });
-    }, [])
-
-    React.useEffect(() => {
         api.recieve('onEventAdd', (msg)=>{
-            console.log('from Home.js: ', msg)
+            // console.log('from Home.js: ', msg)
         })
         api.recieve('LoadCalendarEvents', (data) => {
             setEvents([...data])
@@ -84,6 +77,8 @@ function Home() {
                             right: 'dayGridMonth,dayGridWeek,dayGridDay',
                         }}
                         dayMaxEventRows={2}
+                        datesSet={handleDatesSet}
+
                         //events
                         events={events}
                         // selectable={true}
@@ -92,7 +87,6 @@ function Home() {
                         // drop={(info)=> {
                         //     console.log(info)
                         // }}
-                        // dateSet={date=>{handleDetSet(date)}}
                         />
                 </div>
             </div>

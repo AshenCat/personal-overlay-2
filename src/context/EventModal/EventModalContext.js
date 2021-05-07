@@ -25,6 +25,8 @@ function EventModalProvider(props) {
 
     const onSubmit = () => {
         if (title === "" || start === "" || end === "") return;
+        if (moment(start).isAfter(end)) return;
+        // if (start === end) return;
         calendarRef.current.getApi().addEvent({
             title, 
             start: moment(start).toDate(), 
