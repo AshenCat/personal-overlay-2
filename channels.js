@@ -1,9 +1,12 @@
 const rendererToMain = [
-    "windowState"
+    "windowState",
+    "onEventAdd",
+    "LoadCalendarEvents"
 ]
 
 const mainToRenderer = [
-    
+    "onEventAdd",
+    "LoadCalendarEvents"
 ]
 
 module.exports = {

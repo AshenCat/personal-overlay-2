@@ -11,13 +11,16 @@ const isDev = !app.isPackaged;
 let dbFailed = false;
 
 mongoose.connect(
-    require('./db/config/config').db, 
-    {useNewUrlParser: true, useUnifiedTopology: true})
-        .then(con => console.log('connected to mongodb'))
-        .catch(err => {
-            console.log('failed to connect to mongodb');
-            dbFailed=true;
-        });
+    require('./db/config/config').db, {
+        useNewUrlParser: true, 
+        useUnifiedTopology: true, 
+        useCreateIndex: true
+    }).then(con => {
+        console.log('connected to mongodb')
+    }).catch(err => {
+        console.log('failed to connect to mongodb');
+        dbFailed=true;
+    });
 
 let win;
 
@@ -71,11 +74,20 @@ ipcMain.on('windowState', (e, msg) => {
             win.minimize();
             break;
         case 'maximize':
-            if(win.isMaximized()) win.restore();
+            if (win.isMaximized()) win.restore();
             else win.maximize();
             break; 
     }
 })
+
+const { 
+    onEventAdd,
+    LoadCalendarEvents
+} = require('./db/controllers/EventController');
+
+ipcMain.on('onEventAdd', (e, data) => onEventAdd(e, data))
+ipcMain.on("LoadCalendarEvents", (e, month) => LoadCalendarEvents(e, month))
+
 
 // ipcMain.on('notify', (e, message) => {
 //     new Notification({title: 'Notification', body: message}).show()
