@@ -1,17 +1,27 @@
 import FullCalendar from '@fullcalendar/react';
 import React from 'react';
 import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from "@fullcalendar/timegrid";
+import listPlugin from "@fullcalendar/list"
 import interactionPlugin from "@fullcalendar/interaction"
+import moment from "moment";
 
 import { useEventModalContext } from '../../../context/EventModal/EventModalContext';
 
 import './home.scss'
 import Button from '../../../components/button/Button';
-import moment from 'moment';
+import Input from '../../../components/input/Input';
+import Select from '../../../components/select/select';
 
 function Home() {
     const calendarRef = React.useRef(null);
-    const [events, setEvents] = React.useState([]); 
+    const [events, setEvents] = React.useState([]);
+    const [selectable, setSelectable] = React.useState(false);
+    const [editable, setEditable] = React.useState(false);
+    const [sprintFilter, setSprintFilter] = React.useState('')
+    const [search, setSearch] = React.useState('')
+    // const [eventsVisible, setEventsVisible] = React.useState(2)
+    // const [viewDate, setViewDate] = React.useState(moment())
 
     const {setEventModalOpen, setCalendarRef, setStart, setEnd} = useEventModalContext();
 
@@ -23,14 +33,31 @@ function Home() {
         setEventModalOpen(true);
     }
 
-    const handleEventAdd = (data) => {
-        // console.log('eventAdd')
-        // console.log(data.event.toJSON())
-        api.send('onEventAdd', data.event.toJSON())
+    const handleSelect = (data) => {
+        // console.log(data)
+        setStart(moment(data.startStr));
+        setEnd(moment(data.endStr));
+        setCalendarRef(calendarRef);
+        setEventModalOpen(true);
     }
 
-    const handleDateSet = (data) => {
-        // load events on start;; moment(data.start).toISOstring()
+    const handleEventAdd = (data) => {
+        // console.log(data.event.toPlainObject())
+        const date = {
+            ...data.event.toPlainObject(),
+            start: moment(data.event.toPlainObject().start).add('1','second').format('YYYY-MM-DD HH:mm:ss'),
+            end: data.event.toPlainObject().end ? moment(data.event.toPlainObject().end).add('1','second').format('YYYY-MM-DD HH:mm:ss') : null
+        }
+        console.log(date)
+        api.send('onEventAdd', date)
+    }
+
+    const handleDatesSet = (data) => {
+        // console.log(data)
+        api.send('LoadCalendarEvents', {
+            monthStart: data.startStr,
+            monthEnd: data.endStr,
+        });
     }
 
     const displayEvents = () => {
@@ -40,17 +67,8 @@ function Home() {
     }
 
     React.useEffect(() => {
-        // console.log(moment().add('-1','month').toDate())
-        api.send('LoadCalendarEvents', {
-            monthBefore: moment().add('-1','month').toDate(),
-            current: calendarRef.current.getApi().getDate(),
-            monthAfter: moment().add('1','month').toDate(),
-        });
-    }, [])
-
-    React.useEffect(() => {
         api.recieve('onEventAdd', (msg)=>{
-            console.log('from Home.js: ', msg)
+            // console.log('from Home.js: ', msg)
         })
         api.recieve('LoadCalendarEvents', (data) => {
             setEvents([...data])
@@ -65,7 +83,56 @@ function Home() {
     return (
         <div className="home">
             <div className="events-section">
-                <div className="unassigned-events">
+                <div className="events-filter m-3px">
+                    <h4>Filter and settings</h4>
+                    <div className="filter-and-settings">
+                        <div className="row space-between m-3px">
+                            <label htmlFor="eventsearch">Event Search:</label>
+                            <Input placeholder="Search" value={search} onChange={e=>setSearch(e.target.value)} style={{width: '50%'}}/>
+                        </div>
+                        <div className="row space-between m-3px">
+                            <label htmlFor="ids">Group filter: </label>
+                            <Select name="ids" id="ids" defaultValue={sprintFilter} onChange={e=>setSprintFilter(e.target.value)} style={{width: '50%'}}>
+                                <option value=''>-----</option>
+                                {events.map((event, ctr) => {
+                                    if(event.groupId) return <option value={event.groupId} key={ctr}>{event.groupId}</option>
+                                    return null;
+                                })}
+                            </Select>
+                        </div>
+                        <div className="row m-3px">
+                            <div className="labels">
+                                <label htmlFor="selectable">Selectable: </label>
+                                <label htmlFor="editable m-3px">Editable: </label>
+                            </div>
+                            <div className="switches">
+                                <label className="switch">
+                                    <input type="checkbox" name="selectable" id="selectable" value={selectable} />
+                                    <span className="round-slider" onClick={()=>setSelectable(prevState=>!prevState)}></span>
+                                </label>
+                                <label className="switch">
+                                    <input type="checkbox" name="editable" id="editable" value={editable} />
+                                    <span className="round-slider" onClick={()=>setEditable(prevState=>!prevState)}></span>
+                                </label>
+                            </div>
+                        </div>
+                        {/* <div className="row space-between m-3px">
+                            <label htmlFor="eventsearch">Events Visible:</label>
+                            <select 
+                                name="maxVisibleEvents" id="maxVisibleEvents" 
+                                defaultValue={eventsVisible} style={{width: '25%'}}
+                                onChange={e=>setEventsVisible(parseInt(e.target.value))}
+                                className="">
+                                <option value='1'>1</option>
+                                <option value='2'>2</option>
+                                <option value='3'>3</option>
+                                <option value='4'>4</option>
+                                <option value='5'>5</option>
+                            </select>
+                        </div> */}
+                    </div>
+                </div>
+                <div className="unassigned-events m-3px">
                     <h4>Draggable Events</h4>
                     <Button>Add Set</Button>
                 </div>
@@ -74,25 +141,44 @@ function Home() {
                 <div className="calendar-container">
                     <FullCalendar
                         ref={calendarRef}
-                        plugins={[dayGridPlugin, interactionPlugin]}
+                        plugins={[dayGridPlugin, interactionPlugin, timeGridPlugin, listPlugin]}
                         initialView="dayGridMonth"
                         eventAdd={event => handleEventAdd(event)}
                         dateClick={handleDateClick}
                         headerToolbar={{
                             left: 'prev,next today',
                             center:'title',
-                            right: 'dayGridMonth,dayGridWeek,dayGridDay',
+                            right: 'dayGridMonth,timeGridWeek,dayGridDay,listWeek',
                         }}
-                        dayMaxEventRows={2}
+                        dayMaxEventRows={true}
+                        datesSet={handleDatesSet}
+                        defaultAllDay={true}
                         //events
-                        events={events}
-                        // selectable={true}
-                        // select={handleSelect}
-                        // editable={true}
+                        events={events.filter(event => {
+                            if (sprintFilter !== '') {   
+                                if (event.groupId === sprintFilter) return true;
+                                return false;
+                            }
+                            return true
+                        }).filter(event => {
+                            if (search !== '') {
+                                if (event.groupId?.includes(search)) return true;
+                                if (event.title?.includes(search)) return true;
+                                return false
+                            }
+                            return true
+                        })}
+                        selectable={selectable}
+                        select={handleSelect}
+                        editable={editable}
+                        droppable={true}
                         // drop={(info)=> {
                         //     console.log(info)
                         // }}
-                        // dateSet={date=>{handleDetSet(date)}}
+                        eventResize={(data)=>{
+                            console.log(data)
+                        }}
+                        // eventResizableFromStart={true}
                         />
                 </div>
             </div>

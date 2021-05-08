@@ -7,14 +7,9 @@ const requiredString = {
     required: true
 }
 
-const requiredDate = {
-    type: Date,
-    required: true
-}
-
 let eventSchema = new Schema({
     title: requiredString,
-    start: requiredDate,
+    start: Date,
     end: Date,
     description: String,
     groupId: {
