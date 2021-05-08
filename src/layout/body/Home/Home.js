@@ -11,6 +11,7 @@ import { useEventModalContext } from '../../../context/EventModal/EventModalCont
 import './home.scss'
 import Button from '../../../components/button/Button';
 import Input from '../../../components/input/Input';
+import Select from '../../../components/select/select';
 
 function Home() {
     const calendarRef = React.useRef(null);
@@ -44,7 +45,8 @@ function Home() {
         // console.log(data.event.toPlainObject())
         const date = {
             ...data.event.toPlainObject(),
-            start: moment(data.event.toPlainObject().start).add('1','second').format('YYYY-MM-DD HH:mm:ss')
+            start: moment(data.event.toPlainObject().start).add('1','second').format('YYYY-MM-DD HH:mm:ss'),
+            end: data.event.toPlainObject().end ? moment(data.event.toPlainObject().end).add('1','second').format('YYYY-MM-DD HH:mm:ss') : null
         }
         console.log(date)
         api.send('onEventAdd', date)
@@ -90,13 +92,13 @@ function Home() {
                         </div>
                         <div className="row space-between m-3px">
                             <label htmlFor="ids">Group filter: </label>
-                            <select name="ids" id="ids" defaultValue={sprintFilter} onChange={e=>setSprintFilter(e.target.value)} style={{width: '50%'}}>
+                            <Select name="ids" id="ids" defaultValue={sprintFilter} onChange={e=>setSprintFilter(e.target.value)} style={{width: '50%'}}>
                                 <option value=''>-----</option>
                                 {events.map((event, ctr) => {
                                     if(event.groupId) return <option value={event.groupId} key={ctr}>{event.groupId}</option>
                                     return null;
                                 })}
-                            </select>
+                            </Select>
                         </div>
                         <div className="row m-3px">
                             <div className="labels">
@@ -152,7 +154,20 @@ function Home() {
                         datesSet={handleDatesSet}
                         defaultAllDay={true}
                         //events
-                        events={events}
+                        events={events.filter(event => {
+                            if (sprintFilter !== '') {   
+                                if (event.groupId === sprintFilter) return true;
+                                return false;
+                            }
+                            return true
+                        }).filter(event => {
+                            if (search !== '') {
+                                if (event.groupId?.includes(search)) return true;
+                                if (event.title?.includes(search)) return true;
+                                return false
+                            }
+                            return true
+                        })}
                         selectable={selectable}
                         select={handleSelect}
                         editable={editable}
