@@ -4,6 +4,7 @@ import './eventmodalcontext.scss'
 import DateTime from 'react-datetime'
 import moment from 'moment';
 import Modal from '../../components/modal/Modal';
+import Input from '../../components/input/Input';
 
 const EventModalContext = React.createContext();
 
@@ -27,6 +28,8 @@ function EventModalProvider(props) {
         if (title === "" || start === "" || end === "") return;
         if (moment(start).isAfter(end)) return;
         // if (start === end) return;
+        // console.log(sVal.format('MM-DD-YYYY HH:mm:ss'));
+        // console.log(eVal.format('MM-DD-YYYY HH:mm:ss'));
         calendarRef.current.getApi().addEvent({
             title, 
             start: moment(start).toDate(), 
@@ -46,7 +49,7 @@ function EventModalProvider(props) {
                     <div className="content">
                         <div className="input-group">
                             <label>Title: </label>
-                            <input placeholder="Title" value={title} onChange={e=>setTitle(e.target.value)}/>
+                            <Input placeholder="Title" value={title} onChange={e=>setTitle(e.target.value)} mAndP={true}/>
                         </div>
                         <div className="input-group">
                             <label>Start Date: </label>
@@ -67,6 +70,10 @@ function EventModalProvider(props) {
                                     className: "datetime-input"
                                 }}/>
                         </div>
+                        {/* <div>
+                            <label>All day: </label>
+                            <
+                        </div> */}
                     </div>
                     <div className="actions">
                         <Button onClick={()=>setEventModalOpen(false)}>Cancel</Button>

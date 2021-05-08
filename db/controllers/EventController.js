@@ -1,11 +1,11 @@
 // mongoose controllers
 const EventModel = require('../models/Event');
 // const PersonModel = require('../models/Peron');
-const moment = require('moment')
 
 const onEventAdd = async (e, data) => {
     if(!data.end) data.end = data.start;
     const newEvent = new EventModel(data)
+    console.log(data)
     const eventSaved = await newEvent.save();
     if (eventSaved) e.sender.send('onEventAdd', `Successfully added ${eventSaved.title}`)
     else {
