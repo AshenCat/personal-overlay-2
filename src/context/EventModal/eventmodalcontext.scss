@@ -10,10 +10,16 @@
     padding: 20px;
     transition: all .1s;
 }
+
 .content {
     flex: 1 1 auto;
     padding: 20px;
     transition: all .1s;
+    .hide-input {
+        overflow: hidden;
+        height: 0;
+        opacity: 0;
+    }
     .input-group {
         label {
             transition: all .1s;
@@ -22,9 +28,10 @@
     }
     .input-group:not(:first-child) {
         transition: all .1s;
-        margin-top: 15px;
+        margin-top: 10px;
     }
 }
+
 .actions {
     transition: all .1s;
     flex: 0 1;

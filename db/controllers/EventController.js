@@ -4,8 +4,17 @@ const EventModel = require('../models/Event');
 
 const onEventAdd = async (e, data) => {
     if(!data.end) data.end = data.start;
-    const newEvent = new EventModel(data)
-    console.log(data)
+    const { extendedProps } = data;
+    
+    let newData = {
+        ...data,
+        ...extendedProps,
+        allDay: data.end === data.start ? true : false,
+    }
+    delete newData.extendedProps;
+    console.log(newData)
+
+    const newEvent = new EventModel(newData)
     const eventSaved = await newEvent.save();
     if (eventSaved) e.sender.send('onEventAdd', `Successfully added ${eventSaved.title}`)
     else {
