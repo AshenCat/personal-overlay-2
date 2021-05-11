@@ -12,6 +12,7 @@ import './home.scss'
 import Button from '../../../components/button/Button';
 import Input from '../../../components/input/Input';
 import Select from '../../../components/select/select';
+import ClickMenu from '../../../components/clickMenu/ClickMenu';
 
 function Home() {
     const calendarRef = React.useRef(null);
@@ -20,26 +21,31 @@ function Home() {
     const [editable, setEditable] = React.useState(false);
     const [sprintFilter, setSprintFilter] = React.useState('')
     const [search, setSearch] = React.useState('')
+    const [mouse, setMouse] = React.useState(null)
+    const [dateClickData, setDateClickData] = React.useState(null)
+    const [openClickMenu, setOpenClickMenu] = React.useState(false)
     // const [eventsVisible, setEventsVisible] = React.useState(2)
     // const [viewDate, setViewDate] = React.useState(moment())
 
     const {setEventModalOpen, setCalendarRef, setStart, setEnd} = useEventModalContext();
 
     const handleDateClick = (info) => {
-        // console.log(info)
-        setStart(info.date)
-        setEnd(info.date)
+        // console.log(dateClickData)
+        setStart(info.date ? info.date : moment(info.startStr))
+        setEnd(info.date ? info.date : moment(info.endStr).subtract(1, 'second'))
         setCalendarRef(calendarRef);
         setEventModalOpen(true);
     }
 
-    const handleSelect = (data) => {
-        // console.log(data)
-        setStart(moment(data.startStr));
-        setEnd(moment(data.endStr));
-        setCalendarRef(calendarRef);
-        setEventModalOpen(true);
-    }
+    // const handleSelect = (info) => {
+    //     console.log(info)
+    //     setMouse({x:info.jsEvent.clientX, y:info.jsEvent.y})
+    //     setStart(moment(info.startStr));
+    //     setEnd(moment(info.endStr));
+    //     setCalendarRef(calendarRef);
+    //     setOpenClickMenu(true)
+    //     // setEventModalOpen(true);
+    // }
 
     const handleEventAdd = (data) => {
         // console.log(data.event.toPlainObject())
@@ -84,6 +90,7 @@ function Home() {
         <div className="home">
             <div className="events-section">
                 <div className="events-filter m-3px">
+                    <span className="circular-button"></span>
                     <h4>Filter and settings</h4>
                     <div className="filter-and-settings">
                         <div className="row space-between m-3px">
@@ -116,20 +123,6 @@ function Home() {
                                 </label>
                             </div>
                         </div>
-                        {/* <div className="row space-between m-3px">
-                            <label htmlFor="eventsearch">Events Visible:</label>
-                            <select 
-                                name="maxVisibleEvents" id="maxVisibleEvents" 
-                                defaultValue={eventsVisible} style={{width: '25%'}}
-                                onChange={e=>setEventsVisible(parseInt(e.target.value))}
-                                className="">
-                                <option value='1'>1</option>
-                                <option value='2'>2</option>
-                                <option value='3'>3</option>
-                                <option value='4'>4</option>
-                                <option value='5'>5</option>
-                            </select>
-                        </div> */}
                     </div>
                 </div>
                 <div className="unassigned-events m-3px">
@@ -144,7 +137,12 @@ function Home() {
                         plugins={[dayGridPlugin, interactionPlugin, timeGridPlugin, listPlugin]}
                         initialView="dayGridMonth"
                         eventAdd={event => handleEventAdd(event)}
-                        dateClick={handleDateClick}
+                        dateClick={(info)=>{
+                            // console.log(moment(info.date).format('MM-DD-YYYY'))
+                            setMouse({x:info.jsEvent.clientX, y:info.jsEvent.y})
+                            setDateClickData(info)
+                            setOpenClickMenu(true)
+                        }}
                         headerToolbar={{
                             left: 'prev,next today',
                             center:'title',
@@ -169,7 +167,12 @@ function Home() {
                             return true
                         })}
                         selectable={selectable}
-                        select={handleSelect}
+                        select={(info)=>{
+                            // console.log(moment(info.date).format('MM-DD-YYYY'))
+                            setMouse({x:info.jsEvent.clientX, y:info.jsEvent.y})
+                            setDateClickData(info)
+                            setOpenClickMenu(true)
+                        }}
                         editable={editable}
                         droppable={true}
                         // drop={(info)=> {
@@ -181,6 +184,26 @@ function Home() {
                         // eventResizableFromStart={true}
                         />
                 </div>
+                <ClickMenu 
+                    y={mouse?.y}
+                    x={mouse?.x}
+                    openClickMenu={openClickMenu}
+                    setOpenClickMenu={setOpenClickMenu}>
+                    <div onClick={()=>{
+                        handleDateClick(dateClickData)
+                        setOpenClickMenu(false)
+                        setEventModalOpen(true)
+                    }}>
+                        Add event
+                    </div>
+                    <div onClick={()=>{
+                        console.log(mouse.date)
+                        calendarRef.current.getApi().changeView('dayGridDay', moment(dateClickData).format('YYYY-MM-DD'))
+                        setOpenClickMenu(false)
+                    }}>
+                        Check Date
+                    </div>
+                </ClickMenu>
             </div>
         </div>
     )

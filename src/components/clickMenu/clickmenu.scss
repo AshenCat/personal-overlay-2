@@ -1,0 +1,45 @@
+.clickmenu {
+    position: absolute;
+    background-color: #aaa;
+    width: 100px;
+    height: auto;
+    background-color: rgba(255,255,255, 0.1);
+    padding: 5px;
+    border-radius: 3px;
+    backdrop-filter: blur(6px);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    box-shadow: 10px 10px 10px rgba(45,55,68,0.3);
+    visibility: hidden;
+    // transition: visibility 0s, opacity 0.1s linear;
+    opacity: 0;
+    font-weight: 500;
+    color: inherit;
+
+    div {
+        cursor: pointer;
+        padding: 5px;
+        // &:not(:last-child) {
+        //     // border-bottom: 1px solid rgba(255,255,255, 0.3);
+        // }
+        &:hover {
+            background-color: rgba(255,255,255, 0.3);
+        }
+    }
+}
+
+.clickmenu-open {
+    visibility: visible !important;
+    opacity: 1 !important;
+    // transition: visibility 0s, opacity 0.3s linear;
+}
+
+.clickmenu-menu {
+    padding: 0;
+    margin: 0;
+}
+
+.clickmenu-head {
+    padding: 0 0 5px 0;
+    margin: 0;
+}
