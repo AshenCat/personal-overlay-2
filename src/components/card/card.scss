@@ -1,0 +1,36 @@
+.card-container {
+    position:relative;
+
+    display: flex;
+    flex-flow: column;
+    border-radius: 5px;
+    background-color: #555;
+    padding: 20px;
+    min-width: 180px;
+    width: 75%;
+    transition: all .3s;
+}
+
+.m-1px {
+    margin: 1px 0;
+}
+
+.circular-button {
+    position: absolute;
+    right: 10px;
+    top:10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 12px;
+    height: 12px;
+    overflow: hidden;
+    border-radius:50%;
+    border: 1px solid #6f6f6f;
+    background-color: #888;
+    transition: all .2s;
+    &:hover {
+        background-color: #fff;
+        cursor: pointer;
+    }
+}

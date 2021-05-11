@@ -13,6 +13,7 @@ import Button from '../../../components/button/Button';
 import Input from '../../../components/input/Input';
 import Select from '../../../components/select/select';
 import ClickMenu from '../../../components/clickMenu/ClickMenu';
+import Card from '../../../components/card/Card';
 
 function Home() {
     const calendarRef = React.useRef(null);
@@ -24,6 +25,10 @@ function Home() {
     const [mouse, setMouse] = React.useState(null)
     const [dateClickData, setDateClickData] = React.useState(null)
     const [openClickMenu, setOpenClickMenu] = React.useState(false)
+
+    const [openFilter, setOpenFilter] = React.useState(true)
+    const [openDragEvents, setOpenDragEvents] = React.useState(false)
+    const [openEditedEvents, setEditedEvents] = React.useState(false)
     // const [eventsVisible, setEventsVisible] = React.useState(2)
     // const [viewDate, setViewDate] = React.useState(moment())
 
@@ -89,17 +94,19 @@ function Home() {
     return (
         <div className="home">
             <div className="events-section">
-                <div className="events-filter m-3px">
-                    <span className="circular-button"></span>
-                    <h4>Filter and settings</h4>
-                    <div className="filter-and-settings">
-                        <div className="row space-between m-3px">
+                <Card onButtonClick={()=>setOpenFilter(prev=>!prev)}>
+                    <h4 className="card-title">Filter and settings</h4>
+                    <div className={`filter-and-settings ${openFilter ? 'show-card' : ''}`}>
+                        <div className="row space-between m-5px">
                             <label htmlFor="eventsearch">Event Search:</label>
                             <Input placeholder="Search" value={search} onChange={e=>setSearch(e.target.value)} style={{width: '50%'}}/>
                         </div>
-                        <div className="row space-between m-3px">
-                            <label htmlFor="ids">Group filter: </label>
-                            <Select name="ids" id="ids" defaultValue={sprintFilter} onChange={e=>setSprintFilter(e.target.value)} style={{width: '50%'}}>
+                        <div className="row space-between m-1px">
+                            <label htmlFor="ids" style={{marginTop: '4px'}}>Group filter: </label>
+                            <Select name="ids" id="ids" 
+                            defaultValue={sprintFilter} 
+                            onChange={e=>setSprintFilter(e.target.value)} 
+                            style={{width: '50%', marginTop: '3px'}}>
                                 <option value=''>-----</option>
                                 {events.map((event, ctr) => {
                                     if(event.groupId) return <option value={event.groupId} key={ctr}>{event.groupId}</option>
@@ -107,10 +114,10 @@ function Home() {
                                 })}
                             </Select>
                         </div>
-                        <div className="row m-3px">
+                        <div className="row m-1px">
                             <div className="labels">
                                 <label htmlFor="selectable">Selectable: </label>
-                                <label htmlFor="editable m-3px">Editable: </label>
+                                <label htmlFor="editable">Editable: </label>
                             </div>
                             <div className="switches">
                                 <label className="switch">
@@ -124,11 +131,13 @@ function Home() {
                             </div>
                         </div>
                     </div>
-                </div>
-                <div className="unassigned-events m-3px">
-                    <h4>Draggable Events</h4>
-                    <Button>Add Set</Button>
-                </div>
+                </Card>
+                <Card onButtonClick={()=>setOpenDragEvents(prev=>!prev)}>
+                    <h4 className="card-title">Draggable Events</h4>
+                    <div className={`draggable-events-body ${openDragEvents ? 'show-card' : ''}`}>
+                        <Button style={{width: '100%', marginTop: '3px'}}>Add Set</Button>
+                    </div>
+                </Card>
             </div>
             <div className="calendar">
                 <div className="calendar-container">
