@@ -10,7 +10,8 @@
         align-items: center;
 
         .calendar-container {
-            color: white;
+            // position: relative;
+            color: inherit !important;
             background-color: #333;
             position: relative;
             z-index: 0;
@@ -41,6 +42,7 @@
         }
 
         .events-filter {
+            position:relative;
             h4{
                 margin: 0;
             }
@@ -145,6 +147,26 @@
     }
 }
 
+.circular-button {
+    position: absolute;
+    right: 10px;
+    top:10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 12px;
+    height: 12px;
+    overflow: hidden;
+    border-radius:50%;
+    border: 1px solid #6f6f6f;
+    background-color: #888;
+    transition: all .2s;
+    &:hover {
+        background-color: #fff;
+        cursor: pointer;
+    }
+}
+
 .m-3px {
     margin: 3px 0;
 }
@@ -169,4 +191,8 @@
 
 .fc-col-header-cell {
     background-color: rgba(208, 208, 208, 0.3);
+}
+
+.fc-list-day-text {
+    color: black;
 }
