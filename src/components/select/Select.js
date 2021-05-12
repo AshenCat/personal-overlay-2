@@ -9,7 +9,7 @@ function Select(props) {
             defaultValue={props.defaultValue} 
             onChange={props.onChange}
             style={props.style}
-            className={`base-select ${props.className ? props.className : ''}`}>
+            className={`base-select ${props.className ?? ''}`}>
                 {props.children}
         </select>
     )

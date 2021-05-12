@@ -3,7 +3,7 @@ import './input.scss'
 
 function Input(props) {
     return   <input 
-        className={`base-input ${props.className ? props.className : ''} ${props.mAndP ? 'mAndP' : ''}`}
+        className={`base-input ${props.className ?? ''} ${props.mAndP ? 'mAndP' : ''}`}
         placeholder={props.placeholder} 
         value={props.value} 
         onChange={props.onChange}

@@ -10,7 +10,7 @@ import { useEventModalContext } from '../../../context/EventModal/EventModalCont
 
 import './home.scss'
 import Button from '../../../components/button/Button';
-import Input from '../../../components/input/Input';
+import Input from '../../../components/input/inputText/Input';
 import Select from '../../../components/select/select';
 import ClickMenu from '../../../components/clickMenu/ClickMenu';
 import Card from '../../../components/card/Card';
@@ -36,8 +36,8 @@ function Home() {
 
     const handleDateClick = (info) => {
         // console.log(dateClickData)
-        setStart(info.date ? info.date : moment(info.startStr))
-        setEnd(info.date ? info.date : moment(info.endStr).subtract(1, 'second'))
+        setStart(info.date ?? moment(info.startStr))
+        setEnd(info.date ?? moment(info.endStr).subtract(1, 'second'))
         setCalendarRef(calendarRef);
         setEventModalOpen(true);
     }
@@ -57,9 +57,10 @@ function Home() {
         const date = {
             ...data.event.toPlainObject(),
             start: moment(data.event.toPlainObject().start).add('1','second').format('YYYY-MM-DD HH:mm:ss'),
-            end: data.event.toPlainObject().end ? moment(data.event.toPlainObject().end).add('1','second').format('YYYY-MM-DD HH:mm:ss') : null
+            end: data.event.toPlainObject().end ? moment(data.event.toPlainObject().end).add('1','second').format('YYYY-MM-DD HH:mm:ss') : null,
+            // description: data.event.extendedProps.description,
         }
-        console.log(date)
+        // console.log(data.event.extendedProps)
         api.send('onEventAdd', date)
     }
 
@@ -94,7 +95,7 @@ function Home() {
     return (
         <div className="home">
             <div className="events-section">
-                <Card onButtonClick={()=>setOpenFilter(prev=>!prev)}>
+                <Card onButtonClick={()=>setOpenFilter(prev=>!prev)} isOpen={openFilter}>
                     <h4 className="card-title">Filter and settings</h4>
                     <div className={`filter-and-settings ${openFilter ? 'show-card' : ''}`}>
                         <div className="row space-between m-5px">
@@ -132,10 +133,16 @@ function Home() {
                         </div>
                     </div>
                 </Card>
-                <Card onButtonClick={()=>setOpenDragEvents(prev=>!prev)}>
+                <Card onButtonClick={()=>setOpenDragEvents(prev=>!prev)} isOpen={openDragEvents}>
                     <h4 className="card-title">Draggable Events</h4>
                     <div className={`draggable-events-body ${openDragEvents ? 'show-card' : ''}`}>
                         <Button style={{width: '100%', marginTop: '3px'}}>Add Set</Button>
+                    </div>
+                </Card>
+                <Card onButtonClick={()=>setEditedEvents(prev=>!prev)} isOpen={openEditedEvents}>
+                    <h4 className="card-title">Edited Events</h4>
+                    <div className={`edited-events-body ${openEditedEvents ? 'show-card' : ''}`}>
+                        <Button style={{width: '100%', marginTop: '3px'}}>Save Edits</Button>
                     </div>
                 </Card>
             </div>
@@ -206,8 +213,8 @@ function Home() {
                         Add event
                     </div>
                     <div onClick={()=>{
-                        console.log(mouse.date)
-                        calendarRef.current.getApi().changeView('dayGridDay', moment(dateClickData).format('YYYY-MM-DD'))
+                        // console.log(dateClickData)
+                        calendarRef.current.getApi().changeView('dayGridDay', moment(dateClickData.dateStr).format('YYYY-MM-DD'))
                         setOpenClickMenu(false)
                     }}>
                         Check Date

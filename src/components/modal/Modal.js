@@ -13,9 +13,10 @@ function Modal(props) {
             function handleClickOutside(event) {
                 if (ref.current && !ref.current.contains(event.target)) {
                     try {
-                        props.setEventModalOpen(false);
+                        // console.log('onClose')
+                        props.onClose();
                     } catch(err) {
-                        console.log('no error here')
+                        console.log('error here')
                     }
                 }
             }
@@ -33,7 +34,7 @@ function Modal(props) {
 
     return (
         <div className={props.open ? "backdrop show" : "backdrop"}>
-            <div className="modal" ref={wrapperRef}>
+            <div className="modal" ref={wrapperRef} style={props.open ? {height: 'auto'} : {}}>
                 {props.children}
             </div>
         </div>
