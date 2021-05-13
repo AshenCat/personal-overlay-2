@@ -7,6 +7,7 @@ function Modal(props) {
 
     function useOutsideAlerter(ref) {
         React.useEffect(() => {
+            let isMounted = true;
             /**
              * Alert if clicked on outside of element
              */
@@ -20,10 +21,10 @@ function Modal(props) {
                     }
                 }
             }
-    
             // Bind the event listener
             document.addEventListener("mousedown", handleClickOutside);
             return () => {
+                isMounted = false;
                 // Unbind the event listener on clean up
                 document.removeEventListener("mousedown", handleClickOutside);
             };

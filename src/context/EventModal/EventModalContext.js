@@ -45,12 +45,14 @@ function EventModalProvider(props) {
     }
 
     const onClose = () => {
-        console.log('clear')
-        setTitle("");
-        setStart("");
-        setEnd("");
-        setAllDay(false);
-        setDesc('');
+        if(open) {
+            console.log('clear')
+            setTitle("");
+            setStart("");
+            setEnd("");
+            setAllDay(false);
+            setDesc('');
+        }
         setEventModalOpen(false);
     }
 
