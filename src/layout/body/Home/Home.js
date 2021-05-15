@@ -168,19 +168,20 @@ function Home() {
                         datesSet={handleDatesSet}
                         defaultAllDay={true}
                         //events
-                        events={events.filter(event => {
-                            if (sprintFilter !== '') {   
-                                if (event.groupId === sprintFilter) return true;
-                                return false;
-                            }
-                            return true
-                        }).filter(event => {
-                            if (search !== '') {
-                                if (event.groupId?.includes(search)) return true;
-                                if (event.title?.includes(search)) return true;
-                                return false
-                            }
-                            return true
+                        events={
+                            events.filter(event => {
+                                if (sprintFilter !== '') {   
+                                    if (event.groupId === sprintFilter) return true;
+                                    return false;
+                                }
+                                return true
+                            }).filter(event => {
+                                if (search !== '') {
+                                    if (event.groupId?.includes(search)) return true;
+                                    if (event.title?.includes(search)) return true;
+                                    return false
+                                }
+                                return true
                         })}
                         selectable={selectable}
                         select={(info)=>{

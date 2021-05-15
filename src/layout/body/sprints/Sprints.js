@@ -1,3 +1,4 @@
+import moment from 'moment'
 import React from 'react'
 import DateTime from 'react-datetime'
 import Button from '../../../components/button/Button'
@@ -8,9 +9,9 @@ import Select from '../../../components/select/select'
 import './sprints.scss'
 
 function Sprints(props) {
-    console.log(props.location)
-    const [people, setPeople] = React.useState([...new Array(3)]);
-    const [sprints, setSprints] = React.useState([...new Array(10)])
+    
+    const [people, setPeople] = React.useState([]);
+    const [sprints, setSprints] = React.useState([])
     const [title, setTitle] = React.useState('');
     const [description, setDescription] = React.useState('');
     const [events, setEvents] = React.useState([]);
@@ -18,6 +19,43 @@ function Sprints(props) {
     const [start, setStart] = React.useState('');
     const [end, setEnd] = React.useState('');
     
+    const onSubmit = () => {
+        const data = {
+            title,
+            description,
+            events,
+            participants,
+            start: start ? moment(start).add('1','second').toDate() : null,
+            end: end ? moment(end).add('1','second').toDate() : null,
+        }
+        api.send('onSprintAdd', data)
+        setSprints(prev=>[...prev, data])
+    }
+
+    const onClear = () => {
+        setTitle('')
+        setDescription('')
+        setEvents([])
+        setParticipants([])
+        setStart('')
+        setEnd('')
+    }
+
+    React.useEffect(()=>{
+        api.send('LoadSprints', {})
+        api.recieve('LoadSprints', (data) => {
+            console.log(data);
+            setSprints([...data]);
+        })
+        // api.recieve('onSprintAdd', data => {
+        //     console.log(data)
+        //     setSprints(prev=>[...prev, data.data])
+        // })
+        return () => {
+            api.removeAllListeners('LoadSprints')
+            api.removeAllListeners('onSprintAdd')
+        }
+    }, [])
     
     return (
         <div className="sprints">
@@ -27,40 +65,65 @@ function Sprints(props) {
                     <div className="form-body">
                         <div className="form-group">
                             <label>Title:</label>
-                            <Input className="cWidth" placeholder="Enter title" />
+                            <Input 
+                                className="cWidth" 
+                                placeholder="Enter title" 
+                                value={title}
+                                onChange={e=>setTitle(e.target.value)}/>
                         </div>
                         <div className="form-group">
                             <label>From:</label>
                             <DateTime 
+                                value={start}
+                                onChange={(date)=>setStart(date)}
                                 className="datetime-input-container"
                                 inputProps={{
-                                    className: "datetime-input"
+                                    className: "datetime-input",
+                                    placeholder: 'optional'
+                                }}
+                                renderInput={(props) => {
+                                    return <input {...props} value={(start) ? props.value : ''} />
                                 }}/>
                         </div>
                         <div className="form-group">
                             <label>To:</label>
                             <DateTime 
+                                value={end}
+                                onChange={(date)=>setEnd(date)}
                                 className="datetime-input-container"
                                 inputProps={{
-                                    className: "datetime-input"
+                                    className: "datetime-input",
+                                    placeholder: 'optional'
+                                }}
+                                renderInput={(props) => {
+                                    return <input {...props} value={(end) ? props.value : ''} />
                                 }}/>
                         </div>
                         <div className="form-group">
                             <label>Participants:</label>
-                            <Select className="cWidth">
+                            <Select 
+                                className="cWidth">
                                 <option style={{color: 'black'}}>-----</option>
                                 {people.map((person, ctr) =>{
-                                    return <option style={{color: 'black'}} key={ctr}>Klifford{person?.name}</option>
+                                    return <option style={{color: 'black'}} key={ctr}>{person?.name}</option>
                                 })}
                             </Select>
                         </div>
                         <div className="form-group" style={{flexDirection: 'column', alignItems: 'unset'}}>
                             <label>Description: </label>
-                            <Textarea />
+                            <Textarea value={description} onChange={e=>setDescription(e.target.value)} placeholder="Enter Description" />
                         </div> 
                         <div className="form-group">
-                            <Button style={{width: '78%', marginTop: '8px'}}>Submit</Button>
-                            <Button style={{width: '20%', marginTop: '8px', backgroundColor: '#ccc', color: 'black'}}>Clear</Button>
+                            <Button 
+                                style={{width: '78%', marginTop: '8px'}}
+                                onClick={onSubmit}>
+                                    Submit
+                            </Button>
+                            <Button 
+                                style={{width: '20%', marginTop: '8px', backgroundColor: '#ccc', color: 'black'}}
+                                onClick={onClear}>
+                                    Clear
+                            </Button>
                         </div>
                     </div>
                 </Card>
@@ -68,7 +131,7 @@ function Sprints(props) {
                     <h4 className="card-title">Sprints Filter</h4>
                     <div className="card-body">
                         <div className="form-group">
-                            <label>Search</label>
+                            <label>Search:</label>
                             <Input className="cWidth" placeholder="Search" />
                         </div>
                     </div>
@@ -77,7 +140,13 @@ function Sprints(props) {
             <div className="sprints-container">
                 {sprints.map((sprint, ctr) => {
                     return <Card key={ctr} className="sprint">
-                        Title: {sprint?.name}
+                        <div className="card-title">
+                            <h5>{sprint?.title}</h5>
+                        </div>
+                        <div className="card-body">
+
+                        </div>
+                        <div className="card-actions"></div>
                     </Card>
                 })}
             </div>
