@@ -185,7 +185,7 @@ function Home() {
                         selectable={selectable}
                         select={(info)=>{
                             // console.log(moment(info.date).format('MM-DD-YYYY'))
-                            setMouse({x:info.jsEvent.clientX, y:info.jsEvent.y})
+                            setMouse({x:info.jsEvent.clientX, y:info.jsEvent.clientY})
                             setDateClickData(info)
                             setOpenClickMenu(true)
                         }}

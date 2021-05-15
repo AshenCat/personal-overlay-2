@@ -35,7 +35,10 @@ function Modal(props) {
 
     return (
         <div className={props.open ? "backdrop show" : "backdrop"}>
-            <div className="modal" ref={wrapperRef} style={props.open ? {height: 'auto'} : {}}>
+            <div 
+                className="modal" 
+                ref={wrapperRef} 
+                style={props.open ? {height: 'auto', overflow: 'unset'} : {}}>
                 {props.children}
             </div>
         </div>

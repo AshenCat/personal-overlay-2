@@ -31,7 +31,7 @@ function ClickMenu(props) {
 
     const style = {
         ...props.style,
-        top: props.y,
+        top: (props.y ?? 0) -34,
         left: props.x
     }
 

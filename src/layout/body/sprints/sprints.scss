@@ -7,18 +7,18 @@ $medium : 1100px;
     display: flex;
     transition: all .3s;
     .sprint-filter-and-settings {
-        flex: 1 1 auto;
+        // flex: 1 1 auto;
         display: flex;
         flex-flow: column;
         justify-content: center;
         align-items: center;
-        width: 175px;
+        width: 450px;
         transition: all .3s;
 
         h4.card-title {
             margin: 0;
         }
-        .sprint-settings {
+        .sprint-menu {
             transition: all .3s;
         }
         .sprint-filter {
@@ -35,7 +35,7 @@ $medium : 1100px;
         .sprint {
             transition: all .3s;
             // background-color: #72767d;
-            background-color: rgba(114,118,125,.5);
+            background-color: #333;
             margin: 5px;
             // height: 200px;
             width: 100%;
@@ -47,4 +47,18 @@ $medium : 1100px;
             }
         }
     }
+}
+
+.form-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cWidth {
+    width: unset;
+}
+
+.form-group{
+    margin-top: 5px;
 }

@@ -6,7 +6,7 @@
     .calendar {
         flex: 1 1 auto;
         display: flex;
-        justify-content: flex-start;
+        justify-content: center;
         align-items: center;
 
         .calendar-container {
@@ -18,12 +18,13 @@
             display: flex;
             flex-flow: column;
             justify-content: center;
-            width: 90%;
-            max-width: 900px;
+            width: 95%;
+            max-width: 1000px;
             min-width: 500px;
             // height: 100%;
             margin-right: 0 10px;
             padding: 20px;
+            transition: all .3s;
             @media screen and (max-height: 850px) {
                 width: 550px !important;
             }
@@ -38,6 +39,7 @@
         align-items: center;
         max-width: 300px;
         min-width: 175px;
+        transition: all .3s;
         // height: 100%;
 
         @media (max-width: 1000px) {
@@ -49,12 +51,14 @@
             overflow: hidden;
             opacity: 0;
             transition: opacity .25s;
+            transition: all .3s;
         }
         .edited-events-body {
             height: 0;
             overflow: hidden;
             opacity: 0;
             transition: opacity .25s;
+            transition: all .3s;
         }
         h4.card-title {
             margin: 0;
@@ -64,6 +68,7 @@
             overflow: hidden;
             transition: opacity .25s;
             opacity: 0;
+            transition: all .3s;
             .row {
                 display: flex;
                 flex-flow: row;
@@ -146,6 +151,7 @@
             padding: 20px;
             min-width: 180px;
             width: 75%;
+            transition: all .3s;
         }
         #external-events {
             background-color: #333;
