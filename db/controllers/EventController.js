@@ -1,5 +1,6 @@
 // mongoose controllers
 const EventModel = require('../models/Event');
+const SprintModel = require('../models/Sprint')
 // const PersonModel = require('../models/Peron');
 
 const onEventAdd = async (e, data) => {
@@ -16,11 +17,27 @@ const onEventAdd = async (e, data) => {
 
     const newEvent = new EventModel(newData)
     const eventSaved = await newEvent.save();
-    if (eventSaved) e.sender.send('onEventAdd', `Successfully added ${eventSaved.title}`)
+    if (eventSaved) e.sender.send('onEventAdd', `Successfully added event: ${eventSaved._id}`)
     else {
         //handle fail
         e.sender.send('dbFail', `failed to add ${eventSaved.title}`)
     }
+}
+
+const onSprintAdd = async (e, data) => {
+    console.log(data)
+    const newSprint = new SprintModel(data);
+    const eventSaved = await newSprint.save();
+    if (eventSaved) e.sender.send('onSprintAdd', `Successfully added sprint: ${eventSaved._id}`)
+    else {
+        //handle fail
+        e.sender.send('dbFail', `failed to add ${eventSaved.title}`)
+    }
+}
+
+const LoadSprints = async (e) => {
+    const sprints = await SprintModel.find().lean().exec();
+    e.sender.send('LoadSprints', sprints)
 }
 
 const LoadCalendarEvents = async (e, month) => {
@@ -38,5 +55,7 @@ const LoadCalendarEvents = async (e, month) => {
 
 module.exports = {
     onEventAdd,
-    LoadCalendarEvents
+    onSprintAdd,
+    LoadCalendarEvents,
+    LoadSprints
 }

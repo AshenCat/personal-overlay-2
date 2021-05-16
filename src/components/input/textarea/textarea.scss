@@ -4,4 +4,21 @@
     height: 60px;
     font: inherit;
     margin-top: 5px;
+    color: white;
+    background-color: #d4d4d455;
+    border-radius: 5px;
+    resize: none;
+    
+    &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+        color: rgba(255,255,255, .6);
+        opacity: 1; /* Firefox */
+    }
+      
+    &:-ms-input-placeholder { /* Internet Explorer 10-11 */
+        color: rgba(255,255,255, .8);
+    }
+      
+    &::-ms-input-placeholder { /* Microsoft Edge */
+        color: rgba(255,255,255, .8);
+    }
 }

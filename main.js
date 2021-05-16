@@ -82,11 +82,15 @@ ipcMain.on('windowState', (e, msg) => {
 
 const { 
     onEventAdd,
-    LoadCalendarEvents
+    onSprintAdd,
+    LoadCalendarEvents,
+    LoadSprints,
 } = require('./db/controllers/EventController');
 
 ipcMain.on('onEventAdd', (e, data) => onEventAdd(e, data))
-ipcMain.on("LoadCalendarEvents", (e, month) => LoadCalendarEvents(e, month))
+ipcMain.on('onSprintAdd', (e, data) => onSprintAdd(e,data))
+ipcMain.on('LoadCalendarEvents', (e, month) => LoadCalendarEvents(e, month))
+ipcMain.on('LoadSprints', LoadSprints)
 
 
 // ipcMain.on('notify', (e, message) => {
