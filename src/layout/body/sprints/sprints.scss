@@ -38,38 +38,38 @@ $medium : 1100px;
         padding: 5px 0;
         .sprint {
             transition: all .3s;
-            // background-color: #72767d;
-            // margin: 5px;
+            background-color: rgba(114,118,125,.3);
+            margin: 5px;
+            border-radius: 5px;
+            padding: 20px;
             // height: 200px;
             // width: 400px;
             position: relative;
-            .sprint-card {
-                position: absolute;
-                top: 5px;
-                left: 5px;
-                bottom: 5px;
-                right: 5px;
-                background-color: #333;
-                border-radius: 5px;
-                padding: 10px;
-                display: flex;
-                .labels {
-                    display:flex;
-                    flex-flow: column;
-                    width: 120px;
-                }
-                .sprint-card-body {
-                    flex: 1;
-                    .card-title {
-                        h5 {
-                            display: inline;
-                        }
+            
+            // .labels {
+            //     display:flex;
+            //     flex-flow: column;
+            //     width: 120px;
+            // }
+            .sprint-card-body {
+                // flex: 1;
+                .card-title {
+                    h4 {
+                        margin: 0;
+                        display: inline;
+                        // float: right;
+                        text-align: right;
                     }
-                    
                 }
-                &:hover{
-                    background-color: rgba(114,118,125,1);
+                .card-description {
+                    span {
+                        display: block;
+                        // text-align: right;
+                    }
                 }
+            }
+            &:hover{
+                background-color: rgba(114,118,125,1);
             }
         }
     }
@@ -94,4 +94,9 @@ $medium : 1100px;
         outline: none;
         outline-offset: unset;
     }
+}
+
+.space-between {
+    display: flex;
+    justify-content: space-between;
 }

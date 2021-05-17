@@ -1,15 +1,16 @@
+import { Masonry } from 'masonic'
 import moment from 'moment'
 import React from 'react'
 import DateTime from 'react-datetime'
+import DatePicker from 'react-multi-date-picker'
 import Button from '../../../components/button/Button'
 import Card from '../../../components/card/Card'
 import Input from '../../../components/input/inputText/Input'
 import Textarea from '../../../components/input/textarea/Textarea'
 import Select from '../../../components/select/select'
+import DatePanel from "react-multi-date-picker/plugins/date_panel"
+import TimePicker from "react-multi-date-picker/plugins/time_picker";
 import './sprints.scss'
-
-import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
-import List from 'react-virtualized/dist/commonjs/List';
 
 function Sprints(props) {
     
@@ -58,33 +59,32 @@ function Sprints(props) {
     //     return result
     // }
 
-    const rowRenderer = (propsies) => {
+    const MasonryCard = (propsies) => {
         const {
-            key,
-            index, 
-            style
+            index,
+            data
         } = propsies;
         // console.log(propsies)
-        const sprint = filteredSprints[index]
-        const eventsCount = sprint?.events?.length + 1;
+        const eventsCount = data?.events?.length + 1;
         // console.log(sprint)
-        return  <div key={key} className="sprint" style={style}>
-                    <div className="sprint-card">
-                        <div className="labels">
-                            <div>Sprint name:</div>
-                            <div>Events: </div>
-                            <div>Description:</div>
+        return  <div key={index} className="sprint">
+                    <div className="sprint-card-body">
+                        <div className="card-title space-between">
+                            Title: <h4>{data?.title ?? <em>No title??</em>}</h4>
                         </div>
-                        <div className="sprint-card-body">
-                            <div className="card-title">
-                                <h5>{sprint?.title ?? <em>No title??</em>}</h5>
-                            </div>
-                            <div className="card-events-count">
-                                {eventsCount > 1 ? eventsCount : <em>No Events</em>}
-                            </div>
-                            <div className="card-description">
-                                {sprint?.description ?? <em>No Description</em>}
-                            </div>
+                        <div className="card-events-count space-between">
+                            Events: {eventsCount > 1 ? <span>{eventsCount}</span> : <em>No Events</em>}
+                        </div>
+                        {/* <div className="card-optional-calendar">
+                            {data.start ? 
+                                <DatePicker 
+                                    value={[data.start, data.end]} 
+                                    multiple
+                                    plugins={[<DatePanel />, <TimePicker position="bottom" />]}/> : ''}
+                        
+                        </div> */}
+                        <div className="card-description">
+                            Description: {<span>{data?.description}</span> ?? <em>No Description</em>}
                         </div>
                     </div>
                 </div>
@@ -203,19 +203,11 @@ function Sprints(props) {
                 </Card>
             </div>
             <div className="sprints-container">
-                <AutoSizer>
-                    {({height, width}) => {
-                        // console.log(height)
-                        return <List
-                            height={height}
-                            width={width}
-                            overscanRowCount={5}
-                            rowCount={filteredSprints.length}
-                            rowRenderer={rowRenderer}
-                            rowHeight={120}
-                        />
-                    }}
-                </AutoSizer>
+                <Masonry 
+                    items={filteredSprints}
+                    render={MasonryCard}
+                    overscanBy={5}
+                    />
             </div>
         </div>
     )
