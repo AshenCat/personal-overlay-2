@@ -1,8 +1,8 @@
 import { Masonry } from 'masonic'
 import moment from 'moment'
 import React from 'react'
-import DateTime from 'react-datetime'
-import DatePicker from 'react-multi-date-picker'
+// import DateTime from 'react-datetime'
+import DatePicker, { Calendar } from 'react-multi-date-picker'
 import Button from '../../../components/button/Button'
 import Card from '../../../components/card/Card'
 import Input from '../../../components/input/inputText/Input'
@@ -22,8 +22,9 @@ function Sprints(props) {
     const [description, setDescription] = React.useState('');
     const [events, setEvents] = React.useState([]);
     const [participants, setParticipants] = React.useState([]);
-    const [start, setStart] = React.useState('');
-    const [end, setEnd] = React.useState('');
+    // const [start, setStart] = React.useState('');
+    // const [end, setEnd] = React.useState('');
+    const [dates, setDates] = React.useState('');
     const [filter, setFilter] = React.useState('')
     
     const onSubmit = () => {
@@ -32,8 +33,8 @@ function Sprints(props) {
             description,
             events,
             participants,
-            start: start ? moment(start).add('1','second').toDate() : null,
-            end: end ? moment(end).add('1','second').toDate() : null,
+            start: dates[0] ? moment(dates[0]).add('1','second').toDate() : null,
+            end: dates[1] ? moment(dates[1]).add('1','second').toDate() : null,
         }
         api.send('onSprintAdd', data)
         setSprints(prev=>[...prev, data])
@@ -44,8 +45,9 @@ function Sprints(props) {
         setDescription('')
         setEvents([])
         setParticipants([])
-        setStart('')
-        setEnd('')
+        setDates([])
+        // setStart('')
+        // setEnd('')
     }
 
     // const filteredSprintsResult = () => {
@@ -69,20 +71,23 @@ function Sprints(props) {
         // console.log(sprint)
         return  <div key={index} className="sprint">
                     <div className="sprint-card-body">
+                        <div className="card-optional-calendar centered">
+                            {data.start ? 
+                                <Calendar 
+                                    // fixRelativePosition={'center'}
+                                    className="bg-gray"
+                                    showOtherDays={true}
+                                    zIndex={99}
+                                    value={[data.start, data.end]} 
+                                    range
+                                    /> : '' }
+                        </div>
                         <div className="card-title space-between">
                             Title: <h4>{data?.title ?? <em>No title??</em>}</h4>
                         </div>
                         <div className="card-events-count space-between">
                             Events: {eventsCount > 1 ? <span>{eventsCount}</span> : <em>No Events</em>}
                         </div>
-                        {/* <div className="card-optional-calendar">
-                            {data.start ? 
-                                <DatePicker 
-                                    value={[data.start, data.end]} 
-                                    multiple
-                                    plugins={[<DatePanel />, <TimePicker position="bottom" />]}/> : ''}
-                        
-                        </div> */}
                         <div className="card-description">
                             Description: {<span>{data?.description}</span> ?? <em>No Description</em>}
                         </div>
@@ -133,8 +138,8 @@ function Sprints(props) {
                                 onChange={e=>setTitle(e.target.value)}/>
                         </div>
                         <div className="form-group">
-                            <label>From:</label>
-                            <DateTime 
+                            <label>Date Range:</label>
+                            {/* <DateTime 
                                 value={start}
                                 onChange={(date)=>setStart(date)}
                                 className="datetime-input-container"
@@ -144,21 +149,19 @@ function Sprints(props) {
                                 }}
                                 renderInput={(props) => {
                                     return <input {...props} value={(start) ? props.value : ''} />
-                                }}/>
-                        </div>
-                        <div className="form-group">
-                            <label>To:</label>
-                            <DateTime 
-                                value={end}
-                                onChange={(date)=>setEnd(date)}
-                                className="datetime-input-container"
-                                inputProps={{
-                                    className: "datetime-input",
-                                    placeholder: 'optional'
+                                }}/> */}
+                            <DatePicker 
+                                value={dates} 
+                                onChange={dates=>{
+                                    console.log(dates)
+                                    setDates(dates)
                                 }}
-                                renderInput={(props) => {
-                                    return <input {...props} value={(end) ? props.value : ''} />
-                                }}/>
+                                placeholder="Optional"
+                                inputClass="datetime-input"
+                                zIndex={101}
+                                // multiple
+                                range
+                                plugins={[ <TimePicker />, <DatePanel />,]}/> 
                         </div>
                         <div className="form-group">
                             <label>Participants:</label>
@@ -207,6 +210,7 @@ function Sprints(props) {
                     items={filteredSprints}
                     render={MasonryCard}
                     overscanBy={5}
+                    columnWidth={300}
                     />
             </div>
         </div>
