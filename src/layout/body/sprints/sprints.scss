@@ -3,16 +3,17 @@ $medium : 1100px;
 
 .sprints {
     width: 100%;
-    max-height: 100%;
+    height: 100%;
     display: flex;
     transition: all .3s;
+    position: relative;
     .sprint-filter-and-settings {
         // flex: 1 1 auto;
         display: flex;
         flex-flow: column;
         justify-content: center;
         align-items: center;
-        width: 450px;
+        width: 750px;
         transition: all .3s;
 
         h4.card-title {
@@ -26,24 +27,49 @@ $medium : 1100px;
         }
     }
     .sprints-container {
-        flex: 2;
+        // flex: 1;
         display: flex;
         flex-wrap: wrap;
         // max-height: 50%;
-        overflow:auto;
+        height: 100%;
+        width: 100%;
+        overflow-x: hidden;
         transition: all .3s;
+        padding: 5px 0;
         .sprint {
             transition: all .3s;
             // background-color: #72767d;
-            background-color: #333;
-            margin: 5px;
+            // margin: 5px;
             // height: 200px;
-            width: 100%;
-            &:hover{
-                background-color: rgba(114,118,125,1);
-            }
-            @media screen and (min-width: $medium) {
-                width: 40%;
+            // width: 400px;
+            position: relative;
+            .sprint-card {
+                position: absolute;
+                top: 5px;
+                left: 5px;
+                bottom: 5px;
+                right: 5px;
+                background-color: #333;
+                border-radius: 5px;
+                padding: 10px;
+                display: flex;
+                .labels {
+                    display:flex;
+                    flex-flow: column;
+                    width: 120px;
+                }
+                .sprint-card-body {
+                    flex: 1;
+                    .card-title {
+                        h5 {
+                            display: inline;
+                        }
+                    }
+                    
+                }
+                &:hover{
+                    background-color: rgba(114,118,125,1);
+                }
             }
         }
     }
@@ -61,4 +87,11 @@ $medium : 1100px;
 
 .form-group{
     margin-top: 5px;
+}
+
+.ReactVirtualized__List {
+    &:focus {
+        outline: none;
+        outline-offset: unset;
+    }
 }
