@@ -8,16 +8,22 @@ import Textarea from '../../../components/input/textarea/Textarea'
 import Select from '../../../components/select/select'
 import './sprints.scss'
 
+import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
+import List from 'react-virtualized/dist/commonjs/List';
+
 function Sprints(props) {
     
     const [people, setPeople] = React.useState([]);
     const [sprints, setSprints] = React.useState([])
+    const [filteredSprints, setFilteredSprints] = React.useState([])
+    // const [sprintCount, setSprintCount] = React.useState(0)
     const [title, setTitle] = React.useState('');
     const [description, setDescription] = React.useState('');
     const [events, setEvents] = React.useState([]);
     const [participants, setParticipants] = React.useState([]);
     const [start, setStart] = React.useState('');
     const [end, setEnd] = React.useState('');
+    const [filter, setFilter] = React.useState('')
     
     const onSubmit = () => {
         const data = {
@@ -41,11 +47,66 @@ function Sprints(props) {
         setEnd('')
     }
 
+    // const filteredSprintsResult = () => {
+        // const result =  sprints.filter(sprint => {
+        //     if (filter === '') return true;
+        //     if (sprint.title.includes(filter) || sprint.description.includes(filter)) return true;
+        //     return false
+        // })
+    //     console.log(result)
+    //     setSprintCount(result.length)
+    //     return result
+    // }
+
+    const rowRenderer = (propsies) => {
+        const {
+            key,
+            index, 
+            style
+        } = propsies;
+        // console.log(propsies)
+        const sprint = filteredSprints[index]
+        const eventsCount = sprint?.events?.length + 1;
+        // console.log(sprint)
+        return  <div key={key} className="sprint" style={style}>
+                    <div className="sprint-card">
+                        <div className="labels">
+                            <div>Sprint name:</div>
+                            <div>Events: </div>
+                            <div>Description:</div>
+                        </div>
+                        <div className="sprint-card-body">
+                            <div className="card-title">
+                                <h5>{sprint?.title ?? <em>No title??</em>}</h5>
+                            </div>
+                            <div className="card-events-count">
+                                {eventsCount > 1 ? eventsCount : <em>No Events</em>}
+                            </div>
+                            <div className="card-description">
+                                {sprint?.description ?? <em>No Description</em>}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    }
+
+    React.useEffect(()=>{
+        const val = sprints.filter(sprint => {
+            if (filter === '') return true;
+            if (sprint.title.includes(filter) || sprint.description.includes(filter)) return true;
+            return false
+        })
+        setFilteredSprints(val)
+        console.log(val)
+    }, [filter])
+
     React.useEffect(()=>{
         api.send('LoadSprints', {})
         api.recieve('LoadSprints', (data) => {
-            console.log(data);
+            console.log([...data]);
             setSprints([...data]);
+            setFilteredSprints([...data])
+            // setSprintCount(data.length)
         })
         // api.recieve('onSprintAdd', data => {
         //     console.log(data)
@@ -132,23 +193,29 @@ function Sprints(props) {
                     <div className="card-body">
                         <div className="form-group">
                             <label>Search:</label>
-                            <Input className="cWidth" placeholder="Search" />
+                            <Input 
+                                className="cWidth" 
+                                placeholder="Search" 
+                                value={filter}
+                                onChange={(e)=>setFilter(e.target.value)}/>
                         </div>
                     </div>
                 </Card>
             </div>
             <div className="sprints-container">
-                {sprints.map((sprint, ctr) => {
-                    return <Card key={ctr} className="sprint">
-                        <div className="card-title">
-                            <h5>{sprint?.title}</h5>
-                        </div>
-                        <div className="card-body">
-
-                        </div>
-                        <div className="card-actions"></div>
-                    </Card>
-                })}
+                <AutoSizer>
+                    {({height, width}) => {
+                        // console.log(height)
+                        return <List
+                            height={height}
+                            width={width}
+                            overscanRowCount={5}
+                            rowCount={filteredSprints.length}
+                            rowRenderer={rowRenderer}
+                            rowHeight={120}
+                        />
+                    }}
+                </AutoSizer>
             </div>
         </div>
     )
