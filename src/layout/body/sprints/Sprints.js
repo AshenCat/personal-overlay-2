@@ -77,15 +77,16 @@ function Sprints(props) {
                         <div className="card-optional-calendar">
                             <Calendar 
                                 // fixRelativePosition={'center'}
-                                className="bg-gray"
+                                className="bg-dark"
                                 showOtherDays={true}
                                 zIndex={99}
                                 value={[data?.start, data?.end]} 
                                 range
                                 readOnly
-                                onChange={()=>{console.log('aw')}}
-                                plugins={width > 700 ? width > 950 ? [<DatePanel />, <TimePicker />] :[<DatePanel />] : []}
+                                onChange={()=>{}}
+                                plugins={width > 700 ? width > 850 ? [<DatePanel />, <TimePicker />] :[<DatePanel />] : []}
                                 />
+                                {/* <Calendar value={value} onChange={() => setValue({})} /> */}
                         </div>
                         <div className="sprint-card-body">
                             <div className="card-title space-between">

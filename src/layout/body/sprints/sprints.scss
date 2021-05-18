@@ -50,6 +50,7 @@ $medium : 1100px;
                 bottom: 10px;
                 right: 10px;
                 left: 10px;
+                transition: background-color .2s;
                 .sprint-card-body {
                     flex: 1;
                     display:flex;
@@ -77,7 +78,7 @@ $medium : 1100px;
                     }
                 }
                 &:hover{
-                    background-color: rgba(114,118,125,1);
+                    background-color: rgba(114,118,125,.9);
                 }
             }
         }
