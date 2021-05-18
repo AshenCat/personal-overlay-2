@@ -19,11 +19,13 @@
     "@fullcalendar/timegrid": "^5.6.0",
     "@material-ui/core": "^4.11.4",
     "@material-ui/icons": "^4.11.2",
+    "@react-hook/window-size": "^3.0.7",
     "moment": "^2.29.1",
     "mongoose": "^5.12.7",
     "react": "^17.0.2",
     "react-datetime": "^3.0.4",
     "react-dom": "^17.0.2",
+    "react-multi-date-picker": "^2.8.0",
     "react-router-dom": "^5.2.0",
     "react-virtualized": "^9.22.3"
   },
