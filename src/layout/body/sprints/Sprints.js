@@ -1,4 +1,3 @@
-import { Masonry } from 'masonic'
 import moment from 'moment'
 import React from 'react'
 // import DateTime from 'react-datetime'
@@ -9,15 +8,16 @@ import Input from '../../../components/input/inputText/Input'
 import Textarea from '../../../components/input/textarea/Textarea'
 import Select from '../../../components/select/select'
 import DatePanel from "react-multi-date-picker/plugins/date_panel"
-import TimePicker from "react-multi-date-picker/plugins/time_picker";
+import TimePicker from "react-multi-date-picker/plugins/analog_time_picker";
 import './sprints.scss'
+import { AutoSizer, List } from 'react-virtualized'
 
 function Sprints(props) {
     
     const [people, setPeople] = React.useState([]);
     const [sprints, setSprints] = React.useState([])
     const [filteredSprints, setFilteredSprints] = React.useState([])
-    // const [sprintCount, setSprintCount] = React.useState(0)
+    const [sprintCount, setSprintCount] = React.useState(0)
     const [title, setTitle] = React.useState('');
     const [description, setDescription] = React.useState('');
     const [events, setEvents] = React.useState([]);
@@ -51,45 +51,52 @@ function Sprints(props) {
     }
 
     // const filteredSprintsResult = () => {
-        // const result =  sprints.filter(sprint => {
-        //     if (filter === '') return true;
-        //     if (sprint.title.includes(filter) || sprint.description.includes(filter)) return true;
-        //     return false
-        // })
+    //     const result =  sprints.filter(sprint => {
+    //         if (filter === '') return true;
+    //         if (sprint.title.includes(filter) || sprint.description.includes(filter)) return true;
+    //         return false
+    //     })
     //     console.log(result)
     //     setSprintCount(result.length)
     //     return result
     // }
 
-    const MasonryCard = (propsies) => {
+    const RowCard = (propsies) => {
         const {
             index,
-            data
+            key,
+            style
         } = propsies;
         // console.log(propsies)
         const eventsCount = data?.events?.length + 1;
+        const data = filteredSprints[index]
+        const width = propsies?.parent?.props?.width;
         // console.log(sprint)
-        return  <div key={index} className="sprint">
-                    <div className="sprint-card-body">
-                        <div className="card-optional-calendar centered">
-                            {data.start ? 
-                                <Calendar 
-                                    // fixRelativePosition={'center'}
-                                    className="bg-gray"
-                                    showOtherDays={true}
-                                    zIndex={99}
-                                    value={[data.start, data.end]} 
-                                    range
-                                    /> : '' }
+        if (data) return  <div key={key} className="sprint" style={style}>
+                    <div className="sprint-card">
+                        <div className="card-optional-calendar">
+                            <Calendar 
+                                // fixRelativePosition={'center'}
+                                className="bg-gray"
+                                showOtherDays={true}
+                                zIndex={99}
+                                value={[data?.start, data?.end]} 
+                                range
+                                readOnly
+                                onChange={()=>{console.log('aw')}}
+                                plugins={width > 700 ? width > 950 ? [<DatePanel />, <TimePicker />] :[<DatePanel />] : []}
+                                />
                         </div>
-                        <div className="card-title space-between">
-                            Title: <h4>{data?.title ?? <em>No title??</em>}</h4>
-                        </div>
-                        <div className="card-events-count space-between">
-                            Events: {eventsCount > 1 ? <span>{eventsCount}</span> : <em>No Events</em>}
-                        </div>
-                        <div className="card-description">
-                            Description: {<span>{data?.description}</span> ?? <em>No Description</em>}
+                        <div className="sprint-card-body">
+                            <div className="card-title space-between">
+                                Title: <h4>{data?.title ?? <em>No title??</em>}</h4>
+                            </div>
+                            <div className="card-events-count space-between mt-10px">
+                                Events: {eventsCount > 1 ? <span>{eventsCount}</span> : <em>No Events</em>}
+                            </div>
+                            <div className="card-description mt-10px">
+                                Description: {<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- "<em>{data?.description}</em>"</span> ?? <em>No Description</em>}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -102,16 +109,17 @@ function Sprints(props) {
             return false
         })
         setFilteredSprints(val)
-        console.log(val)
+        setSprintCount(val.length)
+        // console.log(val.length)
     }, [filter])
 
     React.useEffect(()=>{
         api.send('LoadSprints', {})
         api.recieve('LoadSprints', (data) => {
-            console.log([...data]);
+            // console.log([...data]);
             setSprints([...data]);
             setFilteredSprints([...data])
-            // setSprintCount(data.length)
+            setSprintCount(data.length)
         })
         // api.recieve('onSprintAdd', data => {
         //     console.log(data)
@@ -151,6 +159,7 @@ function Sprints(props) {
                                     return <input {...props} value={(start) ? props.value : ''} />
                                 }}/> */}
                             <DatePicker 
+                                type="input-icon"
                                 value={dates} 
                                 onChange={dates=>{
                                     console.log(dates)
@@ -161,7 +170,7 @@ function Sprints(props) {
                                 zIndex={101}
                                 // multiple
                                 range
-                                plugins={[ <TimePicker />, <DatePanel />,]}/> 
+                                plugins={[<DatePanel />,]}/> 
                         </div>
                         <div className="form-group">
                             <label>Participants:</label>
@@ -206,12 +215,18 @@ function Sprints(props) {
                 </Card>
             </div>
             <div className="sprints-container">
-                <Masonry 
-                    items={filteredSprints}
-                    render={MasonryCard}
-                    overscanBy={5}
-                    columnWidth={300}
-                    />
+                <AutoSizer>
+                    {({width, height})=> {
+                        return <List 
+                            height={height}
+                            width={width}
+                            overscanRowCount={2}
+                            rowHeight={330}
+                            rowCount={sprintCount}
+                            rowRenderer={RowCard}
+                            />
+                    }}
+                </AutoSizer>
             </div>
         </div>
     )
