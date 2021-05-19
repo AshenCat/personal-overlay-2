@@ -37,7 +37,14 @@ const onSprintAdd = async (e, data) => {
 
 const LoadSprints = async (e) => {
     const sprints = await SprintModel.find().lean().exec();
-    e.sender.send('LoadSprints', sprints)
+    console.log(sprints[0]._id.toHexString())
+    const resSprints = sprints.map(sprint => {
+        return {
+            ...sprint,
+            _id: sprint._id.toHexString()
+        }
+    })
+    e.sender.send('LoadSprints', resSprints)
 }
 
 const LoadCalendarEvents = async (e, month) => {

@@ -11,6 +11,8 @@ import DatePanel from "react-multi-date-picker/plugins/date_panel"
 import TimePicker from "react-multi-date-picker/plugins/analog_time_picker";
 import './sprints.scss'
 import { AutoSizer, List } from 'react-virtualized'
+import ObjectID from 'bson-objectid'
+
 
 function Sprints(props) {
     
@@ -71,9 +73,10 @@ function Sprints(props) {
         const eventsCount = data?.events?.length + 1;
         const data = filteredSprints[index]
         const width = propsies?.parent?.props?.width;
-        // console.log(sprint)
+        // console.log([...data._id.id]) // [96, 160, 53, 78, 208, 3, 149, 45, 40, 92, 168, 208]
+        // console.log(ObjectID([96, 160, 53, 78, 208, 3, 149, 45, 40, 92, 168, 208]))
         if (data) return  <div key={key} className="sprint" style={style}>
-                    <div className="sprint-card">
+                    <div className="sprint-card" onClick={()=>{props.history.push(`/sprints/${data._id}`)}}>
                         <div className="card-optional-calendar">
                             <Calendar 
                                 // fixRelativePosition={'center'}
@@ -84,8 +87,7 @@ function Sprints(props) {
                                 range
                                 readOnly
                                 onChange={()=>{}}
-                                plugins={width > 700 ? width > 850 ? [<DatePanel />, <TimePicker />] :[<DatePanel />] : []}
-                                />
+                                plugins={width > 700 ? width > 850 ? [<DatePanel />, <TimePicker />] :[<DatePanel />] : []} />
                                 {/* <Calendar value={value} onChange={() => setValue({})} /> */}
                         </div>
                         <div className="sprint-card-body">
@@ -117,7 +119,7 @@ function Sprints(props) {
     React.useEffect(()=>{
         api.send('LoadSprints', {})
         api.recieve('LoadSprints', (data) => {
-            // console.log([...data]);
+            console.log(data);
             setSprints([...data]);
             setFilteredSprints([...data])
             setSprintCount(data.length)

@@ -33,7 +33,25 @@
     }
 }
 
+.ul-last {
+    flex: 0 1;
+}
+
+.circle-border {
+    border-radius: 50%;
+    background-color: rgb(85,85,85);
+}
+
 .active {
     border-left: 3px solid white !important;
     color: white !important;
+}
+
+.white { 
+    color: white !important;
+}
+
+.flex-col {
+    display: flex;
+    flex-direction: column;
 }
