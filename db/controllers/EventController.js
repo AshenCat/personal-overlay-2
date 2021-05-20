@@ -37,7 +37,6 @@ const onSprintAdd = async (e, data) => {
 
 const LoadSprints = async (e) => {
     const sprints = await SprintModel.find().lean().exec();
-    console.log(sprints[0]._id.toHexString())
     const resSprints = sprints.map(sprint => {
         return {
             ...sprint,
@@ -45,6 +44,11 @@ const LoadSprints = async (e) => {
         }
     })
     e.sender.send('LoadSprints', resSprints)
+}
+
+const LoadSprint = async (e, id) => {
+    const sprint = await SprintModel.findById(id).lean().exec();
+    e.sender.send('LoadSprint', sprint)
 }
 
 const LoadCalendarEvents = async (e, month) => {
@@ -64,5 +68,6 @@ module.exports = {
     onEventAdd,
     onSprintAdd,
     LoadCalendarEvents,
-    LoadSprints
+    LoadSprints,
+    LoadSprint
 }

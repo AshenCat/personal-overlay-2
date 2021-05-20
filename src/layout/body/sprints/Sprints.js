@@ -11,7 +11,6 @@ import DatePanel from "react-multi-date-picker/plugins/date_panel"
 import TimePicker from "react-multi-date-picker/plugins/analog_time_picker";
 import './sprints.scss'
 import { AutoSizer, List } from 'react-virtualized'
-import ObjectID from 'bson-objectid'
 
 
 function Sprints(props) {
@@ -87,7 +86,8 @@ function Sprints(props) {
                                 range
                                 readOnly
                                 onChange={()=>{}}
-                                plugins={width > 700 ? width > 850 ? [<DatePanel />, <TimePicker />] :[<DatePanel />] : []} />
+                                plugins={width > 700 ? width > 850 ? [<DatePanel />, <TimePicker />] :[<DatePanel />] : []} 
+                                readOnly/>
                                 {/* <Calendar value={value} onChange={() => setValue({})} /> */}
                         </div>
                         <div className="sprint-card-body">

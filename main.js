@@ -85,12 +85,14 @@ const {
     onSprintAdd,
     LoadCalendarEvents,
     LoadSprints,
+    LoadSprint
 } = require('./db/controllers/EventController');
 
 ipcMain.on('onEventAdd', (e, data) => onEventAdd(e, data))
 ipcMain.on('onSprintAdd', (e, data) => onSprintAdd(e,data))
 ipcMain.on('LoadCalendarEvents', (e, month) => LoadCalendarEvents(e, month))
 ipcMain.on('LoadSprints', LoadSprints)
+ipcMain.on('LoadSprint', (e, id) => {LoadSprint(e,id)})
 
 
 // ipcMain.on('notify', (e, message) => {
