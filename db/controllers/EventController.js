@@ -36,7 +36,8 @@ const onSprintAdd = async (e, data) => {
 }
 
 const LoadSprints = async (e) => {
-    const sprints = await SprintModel.find().lean().exec();
+    const sprints = await SprintModel.find().sort({updatedAt: -1}).lean().exec();
+    // console.log(sprints)
     const resSprints = sprints.map(sprint => {
         return {
             ...sprint,
