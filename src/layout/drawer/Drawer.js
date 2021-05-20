@@ -9,10 +9,20 @@ function Drawer(props) {
 
     let {location} = props
 
-    const onSelect = (id) => {
+    const onSelect = (id, multi) => {
+        let cs = multi ? id[0] : id
+
         document.getElementById(selected)?.classList.remove('active');
-        document.getElementById(id)?.classList.add('active');
-        props.history.push(id === 'home' ? '/' : id);
+        document.getElementById(cs)?.classList.add('active');
+        
+        if (multi) {
+            // console.log('pushing to ', `/${id.join('/')}`)
+            props.history.push( `/${id.join('/')}`);
+        }
+        else {
+            // console.log('pushing to ', `/${id}`)
+            props.history.push(id === 'home' ? '/' : `/${id}`);
+        }
         setSelected(id);   
     }
 
@@ -21,8 +31,21 @@ function Drawer(props) {
         document.getElementById(selected)?.classList.remove('active');
     }
     React.useState(()=>{
-        console.log(location?.pathname?.substring(1))
-        onSelect(location?.pathname?.substring(1) === '' ? 'home' : location?.pathname?.substring(1))
+        const loc = location?.pathname?.split('/').slice(-2)
+        // .join('/')
+        let path, multi = false;
+        if (loc[0] === "") {
+            if (loc[1] === "") path = 'home'
+            else path = loc[1]
+        }
+        else {
+            multi = true;
+            path = loc
+        }
+        // console.log(location)
+        // console.log(loc)
+        // onSelect(location?.pathname?.substring(1) === '' ? 'home' : location?.pathname?.substring(1))
+        onSelect(path, multi)
     }, [location])
 
     return (
