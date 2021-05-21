@@ -3,14 +3,16 @@ const rendererToMain = [
     "onEventAdd",
     "onSprintAdd",
     "LoadSprints",
-    "LoadCalendarEvents"
+    "LoadCalendarEvents",
+    "LoadSprint"
 ]
 
 const mainToRenderer = [
     "onEventAdd",
     "onSprintAdd",
     "LoadSprints",
-    "LoadCalendarEvents"
+    "LoadCalendarEvents",
+    "LoadSprint"
 ]
 
 module.exports = {

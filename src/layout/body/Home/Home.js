@@ -88,7 +88,8 @@ function Home() {
             console.log([...data])
         })
         return () => {
-            api.removeAllListeners('onEventAdded')
+            api.removeAllListeners('onEventAdd')
+            api.removeAllListeners('LoadCalendarEvents')
         }
     }, [])
 

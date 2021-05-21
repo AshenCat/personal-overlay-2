@@ -13,6 +13,7 @@ import EventModalProvider from '../context/EventModal/EventModalContext';
 // const HomeComponent = React.lazy(()=>import('./body/home/Home'));
 const EventsComponent = React.lazy(()=>import('./body/events/Events'));
 const SprintsComponent = React.lazy(()=>import('./body/sprints/Sprints'));
+const SprintDetailsComponent = React.lazy(()=>import('./body/sprints/details/SprintDetails'))
 
 function Body() {
     return (
@@ -25,8 +26,9 @@ function Body() {
                         <React.Suspense fallback={<div>loading...</div>}>
                             <main>
                                 <Route exact path="/" component={Home} />
-                                <Route path="/events" component={EventsComponent} />
-                                <Route path="/sprints" component={SprintsComponent} />
+                                <Route exact path="/events" component={EventsComponent} />
+                                <Route exact path="/sprints" component={SprintsComponent} />
+                                <Route exact path="/sprints/:id" component={SprintDetailsComponent} />
                             </main>
                         </React.Suspense>
                     </EventModalProvider>

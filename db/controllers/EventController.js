@@ -36,8 +36,20 @@ const onSprintAdd = async (e, data) => {
 }
 
 const LoadSprints = async (e) => {
-    const sprints = await SprintModel.find().lean().exec();
-    e.sender.send('LoadSprints', sprints)
+    const sprints = await SprintModel.find().sort({updatedAt: -1}).lean().exec();
+    // console.log(sprints)
+    const resSprints = sprints.map(sprint => {
+        return {
+            ...sprint,
+            _id: sprint._id.toHexString()
+        }
+    })
+    e.sender.send('LoadSprints', resSprints)
+}
+
+const LoadSprint = async (e, id) => {
+    const sprint = await SprintModel.findById(id).lean().exec();
+    e.sender.send('LoadSprint', sprint)
 }
 
 const LoadCalendarEvents = async (e, month) => {
@@ -57,5 +69,6 @@ module.exports = {
     onEventAdd,
     onSprintAdd,
     LoadCalendarEvents,
-    LoadSprints
+    LoadSprints,
+    LoadSprint
 }

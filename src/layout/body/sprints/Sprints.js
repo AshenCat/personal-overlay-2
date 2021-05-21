@@ -12,6 +12,7 @@ import TimePicker from "react-multi-date-picker/plugins/analog_time_picker";
 import './sprints.scss'
 import { AutoSizer, List } from 'react-virtualized'
 
+
 function Sprints(props) {
     
     const [people, setPeople] = React.useState([]);
@@ -37,7 +38,10 @@ function Sprints(props) {
             end: dates[1] ? moment(dates[1]).add('1','second').toDate() : null,
         }
         api.send('onSprintAdd', data)
-        setSprints(prev=>[...prev, data])
+        setSprints(prev=>[data, ...prev])
+        setFilteredSprints(prev=>[data, ...prev])
+        // setSprints(prev=>[...prev, data])
+        // setFilteredSprints()
     }
 
     const onClear = () => {
@@ -50,17 +54,6 @@ function Sprints(props) {
         // setEnd('')
     }
 
-    // const filteredSprintsResult = () => {
-    //     const result =  sprints.filter(sprint => {
-    //         if (filter === '') return true;
-    //         if (sprint.title.includes(filter) || sprint.description.includes(filter)) return true;
-    //         return false
-    //     })
-    //     console.log(result)
-    //     setSprintCount(result.length)
-    //     return result
-    // }
-
     const RowCard = (propsies) => {
         const {
             index,
@@ -71,9 +64,10 @@ function Sprints(props) {
         const eventsCount = data?.events?.length + 1;
         const data = filteredSprints[index]
         const width = propsies?.parent?.props?.width;
-        // console.log(sprint)
+        // console.log([...data._id.id]) // [96, 160, 53, 78, 208, 3, 149, 45, 40, 92, 168, 208]
+        // console.log(ObjectID([96, 160, 53, 78, 208, 3, 149, 45, 40, 92, 168, 208]))
         if (data) return  <div key={key} className="sprint" style={style}>
-                    <div className="sprint-card">
+                    <div className="sprint-card" onClick={()=>{props.history.push(`/sprints/${data._id}`)}}>
                         <div className="card-optional-calendar">
                             <Calendar 
                                 // fixRelativePosition={'center'}
@@ -84,8 +78,8 @@ function Sprints(props) {
                                 range
                                 readOnly
                                 onChange={()=>{}}
-                                plugins={width > 700 ? width > 850 ? [<DatePanel />, <TimePicker />] :[<DatePanel />] : []}
-                                />
+                                plugins={width > 700 ? width > 850 ? [<DatePanel />, <TimePicker />] :[<DatePanel />] : []} 
+                                readOnly/>
                                 {/* <Calendar value={value} onChange={() => setValue({})} /> */}
                         </div>
                         <div className="sprint-card-body">
@@ -117,15 +111,17 @@ function Sprints(props) {
     React.useEffect(()=>{
         api.send('LoadSprints', {})
         api.recieve('LoadSprints', (data) => {
-            // console.log([...data]);
+            console.log(data);
             setSprints([...data]);
             setFilteredSprints([...data])
             setSprintCount(data.length)
         })
-        // api.recieve('onSprintAdd', data => {
-        //     console.log(data)
-        //     setSprints(prev=>[...prev, data.data])
-        // })
+        api.recieve('onSprintAdd', data => {
+            console.log(data)
+
+            // console.log(newSprint)
+            // onClear();
+        })
         return () => {
             api.removeAllListeners('LoadSprints')
             api.removeAllListeners('onSprintAdd')
@@ -148,23 +144,12 @@ function Sprints(props) {
                         </div>
                         <div className="form-group">
                             <label>Date Range:</label>
-                            {/* <DateTime 
-                                value={start}
-                                onChange={(date)=>setStart(date)}
-                                className="datetime-input-container"
-                                inputProps={{
-                                    className: "datetime-input",
-                                    placeholder: 'optional'
-                                }}
-                                renderInput={(props) => {
-                                    return <input {...props} value={(start) ? props.value : ''} />
-                                }}/> */}
                             <DatePicker 
                                 type="input-icon"
                                 value={dates} 
                                 onChange={dates=>{
-                                    console.log(dates)
-                                    setDates(dates)
+                                    console.log(dates.map(date=>date.toString()))
+                                    setDates(dates.map(date=>date.toString()))
                                 }}
                                 placeholder="Optional"
                                 inputClass="datetime-input"
