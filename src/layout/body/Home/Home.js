@@ -11,7 +11,7 @@ import { useEventModalContext } from '../../../context/EventModal/EventModalCont
 import './home.scss'
 import Button from '../../../components/button/Button';
 import Input from '../../../components/input/inputText/Input';
-import Select from '../../../components/select/select';
+import Select from '../../../components/select/Select';
 import ClickMenu from '../../../components/clickMenu/ClickMenu';
 import Card from '../../../components/card/Card';
 
