@@ -7,7 +7,7 @@ const requiredString = {
     required: true
 }
 
-let personSchema = new Schema({
+let participantSchema = new Schema({
     firstname: requiredString,
     lastname: requiredString,
     age: Number,
@@ -22,4 +22,4 @@ let personSchema = new Schema({
     // ppsize: String
 })
 
-module.exports = mongoose.model('people', personSchema)
+module.exports = mongoose.model('participants', participantSchema)

@@ -10,13 +10,18 @@ const requiredString = {
 let sprintSchema = new Schema({
     title: requiredString,
     description: requiredString,
+    status: {
+        type: String,
+        enum: ["active", "done", "on hold"],
+        default: "active",
+    },
     events: [{
         type: mongoose.Types.ObjectId,
         ref: 'events'
     }],
     participants: [{
         type: mongoose.Types.ObjectId,
-        ref: 'person'
+        ref: 'participants'
     }],
     start: Date,
     end: Date,
