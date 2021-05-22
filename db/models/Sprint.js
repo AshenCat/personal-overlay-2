@@ -12,8 +12,8 @@ let sprintSchema = new Schema({
     description: requiredString,
     status: {
         type: String,
-        enum: ["active", "done", "on hold"],
-        default: "active",
+        enum: ["active", "done", "waiting", "on hold"],
+        default: "waiting",
     },
     events: [{
         type: mongoose.Types.ObjectId,
