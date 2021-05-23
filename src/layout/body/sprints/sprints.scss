@@ -76,6 +76,28 @@ $medium : 1100px;
                             display: block;
                         }
                     }
+                    .card-actions{
+                        display: flex;
+                        justify-content: flex-end;
+                        margin-top: 3px;
+                        button {
+                            margin: 0 3px 0 0;
+                            @media screen and (min-width: 1000px) {
+                                width: 80px;
+                            }
+                        }
+                        .danger-btn {
+                            border: 1px solid #f32617;
+                            background-color: transparent;
+                            color:#f32617;
+                            @media screen and (max-width: 1000px) {
+                                margin-top: 5px;
+                            }
+                        }
+                        @media screen and (max-width: 1000px) {
+                            flex-direction: column;
+                        }
+                    }
                 }
                 &:hover{
                     background-color: rgba(114,118,125,.9);

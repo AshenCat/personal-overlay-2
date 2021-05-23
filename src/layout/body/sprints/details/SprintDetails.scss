@@ -1,0 +1,81 @@
+.view-sprint {
+    display: flex;
+    // align-self: flex-start;
+    .card-sprint-details {
+        width: 100%;
+        min-width: none;
+        .card-title {
+            margin: 0;
+        }
+        .card-body {
+            display: flex;
+            .left {
+                width: 300px;
+                display: flex;
+                flex-flow: column;
+                .input-group {
+                    margin-top: 5px;
+                    display: flex;
+                    label {
+                        margin-right: 15px;
+                    }
+                }
+            }
+            .right {
+                display: flex;
+                flex-flow: column;
+                width: 350px;
+                padding-left: 20px;
+                .events {
+                    flex: 1 1 auto;
+                    display:flex;
+                    flex-flow: column;
+                    .events-head {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                    }
+                    .events-list {
+                        flex: 1 1 auto;
+                        margin: 5px 0;
+                        border: 1px solid rgba(255,255,255,.3);
+                        display: flex;
+                    }
+                }
+                .participants {
+                    flex: 1 1 auto;
+                    display:flex;
+                    flex-flow: column;
+                    .participants-head {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                    }
+                    .participants-list {
+                        flex: 1 1 auto;
+                        margin: 5px 0;
+                        border: 1px solid rgba(255,255,255,.3);
+                        display: flex;
+                    }
+                }
+                .card-actions {
+                    display: flex;
+                    justify-content: flex-end;
+                    button {
+                        padding: 8px;
+                        width: 80px;
+                        margin: 0 4px;
+                    }
+                    .cancel-btn {
+                        background-color: transparent;
+                        border: 1px solid white;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.add-btn {
+    background-color: rgb(114, 137, 218) !important;
+}

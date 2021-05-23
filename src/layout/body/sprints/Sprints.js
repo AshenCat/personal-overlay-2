@@ -6,7 +6,7 @@ import Button from '../../../components/button/Button'
 import Card from '../../../components/card/Card'
 import Input from '../../../components/input/inputText/Input'
 import Textarea from '../../../components/input/textarea/Textarea'
-import Select from '../../../components/select/select'
+import Select from '../../../components/select/Select'
 import DatePanel from "react-multi-date-picker/plugins/date_panel"
 import TimePicker from "react-multi-date-picker/plugins/analog_time_picker";
 import './sprints.scss'
@@ -67,7 +67,7 @@ function Sprints(props) {
         // console.log([...data._id.id]) // [96, 160, 53, 78, 208, 3, 149, 45, 40, 92, 168, 208]
         // console.log(ObjectID([96, 160, 53, 78, 208, 3, 149, 45, 40, 92, 168, 208]))
         if (data) return  <div key={key} className="sprint" style={style}>
-                    <div className="sprint-card" onClick={()=>{props.history.push(`/sprints/${data._id}`)}}>
+                    <div className="sprint-card">
                         <div className="card-optional-calendar">
                             <Calendar 
                                 // fixRelativePosition={'center'}
@@ -91,6 +91,18 @@ function Sprints(props) {
                             </div>
                             <div className="card-description mt-10px">
                                 Description: {<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- "<em>{data?.description}</em>"</span> ?? <em>No Description</em>}
+                            </div>
+                            <div className="card-actions">
+                                <Button 
+                                    style={{ padding: '8px'}}
+                                    onClick={()=>{props.history.push(`/sprints/${data._id}`)}}>
+                                        Edit
+                                </Button>
+                                <Button 
+                                    // style={{backgroundColor: '#DC143C', padding: '8px'}}
+                                    className="danger-btn">
+                                        Delete
+                                </Button>
                             </div>
                         </div>
                     </div>
