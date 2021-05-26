@@ -32,12 +32,11 @@ function Home() {
     // const [eventsVisible, setEventsVisible] = React.useState(2)
     // const [viewDate, setViewDate] = React.useState(moment())
 
-    const {setEventModalOpen, setCalendarRef, setStart, setEnd} = useEventModalContext();
+    const {setEventModalOpen, setCalendarRef, setDates} = useEventModalContext();
 
     const handleDateClick = (info) => {
         // console.log(dateClickData)
-        setStart(info.date ?? moment(info.startStr))
-        setEnd(info.date ?? moment(info.endStr).subtract(1, 'second'))
+        setDates([info.date ?? moment(info.startStr), info.date ?? moment(info.endStr).subtract(1, 'second')])
         setCalendarRef(calendarRef);
         setEventModalOpen(true);
     }

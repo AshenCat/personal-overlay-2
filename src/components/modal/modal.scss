@@ -18,13 +18,13 @@
 
     .modal {
         background-color: #333;
-        width: 400px;
+        width: fit-content;
         // height: 375px;
         height: 0;
         overflow: hidden;
         border-radius: 2%;
         position: relative;
-        bottom: 50px;
+        // bottom: 30px;
         
         -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
         -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
@@ -40,6 +40,7 @@
 .show {
     visibility: visible !important;
     opacity: 1 !important;
+    z-index: 100;
 }
 
 th.dow, td.rdtDay, th.rdtSwitch, td.rdtSwitch,
