@@ -34,14 +34,14 @@ function EventModalProvider(props) {
 
     const onSubmit = () => {
         if (title === "") return;
-        if (dates[1] && dates[1] !== "") if(moment(dates[0]?.toString()).isAfter(moment(dates[1]?.toString()))) return;
+        if (dates[1] && dates[1] !== "") if(moment(dates[0].format('YYYY-MM-DD HH:MM')).isAfter(moment(dates[1].format('YYYY-MM-DD HH:MM')))) return;
         // if (start === end) return;
         // console.log(sVal.format('MM-DD-YYYY HH:mm:ss'));
         // console.log(eVal.format('MM-DD-YYYY HH:mm:ss'));
         const obj = {
             title, 
-            start: moment(dates[0]?.toString()).toDate() ?? null, 
-            end: moment(dates[1]?.toString()).toDate() ?? null,
+            start: moment(dates[0].format('YYYY-MM-DD HH:MM')).toDate() ?? null, 
+            end: moment(dates[1].format('YYYY-MM-DD HH:MM')).toDate() ?? null,
             allDay: allDay,
             description: desc,
         }
@@ -66,6 +66,7 @@ function EventModalProvider(props) {
             setTitle("");
             // setStart("");
             // setEnd("");
+            setDates([])
             setAllDay(false);
             setDesc('');
         }
@@ -91,7 +92,11 @@ function EventModalProvider(props) {
                         </div>
                         <div className="input-group">
                             <label>All day: </label>
-                            <SimpleCheckbox value={allDay} onClick={()=>setAllDay(prev=>!prev)} />
+                            <SimpleCheckbox value={allDay} onClick={()=>{
+                                console.log(dates)
+                                setDates(allDay ? "" : [])
+                                setAllDay(prev=>!prev)
+                            }} />
                         </div>
                     </div>
                     {/* <div className="input-group">
@@ -120,9 +125,9 @@ function EventModalProvider(props) {
                                 value={dates}
                                 onChange={date=>{
                                     setDates(date)
-                                    console.log(date)
+                                    // console.log(moment(date[0].format('YYYY-MM-DD HH:MM')))
                                 }}
-                                range
+                                range={!allDay}
                                 showOtherDays
                                 className="modal-calendar bg-dark" />
                         </div>
