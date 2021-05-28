@@ -1,6 +1,8 @@
 // mongoose controllers
 const EventModel = require('../models/Event');
-const SprintModel = require('../models/Sprint')
+const SprintModel = require('../models/Sprint');
+const ParticipantModel = require('../models/Participant');
+const mongoose = require('mongoose');
 // const PersonModel = require('../models/Peron');
 
 const onEventAdd = async (e, data) => {
@@ -48,8 +50,38 @@ const LoadSprints = async (e) => {
 }
 
 const LoadSprint = async (e, id) => {
-    const sprint = await SprintModel.findById(id).lean().exec();
-    e.sender.send('LoadSprint', sprint)
+    try{
+        const sprint = await SprintModel.findOne({_id: mongoose.Types.ObjectId(id)}).populate('events').lean();
+        console.log(sprint.events)
+        e.sender.send('LoadSprint', {
+            ...sprint,
+            _id: sprint._id.toHexString()
+        })
+    }
+    catch(e) {
+        console.log(e)
+    }
+}
+
+const EditSprint = (e, sprint) => {
+    const events = sprint.events;
+    delete sprint.events;
+    EventModel.insertMany(events, (err, ev)=>{
+        if(ev)console.log('insert: true')
+        SprintModel.findByIdAndUpdate(mongoose.Types.ObjectId(sprint._id), sprint, {new:true}, (err,doc)=>{
+            if(doc)console.log('findbyid: true')
+            doc.events.push(ev.map(e=>e._id))
+            doc.save()
+            e.sender.send('EditSprint', `Successfully edited ${sprint._id}`); 
+        })
+    })
+
+}
+
+const DeleteSprint = async (e, id) => {
+    await SprintModel.findByIdAndDelete(mongoose.Types.ObjectId(id)).exec();
+    console.log(`Deleted: ${id}`)
+    e.sender.send('DeleteSprint', `Successfully deleted ${id}`);
 }
 
 const LoadCalendarEvents = async (e, month) => {
@@ -64,11 +96,12 @@ const LoadCalendarEvents = async (e, month) => {
     e.sender.send('LoadCalendarEvents', eventsOnThisMonth)
 }
 
-
 module.exports = {
     onEventAdd,
     onSprintAdd,
     LoadCalendarEvents,
     LoadSprints,
-    LoadSprint
+    LoadSprint,
+    EditSprint,
+    DeleteSprint
 }

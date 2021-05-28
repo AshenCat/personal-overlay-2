@@ -8,7 +8,8 @@ import Input from '../../components/input/inputText/Input';
 import SimpleCheckbox from '../../components/checkbox/simple/simpleCheckbox';
 import Textarea from '../../components/input/textarea/Textarea';
 import { Calendar } from 'react-multi-date-picker';
-
+import TimePicker from "react-multi-date-picker/plugins/time_picker";
+import DatePanel from 'react-multi-date-picker/plugins/date_panel';
 const EventModalContext = React.createContext();
 
 export const useEventModalContext = () => {
@@ -34,14 +35,17 @@ function EventModalProvider(props) {
 
     const onSubmit = () => {
         if (title === "") return;
-        if (dates[1] && dates[1] !== "") if(moment(dates[0].format('YYYY-MM-DD HH:MM')).isAfter(moment(dates[1].format('YYYY-MM-DD HH:MM')))) return;
-        // if (start === end) return;
+        if (dates[1] && dates[1] !== "") if(moment(dates[0]).isAfter(moment(dates[1]))) return;
         // console.log(sVal.format('MM-DD-YYYY HH:mm:ss'));
         // console.log(eVal.format('MM-DD-YYYY HH:mm:ss'));
         const obj = {
             title, 
-            start: moment(dates[0].format('YYYY-MM-DD HH:MM')).toDate() ?? null, 
-            end: moment(dates[1].format('YYYY-MM-DD HH:MM')).toDate() ?? null,
+            // start: dates[0] ? moment(dates[0]).toDate() : null, 
+            // end: dates[1] ? moment(dates[1]).toDate() : null,
+            // start: dates[0] ? moment().year(dates[0].year).month(dates[0].month).day(dates[0].day).hour(dates[0].hour).minute(dates[0].minute) : null,
+            // end: dates[1] ? moment().year(dates[1].year).month(dates[1].month).day(dates[1].day).hour(dates[1].hour).minute(dates[1].minute) : null,
+            start: dates[0] ? moment(dates[0].toString()).add('1','second').toDate() : null,
+            end: dates[1] ? moment(dates[1].toString()).add('1','second').toDate() : null,
             allDay: allDay,
             description: desc,
         }
@@ -49,11 +53,12 @@ function EventModalProvider(props) {
         
         if (calendarRef?.current) {
             console.log('from home')
+            console.log(obj)
             calendarRef.current.getApi().addEvent(obj);
         }
         if (calendarRef?.new) {
             console.log('from edit sprint')
-            console.log(dates)
+            console.log(dates.map(date => date.toString()))
             calendarRef.new.setSprint(obj)
         }
 
@@ -93,8 +98,8 @@ function EventModalProvider(props) {
                         <div className="input-group">
                             <label>All day: </label>
                             <SimpleCheckbox value={allDay} onClick={()=>{
-                                console.log(dates)
-                                setDates(allDay ? "" : [])
+                                // console.log(dates)
+                                setDates([])
                                 setAllDay(prev=>!prev)
                             }} />
                         </div>
@@ -122,12 +127,15 @@ function EventModalProvider(props) {
                         <div className="input-group" style={{flexFlow:"column"}}>
                             <label>Range: </label>
                             <Calendar
+                                format={allDay ? "YYYY-MM-DD" : "YYYY-MM-DD HH:mm:ss"}
                                 value={dates}
                                 onChange={date=>{
+                                    console.log(date.toString())
                                     setDates(date)
                                     // console.log(moment(date[0].format('YYYY-MM-DD HH:MM')))
                                 }}
-                                range={!allDay}
+                                plugins={allDay ? [<DatePanel markFocused />] : [<TimePicker position="bottom" />, <DatePanel markFocused />]}
+                                range
                                 showOtherDays
                                 className="modal-calendar bg-dark" />
                         </div>
