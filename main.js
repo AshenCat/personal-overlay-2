@@ -14,7 +14,8 @@ mongoose.connect(
     require('./db/config/config').db, {
         useNewUrlParser: true, 
         useUnifiedTopology: true, 
-        useCreateIndex: true
+        useCreateIndex: true,
+        useFindAndModify: false
     }).then(con => {
         console.log('connected to mongodb')
     }).catch(err => {
@@ -27,7 +28,7 @@ let win;
 function createWindow() {
     win = new BrowserWindow({
         width:1366, minWidth:900,
-        height: 768, minHeight: 600,
+        height: 768, minHeight: 650,
         backgroundColor: "#333333",
         frame: false,
         webPreferences: {
@@ -85,7 +86,9 @@ const {
     onSprintAdd,
     LoadCalendarEvents,
     LoadSprints,
-    LoadSprint
+    LoadSprint,
+    EditSprint,
+    DeleteSprint
 } = require('./db/controllers/EventController');
 
 ipcMain.on('onEventAdd', (e, data) => onEventAdd(e, data))
@@ -93,6 +96,8 @@ ipcMain.on('onSprintAdd', (e, data) => onSprintAdd(e,data))
 ipcMain.on('LoadCalendarEvents', (e, month) => LoadCalendarEvents(e, month))
 ipcMain.on('LoadSprints', LoadSprints)
 ipcMain.on('LoadSprint', (e, id) => {LoadSprint(e,id)})
+ipcMain.on('EditSprint', (e, sprint) => {EditSprint(e,sprint)})
+ipcMain.on('DeleteSprint', (e, id) => {DeleteSprint(e,id)})
 
 
 // ipcMain.on('notify', (e, message) => {
