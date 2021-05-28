@@ -13,8 +13,8 @@ let eventSchema = new Schema({
     end: Date,
     description: String,
     groupId: {
-        type: mongoose.Types.ObjectId,
-        ref: 'Sprint'
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'sprint'
     },
     allDay: Boolean,
     url: String,
@@ -22,14 +22,14 @@ let eventSchema = new Schema({
     durationEditable: Boolean,
     resourceEditable: Boolean,
     overlap: Boolean,
-    contraint: [{
-        type: mongoose.Types.ObjectId,
-        ref: 'Sprint'
+    constraint: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'sprint'
     }],
 
     assignedTo: [{
-        type: mongoose.Types.ObjectId,
-        ref: 'People'
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'participants'
     }],
     status: {
         type: Boolean,
