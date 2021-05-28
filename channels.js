@@ -4,7 +4,9 @@ const rendererToMain = [
     "onSprintAdd",
     "LoadSprints",
     "LoadCalendarEvents",
-    "LoadSprint"
+    "LoadSprint",
+    "EditSprint",
+    "DeleteSprint"
 ]
 
 const mainToRenderer = [
@@ -12,7 +14,9 @@ const mainToRenderer = [
     "onSprintAdd",
     "LoadSprints",
     "LoadCalendarEvents",
-    "LoadSprint"
+    "LoadSprint",
+    "EditSprint",
+    "DeleteSprint"
 ]
 
 module.exports = {
