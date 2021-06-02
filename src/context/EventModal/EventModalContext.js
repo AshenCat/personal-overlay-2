@@ -10,6 +10,7 @@ import Textarea from '../../components/input/textarea/Textarea';
 import { Calendar } from 'react-multi-date-picker';
 import TimePicker from "react-multi-date-picker/plugins/time_picker";
 import DatePanel from 'react-multi-date-picker/plugins/date_panel';
+// import { nanoid } from 'nanoid'
 const EventModalContext = React.createContext();
 
 export const useEventModalContext = () => {
@@ -26,7 +27,7 @@ function EventModalProvider(props) {
     const [title, setTitle] = React.useState("");
     // const [start, setStart] = React.useState("");
     // const [end, setEnd] = React.useState("");
-    const [dates, setDates] = React.useState([])
+    const [dates, setDates] = React.useState("")
     const [allDay, setAllDay] = React.useState(false)
     const [desc, setDesc] = React.useState("")
     const [calendarRef, setCalendarRef] = React.useState(null)
@@ -35,17 +36,19 @@ function EventModalProvider(props) {
 
     const onSubmit = () => {
         if (title === "") return;
-        if (dates[1] && dates[1] !== "") if(moment(dates[0]).isAfter(moment(dates[1]))) return;
+        // if (dates[1] && dates[1] !== "") if(moment(dates[0]).isAfter(moment(dates[1]))) return;
+        if(!dates) return;
         // console.log(sVal.format('MM-DD-YYYY HH:mm:ss'));
         // console.log(eVal.format('MM-DD-YYYY HH:mm:ss'));
         const obj = {
+            // _id: nanoid(),
             title, 
             // start: dates[0] ? moment(dates[0]).toDate() : null, 
             // end: dates[1] ? moment(dates[1]).toDate() : null,
             // start: dates[0] ? moment().year(dates[0].year).month(dates[0].month).day(dates[0].day).hour(dates[0].hour).minute(dates[0].minute) : null,
             // end: dates[1] ? moment().year(dates[1].year).month(dates[1].month).day(dates[1].day).hour(dates[1].hour).minute(dates[1].minute) : null,
-            start: dates[0] ? moment(dates[0].toString()).add('1','second').toDate() : null,
-            end: dates[1] ? moment(dates[1].toString()).add('1','second').toDate() : null,
+            start: moment(dates.toString()).add('1','second').toDate(),
+            // end: dates[1] ? moment(dates[1].toString()).add('1','second').toDate() : null,
             allDay: allDay,
             description: desc,
         }
@@ -58,7 +61,7 @@ function EventModalProvider(props) {
         }
         if (calendarRef?.new) {
             console.log('from edit sprint')
-            console.log(dates.map(date => date.toString()))
+            // console.log(dates.map(date => date.toString()))
             calendarRef.new.setSprint(obj)
         }
 
@@ -66,15 +69,13 @@ function EventModalProvider(props) {
     }
 
     const onClose = () => {
-        if(open) {
-            console.log('clear')
-            setTitle("");
-            // setStart("");
-            // setEnd("");
-            setDates([])
-            setAllDay(false);
-            setDesc('');
-        }
+        console.log('clear')
+        setTitle("");
+        // setStart("");
+        // setEnd("");
+        setDates("")
+        setAllDay(false);
+        setDesc('');
         // setFunc(null)
         setCalendarRef(null);
         setEventModalOpen(false);
@@ -99,7 +100,7 @@ function EventModalProvider(props) {
                             <label>All day: </label>
                             <SimpleCheckbox value={allDay} onClick={()=>{
                                 // console.log(dates)
-                                setDates([])
+                                // setDates([])
                                 setAllDay(prev=>!prev)
                             }} />
                         </div>
@@ -135,7 +136,7 @@ function EventModalProvider(props) {
                                     // console.log(moment(date[0].format('YYYY-MM-DD HH:MM')))
                                 }}
                                 plugins={allDay ? [<DatePanel markFocused />] : [<TimePicker position="bottom" />, <DatePanel markFocused />]}
-                                range
+                                // range
                                 showOtherDays
                                 className="modal-calendar bg-dark" />
                         </div>

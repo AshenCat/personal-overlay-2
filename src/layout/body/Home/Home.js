@@ -36,7 +36,8 @@ function Home() {
 
     const handleDateClick = (info) => {
         // console.log(dateClickData)
-        setDates([info.date ?? moment(info.startStr), info.date ?? moment(info.endStr).subtract(1, 'second')])
+        // setDates([info.date ?? moment(info.startStr), info.date ?? moment(info.endStr).subtract(1, 'second')])
+        setDates(info.date ?? moment(info.startStr))
         setCalendarRef(calendarRef);
         setEventModalOpen(true);
     }
@@ -53,14 +54,20 @@ function Home() {
 
     const handleEventAdd = (data) => {
         // console.log(data.event.toPlainObject())
+        // console.log()
+        // calendarRef.current.getApi().getEvents().slice(0, -1)
+        // console.log(data)
+        data.revert()
         const date = {
             ...data.event.toPlainObject(),
-            start: moment(data.event.toPlainObject().start).add('1','second').format('YYYY-MM-DD HH:mm:ss'),
-            end: data.event.toPlainObject().end ? moment(data.event.toPlainObject().end).add('1','second').format('YYYY-MM-DD HH:mm:ss') : null,
+            start: moment(data.event.toPlainObject().start).format('YYYY-MM-DD HH:mm:ss'),
+            end: data.event.toPlainObject().end ? moment(data.event.toPlainObject().end).format('YYYY-MM-DD HH:mm:ss') : null,
             // description: data.event.extendedProps.description,
         }
         // console.log(data.event.extendedProps)
         api.send('onEventAdd', date)
+        
+        // window.location.reload();
     }
 
     const handleDatesSet = (data) => {
@@ -80,6 +87,10 @@ function Home() {
     React.useEffect(() => {
         api.recieve('onEventAdd', (msg)=>{
             // console.log('from Home.js: ', msg)
+            api.send('LoadCalendarEvents', {
+                monthStart: moment().clone().startOf('month').subtract(1,'week').format('YYYY-MM-DD hh:mm'),
+                monthEnd: moment().clone().endOf('month').add(1,'week').format('YYYY-MM-DD hh:mm'),
+            });
         })
         api.recieve('LoadCalendarEvents', (data) => {
             setEvents([...data])

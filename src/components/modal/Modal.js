@@ -12,7 +12,7 @@ function Modal(props) {
              * Alert if clicked on outside of element
              */
             function handleClickOutside(event) {
-                if (ref.current && !ref.current.contains(event.target)) {
+                if (ref.current && !ref.current.contains(event.target) && props.open) {
                     try {
                         // console.log('onClose')
                         props.onClose();

@@ -66,8 +66,10 @@ const LoadSprint = async (e, id) => {
 const EditSprint = (e, sprint) => {
     const events = sprint.events;
     delete sprint.events;
-    EventModel.insertMany(events, (err, ev)=>{
-        if(ev)console.log('insert: true')
+    // console.log(events)
+    // console.log(events.filter(event => !event._id))
+    EventModel.insertMany(events.filter(event => !event._id), (err, ev)=>{
+        if(ev) console.log('insert: true')
         SprintModel.findByIdAndUpdate(mongoose.Types.ObjectId(sprint._id), sprint, {new:true}, (err,doc)=>{
             if(doc)console.log('findbyid: true')
             doc.events.push(ev.map(e=>e._id))
