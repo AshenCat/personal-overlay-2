@@ -23,8 +23,6 @@ function Sprints(props) {
     const [description, setDescription] = React.useState('');
     const [events, setEvents] = React.useState([]);
     const [participants, setParticipants] = React.useState([]);
-    // const [start, setStart] = React.useState('');
-    // const [end, setEnd] = React.useState('');
     const [dates, setDates] = React.useState('');
     const [filter, setFilter] = React.useState('')
     
@@ -40,8 +38,6 @@ function Sprints(props) {
         api.send('onSprintAdd', data)
         setSprints(prev=>[data, ...prev])
         setFilteredSprints(prev=>[data, ...prev])
-        // setSprints(prev=>[...prev, data])
-        // setFilteredSprints()
     }
 
     const onClear = () => {
@@ -50,9 +46,42 @@ function Sprints(props) {
         setEvents([])
         setParticipants([])
         setDates([])
-        // setStart('')
-        // setEnd('')
     }
+
+    const onDelete = (id) => {
+        api.send('DeleteSprint', id)
+        setSprints(prev=>prev.filter(pr=>pr._id!==id))
+    }
+    
+    React.useEffect(()=>{
+        const val = sprints.filter(sprint => {
+            if (filter === '') return true;
+            if (sprint.title.includes(filter) || sprint.description.includes(filter)) return true;
+            return false
+        })
+        setFilteredSprints(val)
+        setSprintCount(val.length)
+    }, [filter, sprints])
+
+    React.useEffect(()=>{
+        api.send('LoadSprints', {})
+        api.recieve('LoadSprints', (data) => {
+            console.log(data);
+            setSprints([...data]);
+            setFilteredSprints([...data])
+            setSprintCount(data.length)
+        })
+        api.recieve('onSprintAdd', data => {
+            console.log(data)
+        })
+        api.recieve('DeleteSprint', data => {
+            console.log(data)
+        })
+        return () => {
+            api.removeAllListeners('LoadSprints')
+            api.removeAllListeners('onSprintAdd')
+        }
+    }, [])
 
     const RowCard = (propsies) => {
         const {
@@ -60,12 +89,9 @@ function Sprints(props) {
             key,
             style
         } = propsies;
-        // console.log(propsies)
         const eventsCount = data?.events?.length + 1;
         const data = filteredSprints[index]
         const width = propsies?.parent?.props?.width;
-        // console.log([...data._id.id]) // [96, 160, 53, 78, 208, 3, 149, 45, 40, 92, 168, 208]
-        // console.log(ObjectID([96, 160, 53, 78, 208, 3, 149, 45, 40, 92, 168, 208]))
         if (data) return  <div key={key} className="sprint" style={style}>
                     <div className="sprint-card">
                         <div className="card-optional-calendar">
@@ -95,11 +121,18 @@ function Sprints(props) {
                             <div className="card-actions">
                                 <Button 
                                     style={{ padding: '8px'}}
+                                    className="view-btn"
+                                    onClick={()=>{props.history.push(`/sprints/${data._id}`)}}>
+                                        View
+                                </Button>
+                                <Button 
+                                    style={{ padding: '8px'}}
+                                    className="edit-btn"
                                     onClick={()=>{props.history.push(`/sprints/${data._id}`)}}>
                                         Edit
                                 </Button>
-                                <Button 
-                                    // style={{backgroundColor: '#DC143C', padding: '8px'}}
+                                <Button
+                                    onClick={()=>onDelete(data._id)}
                                     className="danger-btn">
                                         Delete
                                 </Button>
@@ -108,41 +141,11 @@ function Sprints(props) {
                     </div>
                 </div>
     }
-
-    React.useEffect(()=>{
-        const val = sprints.filter(sprint => {
-            if (filter === '') return true;
-            if (sprint.title.includes(filter) || sprint.description.includes(filter)) return true;
-            return false
-        })
-        setFilteredSprints(val)
-        setSprintCount(val.length)
-        // console.log(val.length)
-    }, [filter])
-
-    React.useEffect(()=>{
-        api.send('LoadSprints', {})
-        api.recieve('LoadSprints', (data) => {
-            console.log(data);
-            setSprints([...data]);
-            setFilteredSprints([...data])
-            setSprintCount(data.length)
-        })
-        api.recieve('onSprintAdd', data => {
-            console.log(data)
-
-            // console.log(newSprint)
-            // onClear();
-        })
-        return () => {
-            api.removeAllListeners('LoadSprints')
-            api.removeAllListeners('onSprintAdd')
-        }
-    }, [])
     
     return (
         <div className="sprints">
             <div className="sprint-filter-and-settings">
+                <h1>Sprints</h1>
                 <Card className="sprint-menu" noButton>
                     <h4 className="card-title">Add Sprint</h4>
                     <div className="form-body">
@@ -159,10 +162,7 @@ function Sprints(props) {
                             <DatePicker 
                                 type="input-icon"
                                 value={dates} 
-                                onChange={dates=>{
-                                    console.log(dates.map(date=>date.toString()))
-                                    setDates(dates.map(date=>date.toString()))
-                                }}
+                                onChange={dates=>setDates(dates.map(date=>date.toString()))}
                                 placeholder="Optional"
                                 inputClass="datetime-input"
                                 zIndex={101}
