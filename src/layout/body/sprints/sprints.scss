@@ -13,7 +13,7 @@ $medium : 1100px;
         flex-flow: column;
         justify-content: center;
         align-items: center;
-        width: 750px;
+        // width: 750px;
         transition: all .3s;
 
         h4.card-title {
@@ -24,6 +24,13 @@ $medium : 1100px;
         }
         .sprint-filter {
             transition: all .3s;
+        }
+        h1 {
+            margin: 10px 0;
+        }
+
+        .card-container {
+            min-width: 250px;
         }
     }
     .sprints-container {
@@ -133,6 +140,11 @@ $medium : 1100px;
             }
         }
     }
+}
+
+.hide-body {
+    height: 0;
+    overflow: hidden;
 }
 
 .form-group {
