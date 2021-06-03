@@ -5,6 +5,7 @@ button {
     font: inherit;
     background-color: rgb(17,119,187);
     color: whitesmoke;
+    transition: .25s all;
     &:hover {
         cursor: pointer;
     }
