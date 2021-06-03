@@ -13,11 +13,19 @@
                 width: 300px;
                 display: flex;
                 flex-flow: column;
+                @media screen and (min-width: 1100px) {
+                    width: 400px;
+                }
                 .input-group {
                     margin-top: 5px;
                     display: flex;
                     label {
                         margin-right: 15px;
+                    }
+                    .textarea-sprint {
+                        @media screen and (min-height: 800px) {
+                            height: 180px;
+                        }
                     }
                 }
             }
@@ -26,6 +34,9 @@
                 flex-flow: column;
                 width: 350px;
                 padding-left: 20px;
+                @media screen and (min-width: 1100px) {
+                    width: 400px;
+                }
                 .events {
                     flex: 1 1 auto;
                     display:flex;
@@ -40,6 +51,49 @@
                         margin: 5px 0;
                         border: 1px solid rgba(255,255,255,.3);
                         display: flex;
+                        max-height: 56vh;
+                        overflow: auto;
+                        .display-container {
+                            // width: 100%;
+                            position: relative;
+                            background-color: rgba(255,255,255,.15);
+                            border-bottom: 1px solid rgba(255,255,255,.3);
+                            padding:12px;
+                            display: flex;
+                            flex-flow: column;
+                            .lower-display-container {
+                                display: flex;
+                                .left {
+                                    flex: 6;
+                                    .display-date{
+                                        display: flex;
+                                        justify-content: space-between;
+                                    }
+                                }
+                                .right {
+                                    flex: 1;
+                                    display:flex;
+                                    justify-content: space-evenly;
+                                    align-items: flex-end;
+                                    .danger-btn {
+                                        width: 32px;
+                                        height: 32px;
+                                        color: white;
+                                        background-color: transparent;
+                                        border: transparent;
+                                        transition: .25s;
+                                        // border: 1px solid #f32617;
+                                        // background-color: transparent;
+                                        // color: #f32617;
+                                        &:hover {
+                                            // border: 1px solid #f32617;
+                                            // background-color:  #f32617;
+                                            color: #ff3333;
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
                 .participants {
@@ -74,6 +128,10 @@
             }
         }
     }
+}
+
+.button {
+    transition: .25s all;
 }
 
 .add-btn {

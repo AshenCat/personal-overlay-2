@@ -52,10 +52,16 @@ const LoadSprints = async (e) => {
 const LoadSprint = async (e, id) => {
     try{
         const sprint = await SprintModel.findOne({_id: mongoose.Types.ObjectId(id)}).populate('events').lean();
-        console.log(sprint.events)
+        // console.log(sprint.events)
         e.sender.send('LoadSprint', {
             ...sprint,
-            _id: sprint._id.toHexString()
+            _id: sprint._id.toHexString(),
+            events: [...sprint.events.map(ev => {
+                return {
+                    ...ev,
+                    _id: ev._id.toHexString()
+                }
+            })]
         })
     }
     catch(e) {
@@ -63,21 +69,35 @@ const LoadSprint = async (e, id) => {
     }
 }
 
-const EditSprint = (e, sprint) => {
+const EditSprint = async (e, sprint) => {
     const events = sprint.events;
+    const del = sprint.del;
     delete sprint.events;
-    // console.log(events)
-    // console.log(events.filter(event => !event._id))
-    EventModel.insertMany(events.filter(event => !event._id), (err, ev)=>{
-        if(ev) console.log('insert: true')
-        SprintModel.findByIdAndUpdate(mongoose.Types.ObjectId(sprint._id), sprint, {new:true}, (err,doc)=>{
-            if(doc)console.log('findbyid: true')
-            doc.events.push(ev.map(e=>e._id))
-            doc.save()
-            e.sender.send('EditSprint', `Successfully edited ${sprint._id}`); 
-        })
-    })
+    delete sprint.del;    
 
+    await SprintModel.findByIdAndUpdate(mongoose.Types.ObjectId(sprint._id), sprint, {new:true}, (err,doc)=>{
+        if(doc) console.log('findbyid: true')
+
+        if(del) {
+            del.map( async (dl)=> {
+                await doc.events.pull(dl._id)
+                EventModel.findByIdAndDelete(mongoose.Types.ObjectId(sprint._id),{},(err, doc) => {
+                    console.log(`ID: ${dl._id} deleted!`)
+                    e.sender.send('DeletedEvent', `Successfully deleted event: ${dl._id}`)
+                })
+            })
+        }
+
+        events.filter(event => !event._id).map( async (event) => {
+            const item = new EventModel(event);
+            item.save();
+            console.log(item)
+            doc.events.push(item._id)
+        });
+
+        doc.save()
+        e.sender.send('EditSprint', `Successfully edited ${sprint._id}`); 
+    })
 }
 
 const DeleteSprint = async (e, id) => {
