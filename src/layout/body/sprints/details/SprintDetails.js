@@ -132,6 +132,7 @@ function SprintDetails(props) {
                                     <option style={{color: 'black'}} value="waiting">Waiting</option>
                                     <option style={{color: 'black'}} value="active">Active</option>
                                     <option style={{color: 'black'}} value="on hold">On Hold</option>
+                                    <option style={{color: 'black'}} value="failed">Failed</option>
                                     <option style={{color: 'black'}} value="done">Done</option>
                                 </Select>
                             </div>

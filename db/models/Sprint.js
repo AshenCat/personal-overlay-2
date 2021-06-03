@@ -12,7 +12,7 @@ let sprintSchema = new Schema({
     description: requiredString,
     status: {
         type: String,
-        enum: ["active", "done", "waiting", "on hold"],
+        enum: ["active", "done", "waiting", "on hold", "failed"],
         default: "waiting",
     },
     events: [{
