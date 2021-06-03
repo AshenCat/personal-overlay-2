@@ -90,9 +90,8 @@ const EditSprint = async (e, sprint) => {
 
         events.filter(event => !event._id).map( async (event) => {
             const item = new EventModel(event);
-            item.save();
-            console.log(item)
-            doc.events.push(item._id)
+            const saved = await item.save();
+            if(saved) doc.events.push(item._id)
         });
 
         doc.save()
@@ -111,9 +110,10 @@ const LoadCalendarEvents = async (e, month) => {
         start: {
             $gte: month.monthStart,
         },
-        end: {
-            $lt: month.monthEnd
-        }
+        $or: [
+            {end: {$lt: month.monthEnd}},
+            {end: null}
+        ]
     }).lean().exec();
     e.sender.send('LoadCalendarEvents', eventsOnThisMonth)
 }
