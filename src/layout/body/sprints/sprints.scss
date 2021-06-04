@@ -13,7 +13,7 @@ $medium : 1100px;
         flex-flow: column;
         justify-content: center;
         align-items: center;
-        // width: 750px;
+        width: 550px;
         transition: all .3s;
 
         h4.card-title {
@@ -30,7 +30,7 @@ $medium : 1100px;
         }
 
         .card-container {
-            min-width: 250px;
+            min-width: 230px;
         }
     }
     .sprints-container {
@@ -123,6 +123,7 @@ $medium : 1100px;
                         .view-btn {
                             justify-self: flex-start;
                             margin-right: auto;
+                            min-width: 120px;
                             @media screen and (max-width: 1000px) {
                                 justify-self: unset;
                                 margin-right: unset;
