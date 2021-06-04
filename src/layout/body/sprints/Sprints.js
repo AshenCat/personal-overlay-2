@@ -25,8 +25,13 @@ function Sprints(props) {
     const [participants, setParticipants] = React.useState([]);
     const [dates, setDates] = React.useState('');
     const [filter, setFilter] = React.useState('')
+    const [filterStatus, setFilterStatus] = React.useState('')
+    // const [filterDates, setFilterDates] = React.useState('')
+
+    const [openFilter, setOpenFilter] = React.useState(false)
     
     const onSubmit = () => {
+        if (title.trim() === '' || description.trim() === '') return;
         const data = {
             title,
             description,
@@ -54,14 +59,19 @@ function Sprints(props) {
     }
     
     React.useEffect(()=>{
+        // console.log(filterStatus)
         const val = sprints.filter(sprint => {
             if (filter === '') return true;
-            if (sprint.title.includes(filter) || sprint.description.includes(filter)) return true;
+            if (sprint.title.toLowerCase().includes(filter) || sprint.description.toLowerCase().includes(filter)) return true;
             return false
+        }).filter(sprint=>{
+            if (filterStatus === '') return true;
+            if (sprint.status === filterStatus) return true;
+            return false;
         })
         setFilteredSprints(val)
         setSprintCount(val.length)
-    }, [filter, sprints])
+    }, [filter, sprints, filterStatus])
 
     React.useEffect(()=>{
         api.send('LoadSprints', {})
@@ -105,17 +115,20 @@ function Sprints(props) {
                                 readOnly
                                 onChange={()=>{}}
                                 plugins={width > 700 ? width > 850 ? [<DatePanel />, <TimePicker />] :[<DatePanel />] : []} 
-                                readOnly/>
+                                />
                                 {/* <Calendar value={value} onChange={() => setValue({})} /> */}
                         </div>
                         <div className="sprint-card-body">
                             <div className="card-title space-between">
                                 Title: <h4>{data?.title ?? <em>No title??</em>}</h4>
                             </div>
-                            <div className="card-events-count space-between mt-10px">
+                            <div className="card-events-count space-between">
                                 Events: {eventsCount > 1 ? <span>{eventsCount}</span> : <em>No Events</em>}
                             </div>
-                            <div className="card-description mt-10px">
+                            <div className="card-events-count space-between">
+                                Status: <em>{data?.status}</em>
+                            </div>
+                            <div className="card-description">
                                 Description: {<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- "<em>{data?.description}</em>"</span> ?? <em>No Description</em>}
                             </div>
                             <div className="card-actions">
@@ -146,9 +159,9 @@ function Sprints(props) {
         <div className="sprints">
             <div className="sprint-filter-and-settings">
                 <h1>Sprints</h1>
-                <Card className="sprint-menu" noButton>
+                <Card className="sprint-menu" onButtonClick={()=>setOpenFilter(prev=>!prev)} isOpen={!openFilter}>
                     <h4 className="card-title">Add Sprint</h4>
-                    <div className="form-body">
+                    <div className={`form-body ${!openFilter ? "" : "hide-body"}`}>
                         <div className="form-group">
                             <label>Title:</label>
                             <Input 
@@ -158,7 +171,7 @@ function Sprints(props) {
                                 onChange={e=>setTitle(e.target.value)}/>
                         </div>
                         <div className="form-group">
-                            <label>Date Range:</label>
+                            <label>Date:</label>
                             <DatePicker 
                                 type="input-icon"
                                 value={dates} 
@@ -170,7 +183,7 @@ function Sprints(props) {
                                 range
                                 plugins={[<DatePanel />,]}/> 
                         </div>
-                        <div className="form-group">
+                        {/* <div className="form-group">
                             <label>Participants:</label>
                             <Select 
                                 className="cWidth">
@@ -179,7 +192,7 @@ function Sprints(props) {
                                     return <option style={{color: 'black'}} key={ctr}>{person?.name}</option>
                                 })}
                             </Select>
-                        </div>
+                        </div> */}
                         <div className="form-group" style={{flexDirection: 'column', alignItems: 'unset'}}>
                             <label>Description: </label>
                             <Textarea value={description} onChange={e=>setDescription(e.target.value)} placeholder="Enter Description" />
@@ -198,9 +211,9 @@ function Sprints(props) {
                         </div>
                     </div>
                 </Card>
-                <Card className="sprint-filter" noButton>
+                <Card className="sprint-filter" onButtonClick={()=>setOpenFilter(prev=>!prev)} isOpen={openFilter}>
                     <h4 className="card-title">Sprints Filter</h4>
-                    <div className="card-body">
+                    <div className={`card-body ${openFilter ? "" : "hide-body"}`}>
                         <div className="form-group">
                             <label>Search:</label>
                             <Input 
@@ -209,6 +222,36 @@ function Sprints(props) {
                                 value={filter}
                                 onChange={(e)=>setFilter(e.target.value)}/>
                         </div>
+                        <div className="form-group">
+                            <label>Status: </label>
+                            <Select
+                                onChange={(e)=>{
+                                    setFilterStatus(e.target.value)
+                                    // console.log(filterStatus)
+                                }}
+                                value={filterStatus}
+                                className="cWidth">
+                                <option style={{color: 'black'}} value="">-----</option>
+                                <option style={{color: 'black'}} value="active">Active</option>
+                                <option style={{color: 'black'}} value="done">Done</option>
+                                <option style={{color: 'black'}} value="waiting">Waiting</option>
+                                <option style={{color: 'black'}} value="on hold">On Hold</option>
+                            </Select>
+                        </div>
+                        {/* <div className="form-group" style={{flexFlow:"column", alignItems: "flex-start"}}>
+                            <label>Date: </label>
+                            <Calendar 
+                                // fixRelativePosition={'center'}
+                                className="bg-dark"
+                                showOtherDays={true}
+                                zIndex={99}
+                                // value={[data?.start, data?.end]} 
+                                range
+                                readOnly
+                                onChange={()=>{}} 
+                                // plugins={[<DatePanel position="bottom"/>]}
+                                />
+                        </div> */}
                     </div>
                 </Card>
             </div>

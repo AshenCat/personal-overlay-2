@@ -7,10 +7,14 @@ import Textarea from '../../../../components/input/textarea/Textarea';
 import Button from '../../../../components/button/Button'
 import Select from '../../../../components/select/Select'
 import './SprintDetails.scss'
+import { useEventModalContext } from '../../../../context/EventModal/EventModalContext';
+import moment from 'moment';
+import { DeleteOutline, RestoreFromTrash } from '@material-ui/icons';
 
 function SprintDetails(props) {
     const {location} = props;
 
+    // const [open, setOpen] = React.useState(false);
     const [sprint, setSprint] = React.useState({
         title: '',
         description: '',
@@ -20,29 +24,18 @@ function SprintDetails(props) {
         events: [],
         participants: []
     });
-
-
-    // const [title, setTitle] = React.useState('');
-    // const [description, setDescription] = React.useState('');
-    // const [start, setStart] = React.useState('');
-    // const [end, setEnd] = React.useState('');
-    // const [status, setStatus] = React.useState('');
-    // const [events, setEvents] = React.useState([]);
-    // const [participants, setParticipants] = React.useState([]);
+    const [OG, setOG] = React.useState(null);
+    const [del, setDel] = React.useState([])
+    
+    const {setEventModalOpen, setCalendarRef, setDates} = useEventModalContext();
 
     React.useEffect(()=>{
         const arr = location.pathname.split('/')
         api.send('LoadSprint', arr[arr.length-1])
         api.recieve('LoadSprint', (data) => {
             setSprint(data);
-            console.log(data)
-            // setTitle(data.title)
-            // setDescription(data.description)
-            // setStart(data.start)
-            // setEnd(data.end)
-            // setStatus(data.status)
-            // setEvents(data.events)
-            // setParticipants(data.participants)
+            setOG(data);
+            console.log(data);
         })
         // api.receive()
         return () => {
@@ -50,16 +43,69 @@ function SprintDetails(props) {
         }
     }, [])
 
+    const onEventDel = (key) => {
+        console.log("deleting : ", key)
+        console.log(sprint.events[key])
+        setDel(prev => [...prev, 
+            {
+                event: sprint.events[key],
+                index: key
+            }])
+        setSprint(prev=>{
+            return {
+                ...prev,
+                events: [...prev.events.filter((ev)=>ev!=prev.events[key])]
+            }
+        })
+    }
+
+    const onEventUndo = () => {
+        console.log(del)
+        const lastStackItem =del[del.length - 1];
+        setSprint(prev => {
+            return {
+                ...prev,
+                events: [...prev.events.slice(0, lastStackItem.index), lastStackItem.event ,...prev.events.slice(lastStackItem.index)]
+            }
+        })
+        setDel(prev => [...prev.filter(dl => dl.index !== lastStackItem.index)])
+    }
+
     const onSubmit = () => {
-        console.log(sprint)
+        // console.log(sprint)
+        if (OG !== sprint) {
+            api.send('EditSprint', {
+                ...sprint,
+                del: [...del.filter(dl => !!dl.event._id).map(dl=>dl.event)]
+            })
+            // console.log(del)
+            console.log({
+                    ...sprint,
+                    del: [...del.filter(dl=>!!dl.event._id).map(dl=>dl.event)]
+                })
+        }
     }
 
     const DisplayListOf = (props) => {
-        // console.log(props)
-        if(props?.type?.length !== 0) {
-            return props?.type?.map(sub => <div className="display-container">
-                <div className="display-title">{sub.title}</div>
-                <div className="display-start">{sub.start} - {sub.end}</div>
+        // console.log(props?.type?.length !== 0)
+        if(props?.type?.length !== 0 && props?.type?.length) {
+            return props?.type?.map((sub, key) => <div className="display-container" key={key}>
+                <div className="lower-display-container">
+                    <div className="left">
+                        <div className="display-title"><b>{sub?.title}</b></div>
+                        <div className="display-date"><div>From:</div> <div>{moment(sub?.start).format('YYYY MMM DD HH:mm:ss')}</div></div>
+                        {/* <div className="display-date"><div>To:</div> <div>{moment(sub?.end).format('YYYY MMM DD HH:mm:ss')}</div></div> */}
+                    </div>
+                    <div className="right">
+                        {/* <Button>Edit</Button> */}
+                        <Button 
+                            className="danger-btn"
+                            onClick={()=>onEventDel(key)}>
+                                <DeleteOutline />
+                        </Button>
+                    </div>
+                </div>
+                {/* {sub?.start === sub?.end ? " - " + moment(sub?.end).format("YYYY, MMM DD hh:mm") : ""} </div> */}
             </div>)
         }
         return <em style={{alignSelf:'center', margin: '0 auto', color: 'rgba(255,255,255,.3)'}}>No {props?.str} to show...</em>
@@ -86,12 +132,14 @@ function SprintDetails(props) {
                                     <option style={{color: 'black'}} value="waiting">Waiting</option>
                                     <option style={{color: 'black'}} value="active">Active</option>
                                     <option style={{color: 'black'}} value="on hold">On Hold</option>
+                                    <option style={{color: 'black'}} value="failed">Failed</option>
                                     <option style={{color: 'black'}} value="done">Done</option>
                                 </Select>
                             </div>
                             <div className="input-group" style={{flexFlow: 'column'}}>
                                 <label>Description: </label>
                                 <Textarea
+                                    className="textarea-sprint"
                                     value={sprint?.description} 
                                     onChange={e=>setSprint(prev=>{ return {...prev, description: e.target.value}})}
                                     />
@@ -102,8 +150,8 @@ function SprintDetails(props) {
                                     <Calendar 
                                         value={[sprint?.start, sprint?.end]}
                                         onChange={date=>{
+                                            // setSprint(prev=>{ return {...prev, start: moment(date[0].format('YYYY-MM-DD HH:MM')), end: date[1] ? moment(date[1].format('YYYY-MM-DD HH:MM')) : null}})
                                             setSprint(prev=>{ return {...prev, start: date[0]?.toString(), end: date[1]?.toString()}})
-                                            // console.log(date[1]?.toString())
                                         }}
                                         range
                                         showOtherDays
@@ -114,22 +162,46 @@ function SprintDetails(props) {
                         <div className="right">
                             <div className="events">
                                 <div className="events-head">
-                                    <label>Events: </label>
-                                    <Button className="add-btn">Add Event</Button>
+                                    <label style={{flex:1}}>Events: </label>
+                                    
+                                    <Button 
+                                        onClick={()=>{
+                                            setDates(moment().format('YYYY-MM-DD'))
+                                            setCalendarRef({
+                                                new: {
+                                                    setSprint: (ev) =>{
+                                                        setSprint(prev=>{ return {...prev, events: [...prev.events, ev]}})
+                                                        // console.log(ev)
+                                                    }
+                                                }
+                                            })
+                                            setEventModalOpen(true)
+                                        }}
+                                        style={{height: '100%', padding: '0 15px'}}>
+                                            Add Event
+                                    </Button>
+                                    <Button
+                                        // className={del.length === 0 ? '' : "add-btn"}
+                                        disabled={del.length === 0}
+                                        style={{marginLeft: "5px", padding: '5px 10px 2px 10px', position: 'relative',
+                                                backgroundColor: del.length===0 ? "gray": '#1177bb', cursor: del.length===0 ? "not-allowed" : 'pointer'}}
+                                        onClick={onEventUndo}>
+                                            <RestoreFromTrash />
+                                    </Button>
                                 </div>
-                                <div className="events-list">
+                                <div className="events-list" style={sprint?.events?.length > 0 ? {flexFlow: 'column'} : {}}>
                                     <DisplayListOf type={sprint?.events} str={"events"} />
                                 </div>
                             </div>
-                            <div className="participants">
+                            {/* <div className="participants">
                                 <div className="participants-head">
                                     <label>Participants: </label>
                                     <Button className="add-btn">Add Participant</Button>
                                 </div>
-                                <div className="participants-list">
+                                <div className="participants-list" style={sprint?.events?.length > 0 ? {flexFlow: 'column'} : {}}>
                                     <DisplayListOf type={sprint?.participants} str={"participants"} />
                                 </div>
-                            </div>
+                            </div> */}
                             <div className="card-actions">
                                 <Button
                                     onClick={onSubmit}>
@@ -137,7 +209,10 @@ function SprintDetails(props) {
                                 </Button>
                                 <Button
                                     className="cancel-btn"
-                                    onClick={()=>props.history.goBack()}>
+                                    onClick={()=>{
+                                        props.history.push('/sprints')
+                                        console.log(sprint)
+                                    }}>
                                     Cancel
                                 </Button>
                             </div>
