@@ -11,6 +11,7 @@ import DatePanel from "react-multi-date-picker/plugins/date_panel"
 import TimePicker from "react-multi-date-picker/plugins/analog_time_picker";
 import './sprints.scss'
 import { AutoSizer, List } from 'react-virtualized'
+import Slider from '../../../components/checkbox/slider/Slider'
 
 
 function Sprints(props) {
@@ -27,6 +28,7 @@ function Sprints(props) {
     const [filter, setFilter] = React.useState('')
     const [filterStatus, setFilterStatus] = React.useState('')
     // const [filterDates, setFilterDates] = React.useState('')
+    const [filterAsc, setFilterAsc] = React.useState(false)
 
     const [openFilter, setOpenFilter] = React.useState(false)
     
@@ -69,9 +71,14 @@ function Sprints(props) {
             if (sprint.status === filterStatus) return true;
             return false;
         })
-        setFilteredSprints(val)
+        setFilteredSprints(shouldAscend(val))
         setSprintCount(val.length)
-    }, [filter, sprints, filterStatus])
+    }, [filter, sprints, filterStatus, filterAsc])
+
+    const shouldAscend = (arr) => {
+        if(filterAsc) return [...arr].reverse();
+        return arr;
+    }
 
     React.useEffect(()=>{
         api.send('LoadSprints', {})
@@ -135,8 +142,8 @@ function Sprints(props) {
                                 <Button 
                                     style={{ padding: '8px'}}
                                     className="view-btn"
-                                    onClick={()=>{props.history.push(`/sprints/${data._id}`)}}>
-                                        View
+                                    onClick={()=>{props.history.push(`/sprint`)}}>
+                                        Set Sprint
                                 </Button>
                                 <Button 
                                     style={{ padding: '8px'}}
@@ -237,6 +244,10 @@ function Sprints(props) {
                                 <option style={{color: 'black'}} value="waiting">Waiting</option>
                                 <option style={{color: 'black'}} value="on hold">On Hold</option>
                             </Select>
+                        </div>
+                        <div className="form-group">
+                            <label>Ascending: </label>
+                            <Slider id="ascending" name="ascending" value={filterAsc} onClick={()=>setFilterAsc(prev=>!prev)} />
                         </div>
                         {/* <div className="form-group" style={{flexFlow:"column", alignItems: "flex-start"}}>
                             <label>Date: </label>
