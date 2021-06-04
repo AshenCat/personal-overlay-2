@@ -14,6 +14,7 @@ import Input from '../../../components/input/inputText/Input';
 import Select from '../../../components/select/Select';
 import ClickMenu from '../../../components/clickMenu/ClickMenu';
 import Card from '../../../components/card/Card';
+import Slider from '../../../components/checkbox/slider/Slider';
 
 function Home() {
     const calendarRef = React.useRef(null);
@@ -132,14 +133,16 @@ function Home() {
                                 <label htmlFor="editable">Editable: </label>
                             </div>
                             <div className="switches">
-                                <label className="switch">
+                                {/* <label className="switch">
                                     <input type="checkbox" name="selectable" id="selectable" value={selectable} />
                                     <span className="round-slider" onClick={()=>setSelectable(prevState=>!prevState)}></span>
                                 </label>
                                 <label className="switch">
                                     <input type="checkbox" name="editable" id="editable" value={editable} />
                                     <span className="round-slider" onClick={()=>setEditable(prevState=>!prevState)}></span>
-                                </label>
+                                </label> */}
+                                <Slider name="selectable" id="selectable" value={selectable} onClick={()=>setSelectable(prev=>!prev)} />
+                                <Slider name="editable" id="editable" value={editable} onClick={()=>setEditable(prev=>!prev)} />
                             </div>
                         </div>
                     </div>
