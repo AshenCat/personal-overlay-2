@@ -2,12 +2,14 @@ import React from 'react';
 import './button.scss';
 
 function Button(props) {
+    // if(props.disabled) console.log('disabled')
     return (
         <button
             // onClick={props.onClick}
-            className={`button ${props.className ?? ""} ${props.disabled? 'btn-disabled': ''}`}
             // style={props.style}
-            {...props}>
+            {...props}
+            
+            className={`button ${props.className ?? ""} ${props.disabled? 'btn-disabled': ''}`}>
                 {props.children}
         </button>
     )
