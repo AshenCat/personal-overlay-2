@@ -55,20 +55,16 @@ function Home() {
 
     const handleEventAdd = (data) => {
         // console.log(data.event.toPlainObject())
-        // console.log()
         // calendarRef.current.getApi().getEvents().slice(0, -1)
-        // console.log(data)
         data.revert()
         const date = {
             ...data.event.toPlainObject(),
             start: moment(data.event.toPlainObject().start).format('YYYY-MM-DD HH:mm:ss'),
-            end: data.event.toPlainObject().end ? moment(data.event.toPlainObject().end).format('YYYY-MM-DD HH:mm:ss') : null,
+            // end: data.event.toPlainObject().end ? moment(data.event.toPlainObject().end).format('YYYY-MM-DD HH:mm:ss') : null,
             // description: data.event.extendedProps.description,
+            allDay: data.event.allDay
         }
-        // console.log(data.event.extendedProps)
         api.send('onEventAdd', date)
-        
-        // window.location.reload();
     }
 
     const handleDatesSet = (data) => {
