@@ -43,8 +43,8 @@ function Sprints(props) {
             end: dates[1] ? moment(dates[1]).add('1','second').toDate() : null,
         }
         api.send('onSprintAdd', data)
-        setSprints(prev=>[data, ...prev])
-        setFilteredSprints(prev=>[data, ...prev])
+        // setSprints(prev=>[data, ...prev])
+        // setFilteredSprints(prev=>[data, ...prev])
     }
 
     const onClear = () => {
@@ -90,6 +90,7 @@ function Sprints(props) {
         })
         api.recieve('onSprintAdd', data => {
             console.log(data)
+            api.send('LoadSprints', {})
         })
         api.recieve('DeleteSprint', data => {
             console.log(data)
