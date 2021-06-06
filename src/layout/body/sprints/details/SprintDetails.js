@@ -127,7 +127,7 @@ function SprintDetails(props) {
                             </div>
                             <div className="input-group" style={{justifyContent: "space-between"}}>
                                 <label>Status: </label>
-                                <Select style={{width: "50%"}} defaultValue={status} onChange={e=>setSprint(prev=>{ return {...prev, status: e.target.value}})}>
+                                <Select style={{width: "50%"}} value={sprint?.status} onChange={e=>setSprint(prev=>{ return {...prev, status: e.target.value}})}>
                                     <option style={{color: 'black'}} value=""></option>
                                     <option style={{color: 'black'}} value="waiting">Waiting</option>
                                     <option style={{color: 'black'}} value="active">Active</option>

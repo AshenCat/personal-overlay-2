@@ -6,7 +6,8 @@ function Select(props) {
         <select 
             name={props.name}
             id={props.id}
-            defaultValue={props.defaultValue} 
+            // defaultValue={props.defaultValue} 
+            value={props.value}
             onChange={props.onChange}
             style={props.style}
             className={`base-select ${props.className ?? ''}`}>

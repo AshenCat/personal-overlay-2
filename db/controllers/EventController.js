@@ -6,13 +6,13 @@ const mongoose = require('mongoose');
 // const PersonModel = require('../models/Peron');
 
 const onEventAdd = async (e, data) => {
-    if(!data.end) data.end = data.start;
+    // if(!data.end) data.end = data.start;
     const { extendedProps } = data;
     
     let newData = {
         ...data,
         ...extendedProps,
-        allDay: data.end === data.start ? true : false,
+        // allDay: data.end === data.start ? true : false,
     }
     delete newData.extendedProps;
     console.log(newData)
