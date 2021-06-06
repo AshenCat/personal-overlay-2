@@ -143,7 +143,8 @@ function Sprints(props) {
                                 <Button 
                                     style={{ padding: '8px'}}
                                     className="view-btn"
-                                    onClick={()=>{props.history.push(`/sprint`)}}>
+                                    onClick={()=>{props.history.push(`/sprint`)}}
+                                    disabled={data?.selected}>
                                         Set Sprint
                                 </Button>
                                 <Button 
