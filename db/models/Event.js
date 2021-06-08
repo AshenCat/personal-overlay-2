@@ -22,11 +22,18 @@ let eventSchema = new Schema({
     durationEditable: Boolean,
     resourceEditable: Boolean,
     overlap: Boolean,
+    priority: {
+        type: String,
+        enum: ['low', 'medium', 'high', ''],
+        default: ''
+    },
     constraint: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'sprint'
     }],
-
+    tags: [{
+        type: String
+    }],
     assignedTo: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'participants'
