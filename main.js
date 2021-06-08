@@ -4,7 +4,7 @@ const {
     ipcMain,
     // Notification
 } = require('electron');
-const mongoose = require('mongoose');
+const mongoose = require('mongoose').set('debug', true);
 const path = require('path')
 
 const isDev = !app.isPackaged;
@@ -84,7 +84,7 @@ ipcMain.on('windowState', (e, msg) => {
 const { 
     onEventAdd,
     onSprintAdd,
-    LoadCalendarEvents,
+    LoadCalendarData,
     LoadSprints,
     LoadSprint,
     EditSprint,
@@ -93,7 +93,7 @@ const {
 
 ipcMain.on('onEventAdd', (e, data) => onEventAdd(e, data))
 ipcMain.on('onSprintAdd', (e, data) => onSprintAdd(e,data))
-ipcMain.on('LoadCalendarEvents', (e, month) => LoadCalendarEvents(e, month))
+ipcMain.on('LoadCalendarData', (e, month) => LoadCalendarData(e, month))
 ipcMain.on('LoadSprints', LoadSprints)
 ipcMain.on('LoadSprint', (e, id) => {LoadSprint(e,id)})
 ipcMain.on('EditSprint', (e, sprint) => {EditSprint(e,sprint)})
