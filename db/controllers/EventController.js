@@ -140,7 +140,6 @@ const DeleteSprint = async (e, id) => {
 
 const LoadCalendarData = async (e, month) => {
     const type = month.ofType;
-    console.log(month)
     if (type === 'events') {
         const eventsOnThisMonth = await EventModel.find({
             start: {
