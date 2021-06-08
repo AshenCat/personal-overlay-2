@@ -98,6 +98,7 @@ function Sprints(props) {
         return () => {
             api.removeAllListeners('LoadSprints')
             api.removeAllListeners('onSprintAdd')
+            api.removeAllListeners('DeleteSprint')
         }
     }, [])
 
