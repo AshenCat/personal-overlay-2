@@ -28,16 +28,17 @@ function EventModalProvider(props) {
     // const [start, setStart] = React.useState("");
     // const [end, setEnd] = React.useState("");
     const [dates, setDates] = React.useState("")
-    const [allDay, setAllDay] = React.useState(false)
+    const [allDay, setAllDay] = React.useState(true)
     const [desc, setDesc] = React.useState("")
     const [calendarRef, setCalendarRef] = React.useState(null)
     // const [obj, setObj] = React.useState({})
     // const [func, setFunc] = React.useState(null)
 
     const onSubmit = () => {
+        // console.log(dates)
         if (title === "") return;
         // if (dates[1] && dates[1] !== "") if(moment(dates[0]).isAfter(moment(dates[1]))) return;
-        if(!dates) return;
+        if(dates === "Invalid date") return;
         // console.log(sVal.format('MM-DD-YYYY HH:mm:ss'));
         // console.log(eVal.format('MM-DD-YYYY HH:mm:ss'));
         const obj = {
@@ -74,13 +75,12 @@ function EventModalProvider(props) {
         // setStart("");
         // setEnd("");
         setDates("")
-        setAllDay(false);
+        setAllDay(true);
         setDesc('');
         // setFunc(null)
         setCalendarRef(null);
         setEventModalOpen(false);
     }
-
     return (
         <EventModalContext.Provider value={{setEventModalOpen, setCalendarRef, setDates}}>
             {props.children}
@@ -138,7 +138,8 @@ function EventModalProvider(props) {
                                 plugins={allDay ? [<DatePanel markFocused />] : [<TimePicker position="bottom" />, <DatePanel markFocused />]}
                                 // range
                                 showOtherDays
-                                className="modal-calendar bg-dark" />
+                                // className="modal-calendar bg-dark"
+                                />
                         </div>
                     </div>
                 </div>

@@ -166,7 +166,7 @@ function SprintDetails(props) {
                                     
                                     <Button 
                                         onClick={()=>{
-                                            setDates(moment().format('YYYY-MM-DD'))
+                                            setDates(moment(sprint.start).format('YYYY/MM/DD'))
                                             setCalendarRef({
                                                 new: {
                                                     setSprint: (ev) =>{

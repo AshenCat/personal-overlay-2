@@ -4,7 +4,7 @@ import './simplecheckbox.scss'
 
 function SimpleCheckbox(props) {
     return (
-        <input type="checkbox" value={props.value} checked={props.value} onChange={props.onClick}/>
+        <input type="checkbox" value={props.value} defaultChecked={props.value} onChange={props.onClick}/>
     )
 }
 
