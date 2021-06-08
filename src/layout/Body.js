@@ -11,9 +11,10 @@ import Home from './body/home/Home';
 import EventModalProvider from '../context/EventModal/EventModalContext';
 
 // const HomeComponent = React.lazy(()=>import('./body/home/Home'));
-const EventsComponent = React.lazy(()=>import('./body/events/Events'));
+// const EventsComponent = React.lazy(()=>import('./body/events/Events'));
 const SprintsComponent = React.lazy(()=>import('./body/sprints/Sprints'));
 const SprintDetailsComponent = React.lazy(()=>import('./body/sprints/details/SprintDetails'))
+const todosComponent = React.lazy(()=>import('./body/todos/Todos'))
 
 function Body() {
     return (
@@ -26,7 +27,8 @@ function Body() {
                         <React.Suspense fallback={<div>loading...</div>}>
                             <main>
                                 <Route exact path="/" component={Home} />
-                                <Route exact path="/events" component={EventsComponent} />
+                                {/* <Route exact path="/events" component={EventsComponent} /> */}
+                                <Route exact path="/todos" component={todosComponent} />
                                 <Route exact path="/sprints" component={SprintsComponent} />
                                 <Route exact path="/sprints/:id" component={SprintDetailsComponent} />
                             </main>

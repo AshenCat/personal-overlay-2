@@ -66,7 +66,7 @@ function Drawer(props) {
                     </figure>
                 </li>
                 <li>
-                    <figure className="figure" id="events" onClick={()=>onSelect('events')}>
+                    <figure className="figure" id="todos" onClick={()=>onSelect('todos')}>
                         <span className="logo"><EventNote style={{fontSize: fontSize}} /></span>
                         {/* <figcaption>Todo</figcaption> */}
                     </figure>
