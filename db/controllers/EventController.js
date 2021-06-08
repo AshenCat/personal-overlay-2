@@ -69,6 +69,10 @@ const LoadSprint = async (e, id) => {
     }
 }
 
+const LoadSprintsToday = async (e) => {
+
+}
+
 const EditSprint =  (e, sprint) => {
     const events = sprint.events;
     const del = sprint.del;
@@ -93,7 +97,10 @@ const EditSprint =  (e, sprint) => {
                     })
                 }
 
-                doc.events.push(docs.map(e=>e._id))
+                // doc.events.push(docs.map(e=>e._id))
+                docs.map(e=>{
+                    doc.events.push(e._id)
+                })
         
                 // events.filter(event => !event._id).map( async (event) => {
                 //     const item = new EventModel(event);
@@ -166,6 +173,11 @@ const LoadCalendarData = async (e, month) => {
     }
 }
 
+const LoadEventsWithoutParents = async (e) => {
+    const events = await EventModel.find({groupId: {$eq: null}}).lean().exec();
+    e.sender.send('LoadEventsWithoutParents', events);
+}
+
 module.exports = {
     onEventAdd,
     onSprintAdd,
@@ -173,5 +185,7 @@ module.exports = {
     LoadSprints,
     LoadSprint,
     EditSprint,
-    DeleteSprint
+    DeleteSprint,
+    LoadSprintsToday,
+    LoadEventsWithoutParents
 }
