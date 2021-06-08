@@ -138,23 +138,39 @@ const DeleteSprint = async (e, id) => {
     e.sender.send('DeleteSprint', `Successfully deleted ${id}`);
 }
 
-const LoadCalendarEvents = async (e, month) => {
-    const eventsOnThisMonth = await EventModel.find({
-        start: {
-            $gte: month.monthStart,
-        },
-        $or: [
-            {end: {$lt: month.monthEnd}},
-            {end: null}
-        ]
-    }).lean().exec();
-    e.sender.send('LoadCalendarEvents', eventsOnThisMonth)
+const LoadCalendarData = async (e, month) => {
+    const type = month.ofType;
+    console.log(month)
+    if (type === 'events') {
+        const eventsOnThisMonth = await EventModel.find({
+            start: {
+                $gte: month.monthStart,
+            },
+            $or: [
+                {end: {$lt: month.monthEnd}},
+                {end: null}
+            ]
+        }).lean().exec();
+        e.sender.send('LoadCalendarData', eventsOnThisMonth)
+    }
+    else {
+        const eventsOnThisMonth = await SprintModel.find({
+            start: {
+                $gte: month.monthStart,
+            },
+            $or: [
+                {end: {$lt: month.monthEnd}},
+                {end: null}
+            ]
+        }).lean().exec();
+        e.sender.send('LoadCalendarData', eventsOnThisMonth)
+    }
 }
 
 module.exports = {
     onEventAdd,
     onSprintAdd,
-    LoadCalendarEvents,
+    LoadCalendarData,
     LoadSprints,
     LoadSprint,
     EditSprint,

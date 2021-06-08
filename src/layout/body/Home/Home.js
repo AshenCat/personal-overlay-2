@@ -19,17 +19,16 @@ import Slider from '../../../components/checkbox/slider/Slider';
 function Home() {
     const calendarRef = React.useRef(null);
     const [events, setEvents] = React.useState([]);
+    const [dataType, setDataType] = React.useState('sprints');
     const [selectable, setSelectable] = React.useState(false);
     const [editable, setEditable] = React.useState(false);
-    const [sprintFilter, setSprintFilter] = React.useState('')
+    // const [sprintFilter, setSprintFilter] = React.useState('')
     const [search, setSearch] = React.useState('')
     const [mouse, setMouse] = React.useState(null)
     const [dateClickData, setDateClickData] = React.useState(null)
     const [openClickMenu, setOpenClickMenu] = React.useState(false)
 
     const [openFilter, setOpenFilter] = React.useState(true)
-    const [openDragEvents, setOpenDragEvents] = React.useState(false)
-    const [openEditedEvents, setEditedEvents] = React.useState(false)
     // const [eventsVisible, setEventsVisible] = React.useState(2)
     // const [viewDate, setViewDate] = React.useState(moment())
 
@@ -69,48 +68,93 @@ function Home() {
 
     const handleDatesSet = (data) => {
         // console.log(data)
-        api.send('LoadCalendarEvents', {
-            monthStart: data.startStr,
-            monthEnd: data.endStr,
-        });
+        // api.send('LoadCalendarData', {
+        //     monthStart: data.startStr,
+        //     monthEnd: data.endStr,
+        //     ofType: dataType,
+        // });
     }
 
-    const displayEvents = () => {
-        return (
-            <div></div>
-        )
+    const clickMenuItems = () => {
+        if (dataType === 'events') {
+            return (
+                <>
+                <div onClick={()=>{
+                    handleDateClick(dateClickData)
+                    setOpenClickMenu(false)
+                    // setEventModalOpen(true)
+                }}>
+                    Add event
+                </div>
+                <div onClick={()=>{
+                    // console.log(dateClickData)
+                    calendarRef.current.getApi().changeView('dayGridDay', moment(dateClickData.dateStr).format('YYYY-MM-DD'))
+                    setOpenClickMenu(false)
+                }}>
+                    Check Date
+                </div>
+                </>
+            )
+        }
+        else {
+            return <>
+                <div onClick={()=>{
+                    // handleDateClick(dateClickData)
+                    setOpenClickMenu(false)
+                    // setEventModalOpen(true)
+                }}>
+                    Add Sprint
+                </div>
+                <div onClick={()=>{
+                    // console.log(dateClickData)
+                    calendarRef.current.getApi().changeView('dayGridDay', moment(dateClickData.dateStr).format('YYYY-MM-DD'))
+                    setOpenClickMenu(false)
+                }}>
+                    Check Day
+                </div>
+            </>
+        }
     }
 
     React.useEffect(() => {
         api.recieve('onEventAdd', (msg)=>{
-            // console.log('from Home.js: ', msg)
-            api.send('LoadCalendarEvents', {
+            // console.log()
+            api.send('LoadCalendarData', {
                 monthStart: moment().clone().startOf('month').subtract(1,'week').format('YYYY-MM-DD hh:mm'),
                 monthEnd: moment().clone().endOf('month').add(1,'week').format('YYYY-MM-DD hh:mm'),
+                ofType: dataType,
             });
         })
-        api.recieve('LoadCalendarEvents', (data) => {
+        api.recieve('LoadCalendarData', (data) => {
             setEvents([...data])
             // console.log('loading')
             console.log([...data])
         })
+        
+        api.send('LoadCalendarData', {
+            monthStart: moment().clone().startOf('month').subtract(1,'week').format('YYYY-MM-DD hh:mm'),
+            monthEnd: moment().clone().endOf('month').add(1,'week').format('YYYY-MM-DD hh:mm'),
+            ofType: dataType,
+        });
+    
         return () => {
             api.removeAllListeners('onEventAdd')
-            api.removeAllListeners('LoadCalendarEvents')
+            api.removeAllListeners('LoadCalendarData')
         }
-    }, [])
+    }, [dataType])
 
     return (
         <div className="home">
             <div className="events-section">
+                {<h1 style={{textTransform:"capitalize"}}>{dataType}</h1>}
                 <Card onButtonClick={()=>setOpenFilter(prev=>!prev)} isOpen={openFilter}>
                     <h4 className="card-title">Filter and settings</h4>
                     <div className={`filter-and-settings ${openFilter ? 'show-card' : ''}`}>
                         <div className="row space-between m-5px">
-                            <label htmlFor="eventsearch">Event Search:</label>
+                            <label htmlFor="eventsearch">Search:</label>
                             <Input placeholder="Search" value={search} onChange={e=>setSearch(e.target.value)} style={{width: '50%'}}/>
                         </div>
-                        <div className="row space-between m-1px">
+                        {/* <div className="row space-between m-1px">
                             <label htmlFor="ids" style={{marginTop: '4px'}}>Group filter: </label>
                             <Select name="ids" id="ids" 
                             defaultValue={sprintFilter} 
@@ -122,6 +166,17 @@ function Home() {
                                     return null;
                                 })}
                             </Select>
+                        </div> */}
+                        <div className="row space-between m-1px">
+                            <label htmlFor="ids" style={{marginTop: '4px'}}>Data: </label>
+                            <Select name="data" id="data" 
+                                value={dataType} 
+                                onChange={e=>setDataType(e.target.value)} 
+                                style={{width: '50%', marginTop: '3px'}}>
+                                {/* <option value=''>-----</option> */}
+                                <option value='sprints'>Sprints</option>
+                                <option value='events'>Events</option>
+                            </Select>
                         </div>
                         <div className="row m-1px">
                             <div className="labels">
@@ -129,30 +184,10 @@ function Home() {
                                 <label htmlFor="editable">Editable: </label>
                             </div>
                             <div className="switches">
-                                {/* <label className="switch">
-                                    <input type="checkbox" name="selectable" id="selectable" value={selectable} />
-                                    <span className="round-slider" onClick={()=>setSelectable(prevState=>!prevState)}></span>
-                                </label>
-                                <label className="switch">
-                                    <input type="checkbox" name="editable" id="editable" value={editable} />
-                                    <span className="round-slider" onClick={()=>setEditable(prevState=>!prevState)}></span>
-                                </label> */}
                                 <Slider name="selectable" id="selectable" value={selectable} onClick={()=>setSelectable(prev=>!prev)} />
                                 <Slider name="editable" id="editable" value={editable} onClick={()=>setEditable(prev=>!prev)} />
                             </div>
                         </div>
-                    </div>
-                </Card>
-                <Card onButtonClick={()=>setOpenDragEvents(prev=>!prev)} isOpen={openDragEvents}>
-                    <h4 className="card-title">Draggable Events</h4>
-                    <div className={`draggable-events-body ${openDragEvents ? 'show-card' : ''}`}>
-                        <Button style={{width: '100%', marginTop: '3px'}}>Add Set</Button>
-                    </div>
-                </Card>
-                <Card onButtonClick={()=>setEditedEvents(prev=>!prev)} isOpen={openEditedEvents}>
-                    <h4 className="card-title">Edited Events</h4>
-                    <div className={`edited-events-body ${openEditedEvents ? 'show-card' : ''}`}>
-                        <Button style={{width: '100%', marginTop: '3px'}}>Save Edits</Button>
                     </div>
                 </Card>
             </div>
@@ -180,12 +215,6 @@ function Home() {
                         //events
                         events={
                             events.filter(event => {
-                                if (sprintFilter !== '') {   
-                                    if (event.groupId === sprintFilter) return true;
-                                    return false;
-                                }
-                                return true
-                            }).filter(event => {
                                 if (search !== '') {
                                     if (event.groupId?.includes(search)) return true;
                                     if (event.title?.includes(search)) return true;
@@ -216,20 +245,7 @@ function Home() {
                     x={mouse?.x}
                     openClickMenu={openClickMenu}
                     setOpenClickMenu={setOpenClickMenu}>
-                    <div onClick={()=>{
-                        handleDateClick(dateClickData)
-                        setOpenClickMenu(false)
-                        setEventModalOpen(true)
-                    }}>
-                        Add event
-                    </div>
-                    <div onClick={()=>{
-                        // console.log(dateClickData)
-                        calendarRef.current.getApi().changeView('dayGridDay', moment(dateClickData.dateStr).format('YYYY-MM-DD'))
-                        setOpenClickMenu(false)
-                    }}>
-                        Check Date
-                    </div>
+                    {clickMenuItems()}
                 </ClickMenu>
             </div>
         </div>
