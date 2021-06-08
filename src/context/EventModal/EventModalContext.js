@@ -138,7 +138,7 @@ function EventModalProvider(props) {
                                 plugins={allDay ? [<DatePanel markFocused />] : [<TimePicker position="bottom" />, <DatePanel markFocused />]}
                                 // range
                                 showOtherDays
-                                // className="modal-calendar bg-dark"
+                                className="modal-calendar bg-dark"
                                 />
                         </div>
                     </div>
