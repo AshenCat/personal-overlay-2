@@ -1,0 +1,39 @@
+.view-sprint-container {
+    h1 {
+        margin: 0;
+    }
+    display: flex;
+    width: 100%;
+    height: 100%;
+    .section-left {
+        flex: 1;
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+        align-items: center;
+        .card-container {
+            .card-body {
+                height: 30vh;
+                @media screen and (min-height: 900px) {
+                    height: 35vh;
+                }
+            }
+        }
+        .card-title {
+            margin: 0;
+        }
+    }
+    .section-right{
+        flex: 2;
+    }
+}
+
+.input-group {
+    display: flex;
+    width: 88%;
+    justify-content: space-between;
+    .input-modified {
+        // background-color: rgb(83, 83, 83);
+        width: 80%;
+    }
+}
