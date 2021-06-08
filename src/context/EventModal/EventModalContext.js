@@ -28,9 +28,11 @@ function EventModalProvider(props) {
     // const [start, setStart] = React.useState("");
     // const [end, setEnd] = React.useState("");
     const [dates, setDates] = React.useState("")
-    const [allDay, setAllDay] = React.useState(false)
+    const [allDay, setAllDay] = React.useState(true)
     const [desc, setDesc] = React.useState("")
     const [calendarRef, setCalendarRef] = React.useState(null)
+    const [min, setMin] = React.useState('')
+    const [max, setMax] = React.useState('')
     // const [obj, setObj] = React.useState({})
     // const [func, setFunc] = React.useState(null)
 
@@ -74,15 +76,16 @@ function EventModalProvider(props) {
         // setStart("");
         // setEnd("");
         setDates("")
-        setAllDay(false);
+        setAllDay(true);
         setDesc('');
+        setMin('')
+        setMax('')
         // setFunc(null)
         setCalendarRef(null);
         setEventModalOpen(false);
     }
-
     return (
-        <EventModalContext.Provider value={{setEventModalOpen, setCalendarRef, setDates}}>
+        <EventModalContext.Provider value={{setEventModalOpen, setCalendarRef, setDates, setMin, setMax}}>
             {props.children}
             <Modal open={open} setEventModalOpen={setEventModalOpen} onClose={onClose}>
                 <div className="title"><h3>Add Event</h3></div>
@@ -137,8 +140,11 @@ function EventModalProvider(props) {
                                 }}
                                 plugins={allDay ? [<DatePanel markFocused />] : [<TimePicker position="bottom" />, <DatePanel markFocused />]}
                                 // range
+                                minDate={min}
+                                maxDate={max}
                                 showOtherDays
-                                className="modal-calendar bg-dark" />
+                                // className="modal-calendar bg-dark"
+                                />
                         </div>
                     </div>
                 </div>
