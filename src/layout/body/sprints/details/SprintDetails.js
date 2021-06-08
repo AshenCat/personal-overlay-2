@@ -27,7 +27,7 @@ function SprintDetails(props) {
     const [OG, setOG] = React.useState(null);
     const [del, setDel] = React.useState([])
     
-    const {setEventModalOpen, setCalendarRef, setDates, setMin, setMax} = useEventModalContext();
+    const {setEventModalOpen, setCalendarRef, setDates} = useEventModalContext();
 
     React.useEffect(()=>{
         const arr = location.pathname.split('/')
@@ -166,18 +166,6 @@ function SprintDetails(props) {
                                     
                                     <Button 
                                         onClick={()=>{
-                                            console.log(sprint)
-                                            if(sprint.start) {
-                                                const date = moment(sprint.start)
-                                                setMin(date.format('YYYY/MM/DD'))
-                                                console.log(date.format('YYYY/MM/DD'))
-                                            }
-                                            if(sprint.end) {
-                                                const date = moment(sprint.end)
-                                                setMax(date.format('YYYY/MM/DD'))
-                                                console.log(date.format('YYYY/MM/DD'))
-                                            }
-                                            // console.log(sprint.start)
                                             setDates(moment(sprint.start).format('YYYY/MM/DD'))
                                             setCalendarRef({
                                                 new: {

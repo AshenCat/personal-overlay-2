@@ -31,15 +31,14 @@ function EventModalProvider(props) {
     const [allDay, setAllDay] = React.useState(true)
     const [desc, setDesc] = React.useState("")
     const [calendarRef, setCalendarRef] = React.useState(null)
-    const [min, setMin] = React.useState('')
-    const [max, setMax] = React.useState('')
     // const [obj, setObj] = React.useState({})
     // const [func, setFunc] = React.useState(null)
 
     const onSubmit = () => {
+        // console.log(dates)
         if (title === "") return;
         // if (dates[1] && dates[1] !== "") if(moment(dates[0]).isAfter(moment(dates[1]))) return;
-        if(!dates) return;
+        if(dates === "Invalid date") return;
         // console.log(sVal.format('MM-DD-YYYY HH:mm:ss'));
         // console.log(eVal.format('MM-DD-YYYY HH:mm:ss'));
         const obj = {
@@ -78,14 +77,12 @@ function EventModalProvider(props) {
         setDates("")
         setAllDay(true);
         setDesc('');
-        setMin('')
-        setMax('')
         // setFunc(null)
         setCalendarRef(null);
         setEventModalOpen(false);
     }
     return (
-        <EventModalContext.Provider value={{setEventModalOpen, setCalendarRef, setDates, setMin, setMax}}>
+        <EventModalContext.Provider value={{setEventModalOpen, setCalendarRef, setDates}}>
             {props.children}
             <Modal open={open} setEventModalOpen={setEventModalOpen} onClose={onClose}>
                 <div className="title"><h3>Add Event</h3></div>
@@ -140,8 +137,6 @@ function EventModalProvider(props) {
                                 }}
                                 plugins={allDay ? [<DatePanel markFocused />] : [<TimePicker position="bottom" />, <DatePanel markFocused />]}
                                 // range
-                                minDate={min}
-                                maxDate={max}
                                 showOtherDays
                                 // className="modal-calendar bg-dark"
                                 />
