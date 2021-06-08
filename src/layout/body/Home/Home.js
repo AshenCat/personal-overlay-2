@@ -15,8 +15,9 @@ import Select from '../../../components/select/Select';
 import ClickMenu from '../../../components/clickMenu/ClickMenu';
 import Card from '../../../components/card/Card';
 import Slider from '../../../components/checkbox/slider/Slider';
+import { withRouter } from 'react-router';
 
-function Home() {
+function Home(props) {
     const calendarRef = React.useRef(null);
     const [events, setEvents] = React.useState([]);
     const [dataType, setDataType] = React.useState('sprints');
@@ -99,9 +100,9 @@ function Home() {
         else {
             return <>
                 <div onClick={()=>{
-                    // handleDateClick(dateClickData)
                     setOpenClickMenu(false)
-                    // setEventModalOpen(true)
+                    // console.log(dateClickData)
+                    props.history.push(`/sprints?date=${dateClickData.dateStr}`)
                 }}>
                     Add Sprint
                 </div>
@@ -252,4 +253,4 @@ function Home() {
     )
 }
 
-export default Home
+export default withRouter(Home)
