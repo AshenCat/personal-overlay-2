@@ -1,3 +1,4 @@
+import moment from 'moment'
 import React from 'react'
 import { AutoSizer, List } from 'react-virtualized'
 import Card from '../../../components/card/Card'
@@ -33,12 +34,14 @@ function Todos() {
     //filters
     React.useEffect(()=>{
         const newEvent = eventsWithoutParents.filter(event => {
-            if(event.includes(search)) return true;
+            if(search === '') return true; 
+            if(event.title.includes(search)) return true;
+            if(moment(event.start).format('YYYY MMM DD').includes(search)) return true;
             return false;
         })
         setEventsFiltered(newEvent);
         setFilteredEventsCount(newEvent.length);
-    }, [search])
+    }, [search, eventsWithoutParents])
 
     const RowCard = (propsies) => {
         const {
@@ -46,9 +49,13 @@ function Todos() {
             key,
             style
         } = propsies;
-        const data = sprintFiltered[index]
-        const width = propsies?.parent?.props?.width;
-        if(data) return 
+        const data = eventsFiltered[index]
+        if(data) return <div key={key} style={style} className="autosizer-row-container">
+                            <div className="autosizer-inside">
+                                <div className="row-title">Title: {data?.title}</div>
+                                <div className="row-date">Start: {moment(data?.start).format('YYYY MMM DD')}</div>
+                            </div>
+                        </div>
     }
 
     return (
@@ -57,9 +64,9 @@ function Todos() {
                 <h1>Todos</h1>
                 <div className="input-group">
                     <label>Search: </label>
-                    <Input className="input-modified" />
+                    <Input value={search} onChange={e=>setSearch(e.target.value)} className="input-modified" />
                 </div>
-                <Card className="m-5px">
+                <Card className="m-5px" noButton>
                     <h4 className="card-title">
                         Sprints today
                     </h4>
@@ -67,7 +74,7 @@ function Todos() {
                         
                     </div>
                 </Card>
-                <Card className="m-5px">
+                <Card className="m-5px" noButton>
                     <h4 className="card-title">
                         Events
                     </h4>
@@ -78,9 +85,11 @@ function Todos() {
                                 height={height}
                                 width={width}
                                 overscanRowCount={2}
-                                rowHeight={330}
-                                rowCount={0}
+                                rowHeight={60}
+                                rowCount={eventsCount}
                                 rowRenderer={RowCard}
+                                className="autosizer"
+                                containerStyle={{borderBottom: '1px solid gray'}}
                                 />
                             }}
                         </AutoSizer>

@@ -17,6 +17,26 @@
                 @media screen and (min-height: 900px) {
                     height: 35vh;
                 }
+                .autosizer {
+                    border: 1px solid gray;
+                    border-radius: 5px;
+                    .autosizer-row-container {
+                        position: relative;
+                        border-bottom: 1px solid gray;
+                        transition: .25s all;
+                        &:hover {
+                            background-color: rgb(167, 167, 167);
+                        }
+                        .autosizer-inside {
+                            position: absolute;
+                            left: 9px;
+                            right: 9px;
+                            top: 9px;
+                            bottom: 9px;
+                            
+                        }
+                    }
+                }
             }
         }
         .card-title {
