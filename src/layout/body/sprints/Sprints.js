@@ -12,11 +12,17 @@ import TimePicker from "react-multi-date-picker/plugins/analog_time_picker";
 import './sprints.scss'
 import { AutoSizer, List } from 'react-virtualized'
 import Slider from '../../../components/checkbox/slider/Slider'
+import { useLocation } from 'react-router'
 
+function useQuery() {
+    return new URLSearchParams(useLocation().search);
+}
 
 function Sprints(props) {
+    const date = useQuery().get('date');
     
-    const [people, setPeople] = React.useState([]);
+    // const [people, setPeople] = React.useState([]);
+    const datePickerRef = React.useRef(null)
     const [sprints, setSprints] = React.useState([])
     const [filteredSprints, setFilteredSprints] = React.useState([])
     const [sprintCount, setSprintCount] = React.useState(0)
@@ -102,6 +108,13 @@ function Sprints(props) {
         }
     }, [])
 
+    React.useEffect(()=>{
+        if(date) {
+            setDates([date.replace('-', '/')]);
+            datePickerRef.current.openCalendar();
+        }
+    }, [])
+
     const RowCard = (propsies) => {
         const {
             index,
@@ -183,6 +196,8 @@ function Sprints(props) {
                         <div className="form-group">
                             <label>Date:</label>
                             <DatePicker 
+                                showOtherDays={true}
+                                ref={datePickerRef}
                                 type="input-icon"
                                 value={dates} 
                                 onChange={dates=>setDates(dates.map(date=>date.toString()))}
