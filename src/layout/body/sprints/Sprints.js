@@ -141,8 +141,8 @@ function Sprints(props) {
                                 {/* <Calendar value={value} onChange={() => setValue({})} /> */}
                         </div>
                         <div className="sprint-card-body">
-                            <div className="card-title space-between">
-                                Title: <h4>{data?.title ?? <em>No title??</em>}</h4>
+                            <div className="short card-title space-between">
+                                <span>Title: <h4>{data?.title ?? <em>No title??</em>}</h4></span>
                             </div>
                             <div className="card-events-count space-between">
                                 Events: {eventsCount > 1 ? <span>{eventsCount}</span> : <em>No Events</em>}
