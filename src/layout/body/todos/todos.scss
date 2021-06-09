@@ -11,15 +11,29 @@
         flex-flow: column;
         justify-content: center;
         align-items: center;
+        width: 320px;
         .card-container {
+            padding: 15px;
+            width: 85%;
             .card-body {
+                border: 1px solid gray;
+                border-radius: 5px;
+                // max-width: 350px;
+                .sprintstoday-row {
+                    padding: 9px 9px 8px 9px;
+                    border-bottom: 1px solid gray;
+                    transition: .25s all;
+                    overflow: hidden;
+                    &:hover {
+                        background-color: rgb(167, 167, 167);
+                    }
+                }
+
                 height: 30vh;
                 @media screen and (min-height: 900px) {
                     height: 35vh;
                 }
                 .autosizer {
-                    border: 1px solid gray;
-                    border-radius: 5px;
                     .autosizer-row-container {
                         position: relative;
                         border-bottom: 1px solid gray;
@@ -56,4 +70,23 @@
         // background-color: rgb(83, 83, 83);
         width: 80%;
     }
+}
+
+.short {
+    p {
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    span {
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+.overflow-auto {
+    overflow: auto;
 }

@@ -15,6 +15,7 @@ function Todos() {
 
     const [eventsCount, setFilteredEventsCount] = React.useState(0)
     const [eventsFiltered, setEventsFiltered] = React.useState([])
+    const [sprintsFiltered, setSprintsFiltered] = React.useState([])
 
     React.useEffect(()=>{
         api.send('LoadSprintsToday', {})
@@ -43,6 +44,16 @@ function Todos() {
         setFilteredEventsCount(newEvent.length);
     }, [search, eventsWithoutParents])
 
+    React.useEffect(()=>{
+        const newSprint = sprintsToday.filter(sprint => {
+            if(search === '') return true; 
+            if(sprint.title.includes(search)) return true;
+            if(moment(sprint.start).format('YYYY MMM DD').includes(search)) return true;
+            return false;
+        })
+        setSprintsFiltered(newSprint)
+    }, [search, sprintsToday])
+
     const RowCard = (propsies) => {
         const {
             index,
@@ -52,7 +63,7 @@ function Todos() {
         const data = eventsFiltered[index]
         if(data) return <div key={key} style={style} className="autosizer-row-container">
                             <div className="autosizer-inside">
-                                <div className="row-title">Title: {data?.title}</div>
+                                <div className="short row-title"><p>Title: {data?.title}</p></div>
                                 <div className="row-date">Start: {moment(data?.start).format('YYYY MMM DD')}</div>
                             </div>
                         </div>
@@ -70,8 +81,14 @@ function Todos() {
                     <h4 className="card-title">
                         Sprints today
                     </h4>
-                    <div className="card-body">
-                        
+                    <div className="card-body overflow-auto">
+                        {sprintsFiltered.map((sprint, key) => <div className="sprintstoday-row" key={key}>
+                            <div className="short sprintstoday-title"><p>Title: {sprint.title}</p></div>
+                            <div className="short sprintstoday-description"><p>Desc: {sprint.description}</p></div>
+                            <div className="short sprintstoday-status"><p>Status: {sprint.status}</p></div>
+                            <div className="sprintstoday-eventscount">Events: {sprint.events.length}</div>
+                            
+                        </div>)}
                     </div>
                 </Card>
                 <Card className="m-5px" noButton>
