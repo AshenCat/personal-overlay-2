@@ -11,7 +11,6 @@ let eventSchema = new Schema({
     title: requiredString,
     start: Date,
     end: Date,
-    description: String,
     groupId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'sprint'
@@ -22,18 +21,13 @@ let eventSchema = new Schema({
     durationEditable: Boolean,
     resourceEditable: Boolean,
     overlap: Boolean,
-    priority: {
-        type: String,
-        enum: ['low', 'medium', 'high', ''],
-        default: ''
-    },
     constraint: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'sprint'
     }],
-    tags: [{
-        type: String
-    }],
+
+    dateFinished: Date,
+    description: String,
     assignedTo: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'participants'
@@ -41,7 +35,15 @@ let eventSchema = new Schema({
     status: {
         type: Boolean,
         default: false
-    }
+    },
+    priority: {
+        type: String,
+        enum: ['low', 'medium', 'high', ''],
+        default: ''
+    },
+    tags: [{
+        type: String
+    }],
 }, {timestamps: true})
 
 module.exports = mongoose.model("events", eventSchema)
