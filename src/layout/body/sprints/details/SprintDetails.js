@@ -76,6 +76,12 @@ function SprintDetails(props) {
         if (OG !== sprint) {
             api.send('EditSprint', {
                 ...sprint,
+                events: [...sprint.events.map(ev => {
+                    return {
+                        ...ev,
+                        groupId: sprint._id
+                    }
+                })],
                 del: [...del.filter(dl => !!dl.event._id).map(dl=>dl.event)]
             })
             // console.log(del)

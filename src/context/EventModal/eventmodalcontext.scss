@@ -19,6 +19,8 @@
     .left {
         padding:20px;
         .input-group {
+            display: flex;
+            flex-flow: column;
             label {
                 transition: all .1s;
                 color: white;

@@ -28,7 +28,7 @@ function EventModalProvider(props) {
     // const [start, setStart] = React.useState("");
     // const [end, setEnd] = React.useState("");
     const [dates, setDates] = React.useState("")
-    const [allDay, setAllDay] = React.useState(true)
+    const [allDay, setAllDay] = React.useState(false)
     const [desc, setDesc] = React.useState("")
     const [calendarRef, setCalendarRef] = React.useState(null)
     // const [obj, setObj] = React.useState({})
@@ -75,7 +75,7 @@ function EventModalProvider(props) {
         // setStart("");
         // setEnd("");
         setDates("")
-        setAllDay(true);
+        setAllDay(false);
         setDesc('');
         // setFunc(null)
         setCalendarRef(null);
@@ -138,7 +138,7 @@ function EventModalProvider(props) {
                                 plugins={allDay ? [<DatePanel markFocused />] : [<TimePicker position="bottom" />, <DatePanel markFocused />]}
                                 // range
                                 showOtherDays
-                                // className="modal-calendar bg-dark"
+                                className="modal-calendar bg-dark"
                                 />
                         </div>
                     </div>
