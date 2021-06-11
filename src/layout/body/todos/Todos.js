@@ -50,6 +50,7 @@ function Todos() {
         const newSprint = sprintsToday.filter(sprint => {
             if(search === '') return true; 
             if(sprint.title.includes(search)) return true;
+            if(sprint.status.includes(search)) return true;
             if(moment(sprint.start).format('YYYY MMM DD').includes(search)) return true;
             return false;
         })
