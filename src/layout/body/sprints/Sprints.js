@@ -142,7 +142,7 @@ function Sprints(props) {
                                 {/* <Calendar value={value} onChange={() => setValue({})} /> */}
                         </div>
                         <div className="sprint-card-body">
-                            <div className="short card-title space-between" style={{textTransform: 'capitalize'}}>
+                            <div className="short card-title space-between" style={{textTransform: 'capitalize', maxHeight: '90px', overflow: 'hidden', minHeight: '21px'}}>
                                 Title: <h4 style={{margin: 0}}>{data?.title ?? <em>No title??</em>}</h4>
                             </div>
                             <div className="card-events-count space-between">
