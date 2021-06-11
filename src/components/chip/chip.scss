@@ -1,0 +1,25 @@
+.chip {
+    position: absolute;
+    padding: 2px 10px;
+    right: 0;
+    top: -2px;
+    border-radius: 15px;
+    text-transform: capitalize;
+}
+
+
+.chip-active {
+    background-color: rgb(0,200,117) !important;
+}
+.chip-done {
+    background-color: #2f2f2f !important;
+}
+.chip-waiting {
+    background-color: rgba(114,118,125,.3) !important;
+}
+.chip-onhold {
+    background-color: #d7af6b69 !important;
+}
+.chip-failed {
+    background-color: rgb(226,68,92) !important;
+}
