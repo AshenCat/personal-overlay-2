@@ -36,7 +36,7 @@ function Sprints(props) {
     // const [filterDates, setFilterDates] = React.useState('')
     const [filterAsc, setFilterAsc] = React.useState(false)
 
-    const [openFilter, setOpenFilter] = React.useState(false)
+    // const [openFilter, setOpenFilter] = React.useState(false)
     
     const onSubmit = () => {
         if (title.trim() === '' || description.trim() === '') return;
@@ -182,9 +182,11 @@ function Sprints(props) {
         <div className="sprints">
             <div className="sprint-filter-and-settings">
                 <h1>Sprints</h1>
-                <Card className="sprint-menu" onButtonClick={()=>setOpenFilter(prev=>!prev)} isOpen={!openFilter}>
+                {/* <Card className="sprint-menu" onButtonClick={()=>setOpenFilter(prev=>!prev)} isOpen={!openFilter}> */}
+                <Card className="sprint-menu">
                     <h4 className="card-title">Add Sprint</h4>
-                    <div className={`form-body ${!openFilter ? "" : "hide-body"}`}>
+                    <div className="form-body">
+                    {/* <div className={`form-body ${!openFilter ? "" : "hide-body"}`}> */}
                         <div className="form-group">
                             <label>Title:</label>
                             <Input 
@@ -236,9 +238,11 @@ function Sprints(props) {
                         </div>
                     </div>
                 </Card>
-                <Card className="sprint-filter" onButtonClick={()=>setOpenFilter(prev=>!prev)} isOpen={openFilter}>
+                {/* <Card className="sprint-filter" onButtonClick={()=>setOpenFilter(prev=>!prev)} isOpen={openFilter}> */}
+                <Card className="sprint-filter">
                     <h4 className="card-title">Sprints Filter</h4>
-                    <div className={`card-body ${openFilter ? "" : "hide-body"}`}>
+                    {/* <div className={`card-body ${openFilter ? "" : "hide-body"}`}> */}
+                    <div className={`card-body`}>
                         <div className="form-group">
                             <label>Search:</label>
                             <Input 
