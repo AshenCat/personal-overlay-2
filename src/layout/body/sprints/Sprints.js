@@ -13,6 +13,7 @@ import './sprints.scss'
 import { AutoSizer, List } from 'react-virtualized'
 import Slider from '../../../components/checkbox/slider/Slider'
 import { useLocation } from 'react-router'
+import Chip from '../../../components/chip/Chip'
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
@@ -141,14 +142,18 @@ function Sprints(props) {
                                 {/* <Calendar value={value} onChange={() => setValue({})} /> */}
                         </div>
                         <div className="sprint-card-body">
-                            <div className="short card-title space-between">
-                                <span>Title: <h4>{data?.title ?? <em>No title??</em>}</h4></span>
+                            <div className="short card-title space-between" style={{textTransform: 'capitalize'}}>
+                                Title: <h4 style={{margin: 0}}>{data?.title ?? <em>No title??</em>}</h4>
                             </div>
                             <div className="card-events-count space-between">
                                 Events: {eventsCount > 1 ? <span>{eventsCount}</span> : <em>No Events</em>}
                             </div>
-                            <div className="card-events-count space-between">
-                                Status: <em>{data?.status}</em>
+                            <div className="card-events-count space-between" style={{position: 'relative'}}>
+                                Status: 
+                                <Chip className={`chip-${data?.status.replace(/\s/g,'')}`}>
+                                    <em>{data?.status}</em>
+                                </Chip>
+                                
                             </div>
                             <div className="card-description">
                                 Description: {<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- "<em>{data?.description}</em>"</span> ?? <em>No Description</em>}
