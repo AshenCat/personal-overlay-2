@@ -28,7 +28,7 @@ function Body() {
                             <main>
                                 <Route exact path="/" component={Home} />
                                 {/* <Route exact path="/events" component={EventsComponent} /> */}
-                                <Route exact path="/todos" component={todosComponent} />
+                                <Route path="/todos" component={todosComponent} />
                                 <Route exact path="/sprints" component={SprintsComponent} />
                                 <Route exact path="/sprints/:id" component={SprintDetailsComponent} />
                             </main>
