@@ -162,7 +162,13 @@ const LoadSprintsToday = async (e) => {
         ],
         
     }).lean().exec();
-    e.sender.send('LoadSprintsToday', sprintsToday)
+    
+    e.sender.send('LoadSprintsToday', sprintsToday.map(sprint => {
+        return {
+            ...sprint,
+            _id: sprint._id.toHexString()
+        }
+    }))
 }
 
 const LoadCalendarData = async (e, month) => {
