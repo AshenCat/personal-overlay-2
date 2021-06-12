@@ -7,7 +7,7 @@ import Input from '../../../components/input/inputText/Input'
 import ViewSprint from '../sprints/view/ViewSprint'
 import './todos.scss'
 
-function Todos() {
+function Todos(props) {
     const [selectedSprint, setSelectedSprint] = React.useState(null)
 
     const [sprintsToday, setSprintsToday] = React.useState([])
@@ -85,12 +85,11 @@ function Todos() {
                         Sprints today
                     </h4>
                     <div className="card-body overflow-auto">
-                        {sprintsFiltered.map((sprint, key) => <div className="sprintstoday-row cursor-pointer" key={key}>
+                        {sprintsFiltered.map((sprint, key) => <div className="sprintstoday-row cursor-pointer" key={key} onClick={()=>props.history.push(`/todos/${sprint._id}`)}>
                             <div className="short sprintstoday-title"><div className="dflex-sb">Title: <span>{sprint.title}</span></div></div>
                             <div className="short sprintstoday-description"><div className="dflex-sb">Desc: <span>{sprint.description}</span></div></div>
                             <div className="short sprintstoday-status" style={{position: 'relative'}}><div className="dflex-sb">Status: <Chip className={`chip-${sprint?.status.replace(/\s/g,'')}`}>{sprint.status}</Chip></div></div>
                             <div className="sprintstoday-eventscount"><div className="dflex-sb">Events: <span>{sprint.events.length}</span></div></div>
-                            
                         </div>)}
                     </div>
                 </Card>
