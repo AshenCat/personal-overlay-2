@@ -4,6 +4,17 @@ import './clickmenu.scss'
 function ClickMenu(props) {
     const wrapperRef = React.useRef(null);
 
+    const style = {
+        ...props.style,
+        top: (props.y ?? 0) -34,
+        left: props.x
+    }
+
+    const closedStyle = {
+        top: 0,
+        left: 0
+    }
+
     function useOutsideAlerter(ref) {
         React.useEffect(() => {
             /**
@@ -29,17 +40,11 @@ function ClickMenu(props) {
     }
     useOutsideAlerter(wrapperRef);
 
-    const style = {
-        ...props.style,
-        top: (props.y ?? 0) -34,
-        left: props.x
-    }
-
     return (
         <div 
             ref={wrapperRef}
             className={`clickmenu ${props.openClickMenu ? 'clickmenu-open' : ''}`}
-            style={style}>
+            style={props.openClickMenu ? style : closedStyle}>
             <h5 className="clickmenu-head">{props.title}</h5>
             <menu className="clickmenu-menu">
                 {props.children}

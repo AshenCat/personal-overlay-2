@@ -2,11 +2,13 @@ import moment from 'moment'
 import React from 'react'
 import { AutoSizer, List } from 'react-virtualized'
 import Card from '../../../components/card/Card'
+import Chip from '../../../components/chip/Chip'
 import Input from '../../../components/input/inputText/Input'
+import ViewSprint from '../sprints/view/ViewSprint'
 import './todos.scss'
 
-function Todos() {
-    // const [selectedSprint, setSelectedSprint] = React.useState(null)
+function Todos(props) {
+    const [selectedSprint, setSelectedSprint] = React.useState(null)
 
     const [sprintsToday, setSprintsToday] = React.useState([])
     const [eventsWithoutParents, setEventsWithoutParents] = React.useState([])
@@ -48,6 +50,7 @@ function Todos() {
         const newSprint = sprintsToday.filter(sprint => {
             if(search === '') return true; 
             if(sprint.title.includes(search)) return true;
+            if(sprint.status.includes(search)) return true;
             if(moment(sprint.start).format('YYYY MMM DD').includes(search)) return true;
             return false;
         })
@@ -61,10 +64,10 @@ function Todos() {
             style
         } = propsies;
         const data = eventsFiltered[index]
-        if(data) return <div key={key} style={style} className="autosizer-row-container">
+        if(data) return <div key={key} style={style} className="autosizer-row-container cursor-pointer">
                             <div className="autosizer-inside">
-                                <div className="short row-title"><p>Title: {data?.title}</p></div>
-                                <div className="row-date">Start: {moment(data?.start).format('YYYY MMM DD')}</div>
+                                <div className="short row-title">Title: <span>{data?.title}</span></div>
+                                <div className="row-date">Start: <span>{moment(data?.start).format('YYYY MMM DD')}</span></div>
                             </div>
                         </div>
     }
@@ -82,12 +85,11 @@ function Todos() {
                         Sprints today
                     </h4>
                     <div className="card-body overflow-auto">
-                        {sprintsFiltered.map((sprint, key) => <div className="sprintstoday-row" key={key}>
-                            <div className="short sprintstoday-title"><p>Title: {sprint.title}</p></div>
-                            <div className="short sprintstoday-description"><p>Desc: {sprint.description}</p></div>
-                            <div className="short sprintstoday-status"><p>Status: {sprint.status}</p></div>
-                            <div className="sprintstoday-eventscount">Events: {sprint.events.length}</div>
-                            
+                        {sprintsFiltered.map((sprint, key) => <div className="sprintstoday-row cursor-pointer" key={key} onClick={()=>props.history.push(`/todos/${sprint._id}`)}>
+                            <div className="short sprintstoday-title"><div className="dflex-sb">Title: <span>{sprint.title}</span></div></div>
+                            <div className="short sprintstoday-description"><div className="dflex-sb">Desc: <span>{sprint.description}</span></div></div>
+                            <div className="short sprintstoday-status" style={{position: 'relative'}}><div className="dflex-sb">Status: <Chip className={`chip-${sprint?.status.replace(/\s/g,'')}`}>{sprint.status}</Chip></div></div>
+                            <div className="sprintstoday-eventscount"><div className="dflex-sb">Events: <span>{sprint.events.length}</span></div></div>
                         </div>)}
                     </div>
                 </Card>
@@ -114,7 +116,7 @@ function Todos() {
                 </Card>
             </section>            
             <section className="section-right">
-                asd
+                <ViewSprint />
             </section>            
         </article>
     )

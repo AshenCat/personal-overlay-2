@@ -13,6 +13,7 @@ import './sprints.scss'
 import { AutoSizer, List } from 'react-virtualized'
 import Slider from '../../../components/checkbox/slider/Slider'
 import { useLocation } from 'react-router'
+import Chip from '../../../components/chip/Chip'
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
@@ -36,7 +37,7 @@ function Sprints(props) {
     // const [filterDates, setFilterDates] = React.useState('')
     const [filterAsc, setFilterAsc] = React.useState(false)
 
-    const [openFilter, setOpenFilter] = React.useState(false)
+    // const [openFilter, setOpenFilter] = React.useState(false)
     
     const onSubmit = () => {
         if (title.trim() === '' || description.trim() === '') return;
@@ -141,14 +142,18 @@ function Sprints(props) {
                                 {/* <Calendar value={value} onChange={() => setValue({})} /> */}
                         </div>
                         <div className="sprint-card-body">
-                            <div className="short card-title space-between">
-                                <span>Title: <h4>{data?.title ?? <em>No title??</em>}</h4></span>
+                            <div className="short card-title space-between" style={{textTransform: 'capitalize', maxHeight: '90px', overflow: 'hidden', minHeight: '21px'}}>
+                                Title: <h4 style={{margin: 0}}>{data?.title ?? <em>No title??</em>}</h4>
                             </div>
                             <div className="card-events-count space-between">
                                 Events: {eventsCount > 1 ? <span>{eventsCount}</span> : <em>No Events</em>}
                             </div>
-                            <div className="card-events-count space-between">
-                                Status: <em>{data?.status}</em>
+                            <div className="card-events-count space-between" style={{position: 'relative'}}>
+                                Status: 
+                                <Chip className={`chip-${data?.status.replace(/\s/g,'')}`}>
+                                    <em>{data?.status}</em>
+                                </Chip>
+                                
                             </div>
                             <div className="card-description">
                                 Description: {<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- "<em>{data?.description}</em>"</span> ?? <em>No Description</em>}
@@ -182,9 +187,11 @@ function Sprints(props) {
         <div className="sprints">
             <div className="sprint-filter-and-settings">
                 <h1>Sprints</h1>
-                <Card className="sprint-menu" onButtonClick={()=>setOpenFilter(prev=>!prev)} isOpen={!openFilter}>
+                {/* <Card className="sprint-menu" onButtonClick={()=>setOpenFilter(prev=>!prev)} isOpen={!openFilter}> */}
+                <Card className="sprint-menu">
                     <h4 className="card-title">Add Sprint</h4>
-                    <div className={`form-body ${!openFilter ? "" : "hide-body"}`}>
+                    <div className="form-body">
+                    {/* <div className={`form-body ${!openFilter ? "" : "hide-body"}`}> */}
                         <div className="form-group">
                             <label>Title:</label>
                             <Input 
@@ -236,9 +243,11 @@ function Sprints(props) {
                         </div>
                     </div>
                 </Card>
-                <Card className="sprint-filter" onButtonClick={()=>setOpenFilter(prev=>!prev)} isOpen={openFilter}>
+                {/* <Card className="sprint-filter" onButtonClick={()=>setOpenFilter(prev=>!prev)} isOpen={openFilter}> */}
+                <Card className="sprint-filter">
                     <h4 className="card-title">Sprints Filter</h4>
-                    <div className={`card-body ${openFilter ? "" : "hide-body"}`}>
+                    {/* <div className={`card-body ${openFilter ? "" : "hide-body"}`}> */}
+                    <div className={`card-body`}>
                         <div className="form-group">
                             <label>Search:</label>
                             <Input 
@@ -247,6 +256,22 @@ function Sprints(props) {
                                 value={filter}
                                 onChange={(e)=>setFilter(e.target.value)}/>
                         </div>
+                        {/* <div className="form-group">
+                            <label>Date:</label>
+                            <DatePicker 
+                                showOtherDays={true}
+                                type="input-icon"
+                                value={filterDates} 
+                                onChange={dates=>{
+                                    dates.map(date=>console.log(date.toString()))
+                                    setFilterDates(dates.map(date=>date.toString()))
+                                }}
+                                placeholder="Optional"
+                                inputClass="datetime-input"
+                                zIndex={101}
+                                range
+                                plugins={[<DatePanel />,]}/> 
+                        </div> */}
                         <div className="form-group">
                             <label>Status: </label>
                             <Select

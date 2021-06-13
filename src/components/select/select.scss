@@ -31,6 +31,12 @@
     outline: none;
 }
 
+.select-chip {
+    width: 100px;
+    border: 1px solid gray;
+    border-radius: 15px;
+}
+
 :root {
     --select-border: #777;
     --select-focus: blue;

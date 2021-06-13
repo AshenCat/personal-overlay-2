@@ -1,0 +1,32 @@
+.viewsprint-section {
+    display: flex;
+    justify-content: center;
+    // flex-flow: column;
+    .right {
+        padding: 10px 0 10px 10px;
+        display: flex;
+        flex: 1;
+        // justify-content: flex-end;
+        flex-flow: column;
+        *:not(:nth-child(2)) {
+            margin-left: 15px;
+        }
+        h3 {
+            margin-top: 0;
+            margin-bottom: 0;
+            display: inline-block;
+            text-transform: capitalize;
+            text-overflow: ellipsis;
+        }
+    }
+}
+
+.space-between {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.dflex {
+    display: flex;
+}
