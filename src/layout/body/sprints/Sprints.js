@@ -256,6 +256,22 @@ function Sprints(props) {
                                 value={filter}
                                 onChange={(e)=>setFilter(e.target.value)}/>
                         </div>
+                        {/* <div className="form-group">
+                            <label>Date:</label>
+                            <DatePicker 
+                                showOtherDays={true}
+                                type="input-icon"
+                                value={filterDates} 
+                                onChange={dates=>{
+                                    dates.map(date=>console.log(date.toString()))
+                                    setFilterDates(dates.map(date=>date.toString()))
+                                }}
+                                placeholder="Optional"
+                                inputClass="datetime-input"
+                                zIndex={101}
+                                range
+                                plugins={[<DatePanel />,]}/> 
+                        </div> */}
                         <div className="form-group">
                             <label>Status: </label>
                             <Select
