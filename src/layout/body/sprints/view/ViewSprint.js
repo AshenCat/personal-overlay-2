@@ -2,12 +2,15 @@ import React from 'react'
 import { Calendar } from 'react-multi-date-picker';
 import DatePanel from 'react-multi-date-picker/plugins/date_panel';
 import { withRouter } from 'react-router'
+import Button from '../../../../components/button/Button';
 import Card from '../../../../components/card/Card';
 import Select from '../../../../components/select/Select';
 import './viewsprint.scss'
 
 function ViewSprint({location}) {
+    const cardRef = React.useRef(null);
     const [sprint, setSprint] = React.useState();
+    // const [qstatus, setQStatus] = React.useState();
 
     React.useEffect(() => {
         const sprintID = location.pathname.split('/');
@@ -21,14 +24,30 @@ function ViewSprint({location}) {
                 console.log(data);
             })
         }
-        if(sprintID[sprintID.length-1] === "todos") {
+        else {
             console.log('this should not show up when there\'s a selected sprint')
+        }
+        return () => {
+            api.removeAllListeners('LoadSprint')
         }
     }, [location.pathname])
 
+    React.useEffect(() => {
+        const sprintID = location.pathname.split('/');
+        api.recieve('EditSprint', (data)=>{
+            api.send('LoadSprint', sprintID[sprintID.length-1])
+        })
+        return () => {
+            api.removeAllListeners('EditSprint')
+        }
+    }, [])
+
+    const changeStatus = (e) => {
+        api.send('EditSprint', {...sprint, status: e.target.value})
+    }
+
     const ShowSprint = () => {
-        return <section className="viewsprint-section">
-                <Card style={{width:'95%', flexFlow: 'row'}} noButton>
+        return  <Card style={{width:'95%', flexFlow: 'row'}} noButton>
                     <div className="left">
                         <Calendar 
                                 // fixRelativePosition={'center'}
@@ -37,20 +56,33 @@ function ViewSprint({location}) {
                                 zIndex={99}
                                 value={[sprint?.start, sprint?.end]} 
                                 range
-                                plugins={[<DatePanel position="bottom" />]} 
+                                plugins={[<DatePanel 
+                                    position={cardRef.current?.offsetWidth > 700 ? 'right':'bottom'}
+                                     />]} 
                                 readOnly
                                 />
+                        <div className="card-actions">
+                            <Button 
+                                style={{ padding: '8px'}}
+                                className="edit-btn"
+                                onClick={()=>{props.history.push(`/sprints/${data._id}`)}}>
+                                    Edit
+                            </Button>
+                            <Button
+                                onClick={()=>onDelete(data._id)}
+                                className="danger-btn">
+                                    Delete
+                            </Button>
+                        </div>
                     </div>
                     <div className="right">
                         <div className="space-between" style={{maxHeight: '150px', overflow: 'hidden', textOverflow: 'ellipsis'}}>Title: <h3>{sprint?.title}</h3></div>
-                        <div className="dflex" style={{justifyContent:'flex-end'}}> - <em>"{sprint?.description}"</em></div>
+                        <div className="dflex" style={{justifyContent:'flex-end', maxHeight: '280px', marginLeft: '15px'}}> - <em>"{sprint?.description}"</em></div>
                         <div className="space-between">
                             Status:
                             <Select 
-                                value={sprint?.status}
-                                onChange={e=>setSprint(prev=>{
-                                    return {...prev, status: e.target.value}
-                                })}
+                                defaultValue={sprint?.status}
+                                onChange={changeStatus}
                                 className={`select-chip chip-${sprint?.status}`}
                             >
                                 <option value=''>----</option>
@@ -62,11 +94,10 @@ function ViewSprint({location}) {
                         </div>
                     </div>
                 </Card>
-            </section>
     }
 
     return (<>
-                {sprint ? <ShowSprint /> : 
+                {sprint ?  <section className="viewsprint-section" ref={cardRef}><ShowSprint /></section> : 
                 <div 
                     style={{
                         display: 'flex', 
