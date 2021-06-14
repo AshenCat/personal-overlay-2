@@ -10,7 +10,8 @@ function Select(props) {
             value={props.value}
             onChange={props.onChange}
             style={props.style}
-            className={`base-select ${props.className ?? ''}`}>
+            className={`base-select ${props.className ?? ''}`}
+            {...props}>
                 {props.children}
         </select>
     )
