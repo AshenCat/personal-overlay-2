@@ -101,15 +101,15 @@ function Todos(props) {
                         <AutoSizer>
                             {({width, height})=> {
                             return <List 
-                                height={height}
-                                width={width}
-                                overscanRowCount={2}
-                                rowHeight={60}
-                                rowCount={eventsCount}
-                                rowRenderer={RowCard}
-                                className="autosizer"
-                                containerStyle={{borderBottom: '1px solid gray'}}
-                                />
+                                        height={height}
+                                        width={width}
+                                        overscanRowCount={2}
+                                        rowHeight={60}
+                                        rowCount={eventsCount}
+                                        rowRenderer={RowCard}
+                                        className="autosizer"
+                                        containerStyle={{borderBottom: '1px solid gray'}}
+                                        />
                             }}
                         </AutoSizer>
                     </div>

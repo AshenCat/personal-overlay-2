@@ -2,12 +2,13 @@ import React from 'react'
 import { Calendar } from 'react-multi-date-picker';
 import DatePanel from 'react-multi-date-picker/plugins/date_panel';
 import { withRouter } from 'react-router'
-import Card from '../../../../components/card/Card';
+import Button from '../../../../components/button/Button';
 import Select from '../../../../components/select/Select';
 import './viewsprint.scss'
 
 function ViewSprint({location}) {
     const [sprint, setSprint] = React.useState();
+    // const [qstatus, setQStatus] = React.useState();
 
     React.useEffect(() => {
         const sprintID = location.pathname.split('/');
@@ -21,37 +22,40 @@ function ViewSprint({location}) {
                 console.log(data);
             })
         }
-        if(sprintID[sprintID.length-1] === "todos") {
+        else {
             console.log('this should not show up when there\'s a selected sprint')
+        }
+        return () => {
+            api.removeAllListeners('LoadSprint')
         }
     }, [location.pathname])
 
+    React.useEffect(() => {
+        const sprintID = location.pathname.split('/');
+        api.recieve('EditSprint', (data)=>{
+            api.send('LoadSprint', sprintID[sprintID.length-1])
+        })
+        return () => {
+            api.removeAllListeners('EditSprint')
+        }
+    }, [])
+
+    const changeStatus = (e) => {
+        if(e.target.value !== '') api.send('EditSprint', {...sprint, status: e.target.value})
+    }
+
     const ShowSprint = () => {
-        return <section className="viewsprint-section">
-                <Card style={{width:'95%', flexFlow: 'row'}} noButton>
-                    <div className="left">
-                        <Calendar 
-                                // fixRelativePosition={'center'}
-                                className="bg-dark"
-                                showOtherDays={true}
-                                zIndex={99}
-                                value={[sprint?.start, sprint?.end]} 
-                                range
-                                plugins={[<DatePanel position="bottom" />]} 
-                                readOnly
-                                />
-                    </div>
-                    <div className="right">
-                        <div className="space-between" style={{maxHeight: '150px', overflow: 'hidden', textOverflow: 'ellipsis'}}>Title: <h3>{sprint?.title}</h3></div>
-                        <div className="dflex" style={{justifyContent:'flex-end'}}> - <em>"{sprint?.description}"</em></div>
-                        <div className="space-between">
+        return  <>
+                    <div className="topleft">
+                        <div><h3>{sprint?.title}</h3></div>
+                        <div className="" style={{marginLeft: '15px', marginTop: '15px'}}> - <em>"{sprint?.description}"</em></div>
+                        <div className="" style={{alignSelf: 'flex-start'}}>
                             Status:
                             <Select 
-                                value={sprint?.status}
-                                onChange={e=>setSprint(prev=>{
-                                    return {...prev, status: e.target.value}
-                                })}
-                                className={`select-chip chip-${sprint?.status}`}
+                                defaultValue={sprint?.status} 
+                                style={{marginLeft: '15px', marginTop: '15px'}}
+                                onChange={changeStatus}
+                                className={`select-chip chip-${sprint?.status.replace(/\s/g,'')}`}
                             >
                                 <option value=''>----</option>
                                 <option value='waiting'>Waiting</option>
@@ -60,13 +64,44 @@ function ViewSprint({location}) {
                                 <option value='failed'>Failed</option>
                             </Select>
                         </div>
+                        <div style={{display:'flex', alignItems: 'center', flexFlow: 'column', marginTop: '30px'}}>
+                            <Calendar 
+                                // fixRelativePosition={'center'}
+                                className="bg-dark"
+                                showOtherDays={true}
+                                zIndex={99}
+                                value={[sprint?.start, sprint?.end]} 
+                                range
+                                plugins={[<DatePanel position='right' />]} 
+                                readOnly
+                                />
+                                <div className="card-actions">
+                                <Button 
+                                    style={{ flex:1}}
+                                    className="edit-btn"
+                                    onClick={()=>{props.history.push(`/sprints/${data._id}`)}}>
+                                        Edit
+                                </Button>
+                                <Button
+                                    style={{ flex:1}}
+                                    onClick={()=>onDelete(data._id)}
+                                    className="danger-btn">
+                                        Delete
+                                </Button>
+                            </div>
+                        </div>
                     </div>
-                </Card>
-            </section>
+                    <div className="bottomright">
+                        <div className="eventsheader">
+                            <h4>Events:</h4>
+                        </div>
+                    </div>
+                </>
     }
 
     return (<>
-                {sprint ? <ShowSprint /> : 
+                <div style={{display:'flex', justifyContent: 'center'}}><h2>SPRINT</h2></div>
+                {sprint ?  <section className="viewsprint-section"><ShowSprint /></section> : 
                 <div 
                     style={{
                         display: 'flex', 

@@ -1,22 +1,69 @@
 .viewsprint-section {
     display: flex;
     justify-content: center;
-    // flex-flow: column;
-    .right {
-        padding: 10px 0 10px 10px;
-        display: flex;
+    flex-direction: column;
+    @media screen and (min-width: 1200px) {
+        flex-direction: row;
+    }
+    .topleft{
         flex: 1;
-        // justify-content: flex-end;
+        display: flex;
         flex-flow: column;
-        *:not(:nth-child(2)) {
-            margin-left: 15px;
-        }
+        // justify-content: center;
+        // align-items: center;
         h3 {
             margin-top: 0;
             margin-bottom: 0;
             display: inline-block;
             text-transform: capitalize;
             text-overflow: ellipsis;
+        }
+        .card-actions{
+            display: flex;
+            // justify-content: flex-end;
+            margin-top: 3px;
+            width: 382px;
+            button {
+                // margin: 0 3px 0 0;
+                transition: .25s all;
+            }
+            .danger-btn {
+                border: 1px solid #f32617;
+                background-color: transparent;
+                color:#f32617;
+                &:hover {
+                    border: 1px solid #f32617;
+                    background-color:  #f32617;
+                    color:white;
+                }
+            }
+            .edit-btn {
+                border: 1px solid rgb(17,119,187);
+                background-color: transparent;
+                color:rgb(17,119,187);
+                &:hover {
+                    border: 1px solid rgb(17,119,187);
+                    background-color:  rgb(17,119,187);
+                    color:white;
+                }
+            }
+            @media screen and (max-width: 1000px) {
+                flex-direction: column;
+            }
+        }
+    }
+    .bottomright {
+        flex:1;
+        .eventsheader {
+            display: flex;
+            justify-content: center;
+            @media screen and (min-width: 1200px) {
+                flex-direction: row;
+                h4 {
+                    margin: 0;
+                }
+            }
+            
         }
     }
 }
@@ -25,7 +72,6 @@
     display: flex;
     justify-content: space-between;
 }
-
 
 .dflex {
     display: flex;
