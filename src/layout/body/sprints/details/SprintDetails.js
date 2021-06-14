@@ -119,112 +119,112 @@ function SprintDetails(props) {
 
     return (
         <article className="view-sprint">
-                <Card 
-                    className="card-sprint-details" 
-                    noButton>
-                    <h4 className="card-title">
-                        Sprint Details
-                    </h4>
-                    <div className="card-body">
-                        <div className="left">
-                            <div className="input-group">
-                                <label>Title: </label>
-                                <Input value={sprint?.title} onChange={(e)=>setSprint(prev=>{ return {...prev, title: e.target.value}})} />
-                            </div>
-                            <div className="input-group" style={{justifyContent: "space-between"}}>
-                                <label>Status: </label>
-                                <Select style={{width: "50%"}} value={sprint?.status} onChange={e=>setSprint(prev=>{ return {...prev, status: e.target.value}})}>
-                                    <option style={{color: 'black'}} value=""></option>
-                                    <option style={{color: 'black'}} value="waiting">Waiting</option>
-                                    <option style={{color: 'black'}} value="active">Active</option>
-                                    <option style={{color: 'black'}} value="on hold">On Hold</option>
-                                    <option style={{color: 'black'}} value="failed">Failed</option>
-                                    <option style={{color: 'black'}} value="done">Done</option>
-                                </Select>
-                            </div>
-                            <div className="input-group" style={{flexFlow: 'column'}}>
-                                <label>Description: </label>
-                                <Textarea
-                                    className="textarea-sprint"
-                                    value={sprint?.description} 
-                                    onChange={e=>setSprint(prev=>{ return {...prev, description: e.target.value}})}
-                                    />
-                            </div>
-                            <div className="input-group" style={{flexFlow: 'column'}}>
-                                <label>Range:</label>
-                                <div style={{display: 'flex', justifyContent: 'center'}}>
-                                    <Calendar 
-                                        value={[sprint?.start, sprint?.end]}
-                                        onChange={date=>{
-                                            // setSprint(prev=>{ return {...prev, start: moment(date[0].format('YYYY-MM-DD HH:MM')), end: date[1] ? moment(date[1].format('YYYY-MM-DD HH:MM')) : null}})
-                                            setSprint(prev=>{ return {...prev, start: date[0]?.toString(), end: date[1]?.toString()}})
-                                        }}
-                                        range
-                                        showOtherDays
-                                        className="bg-dark"/>
-                                </div>
-                            </div>
+            <Card 
+                className="card-sprint-details" 
+                noButton>
+                <h4 className="card-title">
+                    Sprint Details
+                </h4>
+                <div className="card-body">
+                    <div className="left">
+                        <div className="input-group">
+                            <label>Title: </label>
+                            <Input value={sprint?.title} onChange={(e)=>setSprint(prev=>{ return {...prev, title: e.target.value}})} />
                         </div>
-                        <div className="right">
-                            <div className="events">
-                                <div className="events-head">
-                                    <label style={{flex:1}}>Events: </label>
-                                    
-                                    <Button 
-                                        onClick={()=>{
-                                            setDates(moment(sprint.start).format('YYYY/MM/DD'))
-                                            setCalendarRef({
-                                                new: {
-                                                    setSprint: (ev) =>{
-                                                        setSprint(prev=>{ return {...prev, events: [...prev.events, ev]}})
-                                                        // console.log(ev)
-                                                    }
-                                                }
-                                            })
-                                            setEventModalOpen(true)
-                                        }}
-                                        style={{height: '100%', padding: '0 15px'}}>
-                                            Add Event
-                                    </Button>
-                                    <Button
-                                        // className={del.length === 0 ? '' : "add-btn"}
-                                        disabled={del.length === 0}
-                                        style={{marginLeft: "5px", padding: '5px 10px 2px 10px', position: 'relative',
-                                                backgroundColor: del.length===0 ? "gray": '#1177bb', cursor: del.length===0 ? "not-allowed" : 'pointer'}}
-                                        onClick={onEventUndo}>
-                                            <RestoreFromTrash />
-                                    </Button>
-                                </div>
-                                <div className="events-list" style={sprint?.events?.length > 0 ? {flexFlow: 'column'} : {}}>
-                                    <DisplayListOf type={sprint?.events} str={"events"} />
-                                </div>
-                            </div>
-                            {/* <div className="participants">
-                                <div className="participants-head">
-                                    <label>Participants: </label>
-                                    <Button className="add-btn">Add Participant</Button>
-                                </div>
-                                <div className="participants-list" style={sprint?.events?.length > 0 ? {flexFlow: 'column'} : {}}>
-                                    <DisplayListOf type={sprint?.participants} str={"participants"} />
-                                </div>
-                            </div> */}
-                            <div className="card-actions">
-                                <Button
-                                    onClick={onSubmit}>
-                                    Save
-                                </Button>
-                                <Button
-                                    className="cancel-btn"
-                                    onClick={()=>{
-                                        props.history.push('/sprints')
-                                        console.log(sprint)
-                                    }}>
-                                    Cancel
-                                </Button>
+                        <div className="input-group" style={{justifyContent: "space-between"}}>
+                            <label>Status: </label>
+                            <Select style={{width: "50%"}} value={sprint?.status} onChange={e=>setSprint(prev=>{ return {...prev, status: e.target.value}})}>
+                                <option style={{color: 'black'}} value=""></option>
+                                <option style={{color: 'black'}} value="waiting">Waiting</option>
+                                <option style={{color: 'black'}} value="active">Active</option>
+                                <option style={{color: 'black'}} value="on hold">On Hold</option>
+                                <option style={{color: 'black'}} value="failed">Failed</option>
+                                <option style={{color: 'black'}} value="done">Done</option>
+                            </Select>
+                        </div>
+                        <div className="input-group" style={{flexFlow: 'column'}}>
+                            <label>Description: </label>
+                            <Textarea
+                                className="textarea-sprint"
+                                value={sprint?.description} 
+                                onChange={e=>setSprint(prev=>{ return {...prev, description: e.target.value}})}
+                                />
+                        </div>
+                        <div className="input-group" style={{flexFlow: 'column'}}>
+                            <label>Range:</label>
+                            <div style={{display: 'flex', justifyContent: 'center'}}>
+                                <Calendar 
+                                    value={[sprint?.start, sprint?.end]}
+                                    onChange={date=>{
+                                        // setSprint(prev=>{ return {...prev, start: moment(date[0].format('YYYY-MM-DD HH:MM')), end: date[1] ? moment(date[1].format('YYYY-MM-DD HH:MM')) : null}})
+                                        setSprint(prev=>{ return {...prev, start: date[0]?.toString(), end: date[1]?.toString()}})
+                                    }}
+                                    range
+                                    showOtherDays
+                                    className="bg-dark"/>
                             </div>
                         </div>
                     </div>
-                </Card>
+                    <div className="right">
+                        <div className="events">
+                            <div className="events-head">
+                                <label style={{flex:1}}>Events: </label>
+                                
+                                <Button 
+                                    onClick={()=>{
+                                        setDates(moment(sprint.start).format('YYYY/MM/DD'))
+                                        setCalendarRef({
+                                            new: {
+                                                setSprint: (ev) =>{
+                                                    setSprint(prev=>{ return {...prev, events: [...prev.events, ev]}})
+                                                    // console.log(ev)
+                                                }
+                                            }
+                                        })
+                                        setEventModalOpen(true)
+                                    }}
+                                    style={{height: '100%', padding: '0 15px'}}>
+                                        Add Event
+                                </Button>
+                                <Button
+                                    // className={del.length === 0 ? '' : "add-btn"}
+                                    disabled={del.length === 0}
+                                    style={{marginLeft: "5px", padding: '5px 10px 2px 10px', position: 'relative',
+                                            backgroundColor: del.length===0 ? "gray": '#1177bb', cursor: del.length===0 ? "not-allowed" : 'pointer'}}
+                                    onClick={onEventUndo}>
+                                        <RestoreFromTrash />
+                                </Button>
+                            </div>
+                            <div className="events-list" style={sprint?.events?.length > 0 ? {flexFlow: 'column'} : {}}>
+                                <DisplayListOf type={sprint?.events} str={"events"} />
+                            </div>
+                        </div>
+                        {/* <div className="participants">
+                            <div className="participants-head">
+                                <label>Participants: </label>
+                                <Button className="add-btn">Add Participant</Button>
+                            </div>
+                            <div className="participants-list" style={sprint?.events?.length > 0 ? {flexFlow: 'column'} : {}}>
+                                <DisplayListOf type={sprint?.participants} str={"participants"} />
+                            </div>
+                        </div> */}
+                        <div className="card-actions">
+                            <Button
+                                onClick={onSubmit}>
+                                Save
+                            </Button>
+                            <Button
+                                className="cancel-btn"
+                                onClick={()=>{
+                                    props.history.push('/sprints')
+                                    console.log(sprint)
+                                }}>
+                                Cancel
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            </Card>
         </article>
     )
 }
