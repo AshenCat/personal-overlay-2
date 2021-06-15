@@ -5,7 +5,7 @@ import './eventmodalcontext.scss'
 import moment from 'moment';
 import Modal from '../../components/modal/Modal';
 import Input from '../../components/input/inputText/Input';
-import SimpleCheckbox from '../../components/checkbox/simple/simpleCheckbox';
+import SimpleCheckbox from '../../components/checkbox/simple/SimpleCheckbox';
 import Textarea from '../../components/input/textarea/Textarea';
 import { Calendar } from 'react-multi-date-picker';
 import TimePicker from "react-multi-date-picker/plugins/time_picker";
