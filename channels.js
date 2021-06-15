@@ -9,7 +9,8 @@ const rendererToMain = [
     "DeleteSprint",
     "DeletedEvent",
     "LoadEventsWithoutParents",
-    "LoadSprintsToday"
+    "LoadSprintsToday",
+    "ChangeEventStatus"
 ]
 
 const mainToRenderer = [
@@ -22,7 +23,8 @@ const mainToRenderer = [
     "DeleteSprint",
     "DeletedEvent",
     "LoadEventsWithoutParents",
-    "LoadSprintsToday"
+    "LoadSprintsToday",
+    "ChangeEventStatus"
 ]
 
 module.exports = {

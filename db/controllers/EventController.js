@@ -27,6 +27,18 @@ const onEventAdd = async (e, data) => {
     }
 }
 
+const ChangeEventStatus = async (e, id) => {
+    const event = await EventModel.findById(id).exec();
+    event.status = !event.status;
+    event.save();
+    console.log(`Quick mark status: ${event.status}`)
+    console.log(event._doc)
+    e.sender.send('ChangeEventStatus', {
+        ...event._doc,
+        _id: event._id.toHexString()
+    })
+}
+
 const onSprintAdd = async (e, data) => {
     console.log(data)
     const newSprint = new SprintModel(data);
@@ -213,5 +225,6 @@ module.exports = {
     EditSprint,
     DeleteSprint,
     LoadSprintsToday,
-    LoadEventsWithoutParents
+    LoadEventsWithoutParents,
+    ChangeEventStatus
 }

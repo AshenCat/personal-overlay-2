@@ -117,6 +117,7 @@ const {
     DeleteSprint,
     LoadEventsWithoutParents,
     LoadSprintsToday,
+    ChangeEventStatus
 } = require('./db/controllers/EventController');
 
 ipcMain.on('onEventAdd', (e, data) => onEventAdd(e, data))
@@ -128,6 +129,7 @@ ipcMain.on('EditSprint', (e, sprint) => {EditSprint(e,sprint)})
 ipcMain.on('DeleteSprint', (e, id) => {DeleteSprint(e,id)})
 ipcMain.on('LoadSprintsToday', LoadSprintsToday)
 ipcMain.on('LoadEventsWithoutParents', LoadEventsWithoutParents)
+ipcMain.on('ChangeEventStatus', (e, id) => ChangeEventStatus(e, id))
 
 
 // ipcMain.on('notify', (e, message) => {
