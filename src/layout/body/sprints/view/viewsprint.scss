@@ -2,6 +2,7 @@
     display: flex;
     justify-content: center;
     flex-direction: column;
+    width: 100%;
     @media screen and (min-width: 1200px) {
         flex-direction: row;
     }
@@ -54,6 +55,9 @@
     }
     .bottomright {
         flex:1;
+        @media screen and (min-width: 1200px) {
+            padding-left: 10px;
+        }
         .eventsheader {
             display: flex;
             justify-content: center;
@@ -66,6 +70,7 @@
             
         }
         .events-list {
+            width: 100%;
             .event-row {
                 border-left: 8px solid white;
                 margin: 10px 0;
@@ -73,8 +78,16 @@
 
                 background-color: #555;
                 display: flex;
-                justify-content: space-between;
+                // justify-content: space-between;
                 align-items: center;
+
+                .col {
+                    flex: 1;
+                    overflow: hidden;
+                }
+                .event-title {
+                    max-width: 300px;
+                }
             }
             .event-done {
                 text-decoration: line-through;

@@ -133,7 +133,7 @@ function ViewSprint({location, history, changeSprintInArray}) {
                                         </div> : ''}
                             {sprint?.events?.map((event, key)=>{
                                 return <div className={`event-row ${event.status ? 'event-done' : ''}`} key={key}>
-                                    <div className="row">
+                                    <div className="col">
                                         <div className="short event-title">
                                             <span>{event.title}</span>
                                         </div>

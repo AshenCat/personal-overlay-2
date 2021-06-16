@@ -34,6 +34,9 @@
                     height: 35vh;
                 }
                 .autosizer {
+                    &:focus {
+                        outline: none;
+                    }
                     .autosizer-row-container {
                         position: relative;
                         border-bottom: 1px solid gray;
@@ -47,14 +50,21 @@
                             right: 9px;
                             top: 9px;
                             bottom: 9px;
-                            .row-title{
-                                display: flex;
-                                justify-content: space-between;
-                                text-transform: capitalize;
-                            }
-                            .row-date{
-                                display: flex;
-                                justify-content: space-between;
+                            display: flex;
+                            align-items: center;
+                            .col {
+                                flex: 1;
+                                overflow: hidden;
+                                padding-right: 5px;
+                                .row-title{
+                                    display: flex;
+                                    justify-content: space-between;
+                                    text-transform: capitalize;
+                                }
+                                .row-date{
+                                    display: flex;
+                                    justify-content: space-between;
+                                }
                             }
                         }
                     }
