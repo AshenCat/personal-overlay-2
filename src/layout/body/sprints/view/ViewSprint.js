@@ -62,7 +62,13 @@ function ViewSprint({location, history}) {
         api.send('ChangeEventStatus', id)
     }
 
-    const ShowSprint = (history) => {
+    const onDelete = (id) => {
+        console.log('delete')
+    }
+    
+    const push = (where) => history.push(where);
+
+    const ShowSprint = () => {
         return  <>
                     <div className="topleft">
                         <div><h3>{sprint?.title}</h3></div>
@@ -92,16 +98,16 @@ function ViewSprint({location, history}) {
                                 plugins={[<DatePanel position='right' />]} 
                                 readOnly
                                 />
-                                <div className="card-actions">
+                            <div className="card-actions">
                                 <Button 
                                     style={{ flex:1}}
                                     className="edit-btn"
-                                    onClick={()=>{history.push(`/sprints/${data._id}`)}}>
+                                    onClick={()=>{push(`/sprints/${sprint._id}`)}}>
                                         Edit
                                 </Button>
                                 <Button
                                     style={{ flex:1}}
-                                    onClick={()=>onDelete(data._id)}
+                                    onClick={()=>onDelete(sprint._id)}
                                     className="danger-btn">
                                         Delete
                                 </Button>
@@ -147,7 +153,7 @@ function ViewSprint({location, history}) {
 
     return (<>
                 <div style={{display:'flex', justifyContent: 'center'}}><h2>SPRINT</h2></div>
-                {sprint ?  <section className="viewsprint-section"><ShowSprint history={history} /></section> : 
+                {sprint ?  <section className="viewsprint-section"><ShowSprint /></section> : 
                 <div 
                     style={{
                         display: 'flex', 
