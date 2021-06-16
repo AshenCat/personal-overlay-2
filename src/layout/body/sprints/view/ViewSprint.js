@@ -8,7 +8,7 @@ import SimpleCheckbox from '../../../../components/checkbox/simple/SimpleCheckbo
 import Select from '../../../../components/select/Select';
 import './viewsprint.scss'
 
-function ViewSprint({location, history}) {
+function ViewSprint({location, history, changeSprintInArray}) {
     const [sprint, setSprint] = React.useState();
     // const [qstatus, setQStatus] = React.useState();
 
@@ -21,7 +21,7 @@ function ViewSprint({location, history}) {
             api.send('LoadSprint', urlSplit[urlSplit.length-1])
             api.recieve('LoadSprint', (data) => {
                 setSprint(data);
-                console.log(data);
+                changeSprintInArray(data)
             })
         }
         else {
