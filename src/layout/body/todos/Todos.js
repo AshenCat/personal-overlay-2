@@ -8,7 +8,7 @@ import ViewSprint from '../sprints/view/ViewSprint'
 import './todos.scss'
 
 function Todos(props) {
-    const [selectedSprint, setSelectedSprint] = React.useState(null)
+    // const [selectedSprint, setSelectedSprint] = React.useState(null)
 
     const [sprintsToday, setSprintsToday] = React.useState([])
     const [eventsWithoutParents, setEventsWithoutParents] = React.useState([])
@@ -56,6 +56,10 @@ function Todos(props) {
         })
         setSprintsFiltered(newSprint)
     }, [search, sprintsToday])
+
+    const changeSprintInArray = (editedSprint) => {
+        setSprintsToday(prev => [...prev.map(sprint => sprint._id === editedSprint._id ? editedSprint : sprint)])
+    }
 
     const RowCard = (propsies) => {
         const {
@@ -116,7 +120,7 @@ function Todos(props) {
                 </Card>
             </section>            
             <section className="section-right">
-                <ViewSprint />
+                <ViewSprint changeSprintInArray={changeSprintInArray} />
             </section>            
         </article>
     )

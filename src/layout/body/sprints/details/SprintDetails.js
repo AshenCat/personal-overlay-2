@@ -216,8 +216,7 @@ function SprintDetails(props) {
                             <Button
                                 className="cancel-btn"
                                 onClick={()=>{
-                                    props.history.push('/sprints')
-                                    console.log(sprint)
+                                    props.history.goBack();
                                 }}>
                                 Cancel
                             </Button>

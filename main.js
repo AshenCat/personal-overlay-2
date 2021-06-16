@@ -2,6 +2,9 @@ const {
     app,
     BrowserWindow,
     ipcMain,
+    globalShortcut,
+    Tray,
+    Menu
     // Notification
 } = require('electron');
 const mongoose = require('mongoose').set('debug', true);
@@ -9,6 +12,14 @@ const path = require('path')
 
 const isDev = !app.isPackaged;
 let dbFailed = false;
+
+const version = 'v0.0.0'
+
+const trayMenu = Menu.buildFromTemplate([
+    {label: version},
+    {label: 'Check for updates'},
+    {role: 'quit'},
+])
 
 mongoose.connect(
     require('./db/config/config').db, {
@@ -23,9 +34,16 @@ mongoose.connect(
         dbFailed=true;
     });
 
-let win;
+let win, tray;
+
+function createTray() {
+    tray = new Tray('./icons/icon.png')
+    tray.setToolTip('Personal Overlay')
+    tray.setContextMenu(trayMenu)
+}
 
 function createWindow() {
+    createTray()
     win = new BrowserWindow({
         width:1366, minWidth:900,
         height: 768, minHeight: 650,
@@ -44,6 +62,14 @@ function createWindow() {
         if(dbFailed) {
             console.log('dbfailed')
             win.webContents.send('dbfailed', "Could not connect to mongoDB...");
+        }
+    })
+    globalShortcut.register('CommandOrControl+Shift+~', () => {
+        if (win.isVisible()) {
+            win.hide()
+            console.log('hide')
+        } else {
+            win.show()
         }
     })
 }
@@ -91,6 +117,7 @@ const {
     DeleteSprint,
     LoadEventsWithoutParents,
     LoadSprintsToday,
+    ChangeEventStatus
 } = require('./db/controllers/EventController');
 
 ipcMain.on('onEventAdd', (e, data) => onEventAdd(e, data))
@@ -102,6 +129,7 @@ ipcMain.on('EditSprint', (e, sprint) => {EditSprint(e,sprint)})
 ipcMain.on('DeleteSprint', (e, id) => {DeleteSprint(e,id)})
 ipcMain.on('LoadSprintsToday', LoadSprintsToday)
 ipcMain.on('LoadEventsWithoutParents', LoadEventsWithoutParents)
+ipcMain.on('ChangeEventStatus', (e, id) => ChangeEventStatus(e, id))
 
 
 // ipcMain.on('notify', (e, message) => {
