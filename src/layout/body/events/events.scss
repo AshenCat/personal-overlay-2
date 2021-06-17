@@ -46,6 +46,7 @@ section.events {
                     overflow: hidden;
                     .col {
                         .row-title {
+                            white-space: nowrap;
                             max-height: 50px;
                             margin: 0;
                             white-space: nowrap;
@@ -53,17 +54,6 @@ section.events {
                             text-overflow: ellipsis;
                             h3 {
                                 margin: 0;
-                            }
-                        }
-                        .row-parent {
-                            span {
-                                max-height: 50px;
-                                margin: 0;
-                                white-space: nowrap;
-                                overflow: hidden;
-                                text-overflow: ellipsis;
-                                text-decoration: underline;
-                                cursor: pointer;
                             }
                         }
                         .event-done-text {
@@ -101,6 +91,11 @@ section.events {
                             justify-self: flex-start;
                             // margin-right: auto;
                             min-width: 120px;
+                            &:hover {
+                                border: 1px solid #1177bb;
+                                background-color: transparent;
+                                color: white;
+                            }
                         }
                     }
                 }
