@@ -13,7 +13,7 @@ let eventSchema = new Schema({
     end: Date,
     groupId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'sprint'
+        ref: 'sprints'
     },
     allDay: Boolean,
     url: String,
@@ -23,7 +23,7 @@ let eventSchema = new Schema({
     overlap: Boolean,
     constraint: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'sprint'
+        ref: 'sprints'
     }],
 
     dateFinished: Date,
