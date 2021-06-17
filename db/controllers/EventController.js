@@ -234,8 +234,8 @@ const LoadEventsWithoutParents = async (e) => {
 }
 
 const LoadAllEvents = async (e) => {
-    const events = await EventModel.find().lean().exec();
-    console.log(events)
+    const events = await EventModel.find().populate('groupId').lean().exec();
+    // console.log(events)
     e.sender.send('LoadAllEvents', events.map(event=>{
         return {
             ...event,
