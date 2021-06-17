@@ -28,9 +28,9 @@ section.events {
             }
             .autosizer-row-container {
                 position: relative;
-                background-color: #333;
-                border-top: 1px solid #444;
-                border-left: 1px solid #444;
+                background-color: #444;
+                border-top: 1px solid #555;
+                border-left: 1px solid #555;
                 transition: .25s all;
                 &:hover {
                     background-color: #666;
@@ -53,6 +53,17 @@ section.events {
                             text-overflow: ellipsis;
                             h3 {
                                 margin: 0;
+                            }
+                        }
+                        .row-parent {
+                            span {
+                                max-height: 50px;
+                                margin: 0;
+                                white-space: nowrap;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                text-decoration: underline;
+                                cursor: pointer;
                             }
                         }
                         .event-done-text {
@@ -96,7 +107,7 @@ section.events {
             }
             .event-done {
                 border-left: 4px solid #00c875 !important;
-                background-color: #444;
+                background-color: #333;
                 border-top: 1px solid #555;
             }
         }

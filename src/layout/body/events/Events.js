@@ -6,8 +6,9 @@ import Slider from '../../../components/checkbox/slider/Slider';
 import moment from 'moment';
 import { AutoSizer, List } from 'react-virtualized';
 import Button from '../../../components/button/Button';
+import { withRouter } from 'react-router';
 
-function Events() {
+function Events(props) {
     const [events, setEvents] = React.useState([]);
     const [eventsFiltered, setEventsFiltered] = React.useState([]);
     const [filteredCount, setFilteredCount] = React.useState(0)
@@ -66,6 +67,7 @@ function Events() {
                                 <div className="autosizer-inside cursor-pointer">
                                     <div className="col">
                                         <div className="short row-title"><span className={`${data?.status ? 'event-done-text' : ''}`}><h3>{data?.title}</h3></span></div>
+                                        <div className="short row-parent"> From: <span className={`${data?.status ? 'event-done-text' : ''}`} onClick={()=>props.history.push(`/todos/${data?.groupId?._id}`)}>{data?.groupId?.title}</span>{!data.groupId ? 'No parent...' : ''}</div>
                                         <div className="short row-title"> - <span className={`${data?.status ? 'event-done-text' : ''}`}><em>"{data?.description}"</em></span></div>
                                         <div className="row-date"><span className={`${data?.status ? 'event-done-text' : ''}`}>{moment(data?.start).format('YYYY MMM DD')}</span></div>
                                     </div>
@@ -107,7 +109,7 @@ function Events() {
                                     height={height}
                                     width={width}
                                     overscanRowCount={2}
-                                    rowHeight={128}
+                                    rowHeight={149}
                                     rowCount={filteredCount}
                                     rowRenderer={RowCard}
                                     className="autosizer"
@@ -120,4 +122,4 @@ function Events() {
     )
 }
 
-export default Events
+export default withRouter(Events)
