@@ -233,6 +233,17 @@ const LoadEventsWithoutParents = async (e) => {
     }));
 }
 
+const LoadAllEvents = async (e) => {
+    const events = await EventModel.find().lean().exec();
+    console.log(events)
+    e.sender.send('LoadAllEvents', events.map(event=>{
+        return {
+            ...event,
+            _id: event._id.toHexString()
+        }
+    }))
+}
+
 module.exports = {
     onEventAdd,
     onSprintAdd,
@@ -244,5 +255,6 @@ module.exports = {
     LoadSprintsToday,
     LoadEventsWithoutParents,
     ChangeEventStatus,
-    ChangeEventStatus1
+    ChangeEventStatus1,
+    LoadAllEvents
 }

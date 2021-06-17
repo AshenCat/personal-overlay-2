@@ -1,4 +1,4 @@
-import { ArrowBack, EventNote, Home, PostAdd } from '@material-ui/icons'
+import { ArrowBack, EventNote, Home, PostAdd, Reorder } from '@material-ui/icons'
 import React from 'react'
 import { withRouter } from 'react-router-dom';
 import './drawer.scss'
@@ -74,6 +74,12 @@ function Drawer(props) {
                 <li>
                     <figure className="figure" id="sprints" onClick={()=>onSelect('sprints')}>
                         <span className="logo"><PostAdd style={{fontSize: fontSize}} /></span>
+                        {/* <figcaption>Todo</figcaption> */}
+                    </figure>
+                </li>
+                <li>
+                    <figure className="figure" id="events" onClick={()=>onSelect('events')}>
+                        <span className="logo"><Reorder style={{fontSize: fontSize}} /></span>
                         {/* <figcaption>Todo</figcaption> */}
                     </figure>
                 </li>

@@ -1,10 +1,116 @@
-import React from 'react'
+import React from 'react';
+import './events.scss';
+import Card from '../../../components/card/Card';
+import Input from '../../../components/input/inputText/Input';
+import Slider from '../../../components/checkbox/slider/Slider';
+import moment from 'moment';
+import { AutoSizer, List } from 'react-virtualized';
+import SimpleCheckbox from '../../../components/checkbox/simple/SimpleCheckbox';
 
 function Events() {
+    const [events, setEvents] = React.useState([]);
+    const [eventsFiltered, setEventsFiltered] = React.useState([]);
+    const [filteredCount, setFilteredCount] = React.useState(0)
+ 
+    const [searchFilter, setSearchFilter] = React.useState('');
+    const [hideFinished, setHideFinished] = React.useState(false);
+    const [hideWithSprint, setHideWithSprint] = React.useState(false);
+
+
+    React.useEffect(()=>{
+        api.send('LoadAllEvents', {})
+        api.recieve('LoadAllEvents', data => {
+            setEvents(data)
+            setEventsFiltered(data)
+            setFilteredCount(data.length)
+        })
+        return () => {
+            api.removeAllListeners('LoadAllEvents');
+        }
+    }, [])
+
+    React.useEffect(()=>{
+        const newEvents = events.filter(ev => {
+            if (hideFinished) return !ev.status;
+            return true;
+        }).filter(ev => {
+            if (hideWithSprint) return !ev.groupId;
+            return true;
+        }).filter(ev => {
+            if (searchFilter.trim() === '') return true;
+            if (ev.title.includes(searchFilter)) return true; 
+            if (ev.description.includes(searchFilter)) return true; 
+            if(moment(ev.start).format('YYYY MMM DD').toLowerCase().includes(searchFilter.toLowerCase())) return true;
+        })
+        setEventsFiltered([...newEvents])
+        setFilteredCount(newEvents.length)
+        console.log(newEvents)
+    }, [searchFilter, hideFinished, hideWithSprint])
+
+    const changeEventStatus = (id) => {
+
+    }
+
+    const RowCard = (propsies) => {
+        const {
+            index,
+            key,
+            style
+        } = propsies;
+        const data = eventsFiltered[index];
+        if (data) return    <div key={key} style={style} className={`autosizer-row-container cursor-pointer ${data?.status ? 'event-done' : ''}`}>
+                                <div className="autosizer-inside">
+                                    <div className="col">
+                                        <div className="short row-title">Title: <span className={`${data?.status ? 'event-done-text' : ''}`}>{data?.title}</span></div>
+                                        <div className="short row-title">Description: <span className={`${data?.status ? 'event-done-text' : ''}`}>{data?.description}</span></div>
+                                        <div className="row-date">Start: <span className={`${data?.status ? 'event-done-text' : ''}`}>{moment(data?.start).format('YYYY MMM DD')}</span></div>
+                                    </div>
+                                    <div className="event-status">
+                                        <SimpleCheckbox value={data?.status} onClick={()=>changeEventStatus(data._id)}/>
+                                    </div>
+                                </div>
+                            </div>
+    }
+
     return (
-        <>
-            
-        </>
+        <section>
+            <aside className="events-filter">
+                <h2>Events</h2>
+               <Card noButton>
+                   <div className="card-title">
+                       <h3>Events Filter</h3>
+                   </div>
+                   <div className="form-group">
+                       <label>Search:</label>
+                       <Input value={searchFilter} onChange={(e)=>setSearchFilter(e.target.value)} className="cWidth" />
+                   </div>
+                   <div className="form-group">
+                       <label>Hide Finished:</label>
+                       <Slider value={hideFinished} onClick={()=>setHideFinished(prev=>!prev)}/>
+                   </div>
+                   <div className="form-group">
+                       <label>Hide with sprint:</label>
+                       <Slider value={hideWithSprint} onClick={()=>setHideWithSprint(prev=>!prev)}/>
+                   </div>
+               </Card>
+            </aside> 
+            <article className="events-content">
+                <AutoSizer>
+                    {({width, height})=> {
+                        return <List 
+                                    height={height}
+                                    width={width}
+                                    overscanRowCount={2}
+                                    rowHeight={240}
+                                    rowCount={filteredCount}
+                                    rowRenderer={RowCard}
+                                    className="autosizer"
+                                    containerStyle={{borderBottom: '1px solid gray'}}
+                                    />
+                        }}
+                </AutoSizer>
+            </article>
+        </section>
     )
 }
 
