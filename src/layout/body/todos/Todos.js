@@ -2,6 +2,7 @@ import moment from 'moment'
 import React from 'react'
 import { AutoSizer, List } from 'react-virtualized'
 import Card from '../../../components/card/Card'
+import SimpleCheckbox from '../../../components/checkbox/simple/SimpleCheckbox'
 import Chip from '../../../components/chip/Chip'
 import Input from '../../../components/input/inputText/Input'
 import ViewSprint from '../sprints/view/ViewSprint'
@@ -26,7 +27,12 @@ function Todos(props) {
             setSprintsToday([...sprintsTodayRes])
         })
         api.recieve('LoadEventsWithoutParents', eventsRes => {
-            setEventsWithoutParents([...eventsRes])
+            setEventsWithoutParents([...eventsRes.sort((a,b)=>a.status-b.status)])
+        })
+        api.recieve('ChangeEventStatus1', newEvent => {
+            setEventsWithoutParents(prev => {
+                return [...prev.map(event => event._id === newEvent._id ? newEvent : event)]
+            })
         })
         return () => {
             api.removeAllListeners('LoadSprintsToday')
@@ -39,7 +45,7 @@ function Todos(props) {
         const newEvent = eventsWithoutParents.filter(event => {
             if(search === '') return true; 
             if(event.title.includes(search)) return true;
-            if(moment(event.start).format('YYYY MMM DD').includes(search)) return true;
+            if(moment(event.start).format('YYYY MMM DD').toLowerCase().includes(search.toLowerCase())) return true;
             return false;
         })
         setEventsFiltered(newEvent);
@@ -51,7 +57,7 @@ function Todos(props) {
             if(search === '') return true; 
             if(sprint.title.includes(search)) return true;
             if(sprint.status.includes(search)) return true;
-            if(moment(sprint.start).format('YYYY MMM DD').includes(search)) return true;
+            if(moment(sprint.start).format('YYYY MMM DD').toLowerCase().includes(search.toLowerCase())) return true;
             return false;
         })
         setSprintsFiltered(newSprint)
@@ -61,6 +67,10 @@ function Todos(props) {
         setSprintsToday(prev => [...prev.map(sprint => sprint._id === editedSprint._id ? editedSprint : sprint)])
     }
 
+    const changeEventStatus = (id) => {
+        api.send('ChangeEventStatus1', id)
+    }
+
     const RowCard = (propsies) => {
         const {
             index,
@@ -68,10 +78,15 @@ function Todos(props) {
             style
         } = propsies;
         const data = eventsFiltered[index]
-        if(data) return <div key={key} style={style} className="autosizer-row-container cursor-pointer">
+        if(data) return <div key={key} style={style} className={`autosizer-row-container cursor-pointer ${data?.status ? 'event-done' : ''}`}>
                             <div className="autosizer-inside">
-                                <div className="short row-title">Title: <span>{data?.title}</span></div>
-                                <div className="row-date">Start: <span>{moment(data?.start).format('YYYY MMM DD')}</span></div>
+                                <div className="col">
+                                    <div className="short row-title">Title: <span className={`${data?.status ? 'event-done-text' : ''}`}>{data?.title}</span></div>
+                                    <div className="row-date">Start: <span className={`${data?.status ? 'event-done-text' : ''}`}>{moment(data?.start).format('YYYY MMM DD')}</span></div>
+                                </div>
+                                <div className="event-status">
+                                    <SimpleCheckbox value={data?.status} onClick={()=>changeEventStatus(data._id)}/>
+                                </div>
                             </div>
                         </div>
     }

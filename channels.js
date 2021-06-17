@@ -10,7 +10,8 @@ const rendererToMain = [
     "DeletedEvent",
     "LoadEventsWithoutParents",
     "LoadSprintsToday",
-    "ChangeEventStatus"
+    "ChangeEventStatus",
+    "ChangeEventStatus1", //cant have both channels open in 1 page
 ]
 
 const mainToRenderer = [
@@ -24,7 +25,8 @@ const mainToRenderer = [
     "DeletedEvent",
     "LoadEventsWithoutParents",
     "LoadSprintsToday",
-    "ChangeEventStatus"
+    "ChangeEventStatus",
+    "ChangeEventStatus1", //cant have both channels open in 1 page
 ]
 
 module.exports = {
