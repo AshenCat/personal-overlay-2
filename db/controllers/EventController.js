@@ -31,9 +31,21 @@ const ChangeEventStatus = async (e, id) => {
     const event = await EventModel.findById(id).exec();
     event.status = !event.status;
     event.save();
+    // console.log(`Quick mark status: ${event.status}`)
+    // console.log(event._doc)
+    e.sender.send('ChangeEventStatus', {
+        ...event._doc,
+        _id: event._id.toHexString()
+    })
+}
+
+const ChangeEventStatus1 = async (e, id) => {
+    const event = await EventModel.findById(id).exec();
+    event.status = !event.status;
+    event.save();
     console.log(`Quick mark status: ${event.status}`)
     console.log(event._doc)
-    e.sender.send('ChangeEventStatus', {
+    e.sender.send('ChangeEventStatus1', {
         ...event._doc,
         _id: event._id.toHexString()
     })
@@ -213,7 +225,12 @@ const LoadCalendarData = async (e, month) => {
 
 const LoadEventsWithoutParents = async (e) => {
     const events = await EventModel.find({groupId: {$eq: null}}).lean().exec();
-    e.sender.send('LoadEventsWithoutParents', events);
+    e.sender.send('LoadEventsWithoutParents', events.map(event=>{
+        return {
+            ...event,
+            _id: event._id.toHexString()
+        }
+    }));
 }
 
 module.exports = {
@@ -226,5 +243,6 @@ module.exports = {
     DeleteSprint,
     LoadSprintsToday,
     LoadEventsWithoutParents,
-    ChangeEventStatus
+    ChangeEventStatus,
+    ChangeEventStatus1
 }
