@@ -1,4 +1,4 @@
-import { ArrowBack, EventNote, Home, PostAdd, Reorder } from '@material-ui/icons'
+import { ArrowBack, EventNote, Home, NotificationImportant, PostAdd, Reorder } from '@material-ui/icons'
 import React from 'react'
 import { withRouter } from 'react-router-dom';
 import './drawer.scss'
@@ -7,7 +7,7 @@ function Drawer(props) {
     const [selected, setSelected] = React.useState('home')
     const fontSize=40;
 
-    let {location} = props
+    let {location, history} = props
 
     const onSelect = (id, multi) => {
         let cs = multi ? id[0] : id
@@ -17,17 +17,17 @@ function Drawer(props) {
         
         if (multi) {
             // console.log('pushing to ', `/${id.join('/')}`)
-            props.history.push( `/${id.join('/')}`);
+            history.push( `/${id.join('/')}`);
         }
         else {
             // console.log('pushing to ', `/${id}`)
-            props.history.push(id === 'home' ? '/' : `/${id}`);
+            history.push(id === 'home' ? '/' : `/${id}`);
         }
         setSelected(id);   
     }
 
     const onBack = () => {
-        props.history.goBack()
+        history.goBack()
         document.getElementById(selected)?.classList.remove('active');
     }
     React.useState(()=>{
@@ -80,6 +80,12 @@ function Drawer(props) {
                 <li>
                     <figure className="figure" id="events" onClick={()=>onSelect('events')}>
                         <span className="logo"><Reorder style={{fontSize: fontSize}} /></span>
+                        {/* <figcaption>Todo</figcaption> */}
+                    </figure>
+                </li>
+                <li>
+                    <figure className="figure" id="overdue" onClick={()=>onSelect('overdue')}>
+                        <span className="logo"><NotificationImportant style={{fontSize: fontSize}} /></span>
                         {/* <figcaption>Todo</figcaption> */}
                     </figure>
                 </li>

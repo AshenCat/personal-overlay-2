@@ -12,7 +12,9 @@ const rendererToMain = [
     "LoadSprintsToday",
     "ChangeEventStatus",
     "ChangeEventStatus1", //cant have both channels open in 1 page
-    "LoadAllEvents"
+    "LoadAllEvents",
+    "queryOverdueSprints",
+    "queryOverdueEvents"
 ]
 
 const mainToRenderer = [
@@ -28,7 +30,9 @@ const mainToRenderer = [
     "LoadSprintsToday",
     "ChangeEventStatus",
     "ChangeEventStatus1", //cant have both channels open in 1 page
-    "LoadAllEvents"
+    "LoadAllEvents",
+    "queryOverdueSprints",
+    "queryOverdueEvents"
 ]
 
 module.exports = {

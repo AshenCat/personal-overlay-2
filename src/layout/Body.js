@@ -13,7 +13,8 @@ import EventModalProvider from '../context/EventModal/EventModalContext';
 const EventsComponent = React.lazy(()=>import('./body/events/Events'));
 const SprintsComponent = React.lazy(()=>import('./body/sprints/Sprints'));
 const SprintDetailsComponent = React.lazy(()=>import('./body/sprints/details/SprintDetails'))
-const todosComponent = React.lazy(()=>import('./body/todos/Todos'))
+const TodosComponent = React.lazy(()=>import('./body/todos/Todos'))
+const OverdueComponent = React.lazy(()=>import('./body/overdue/Overdue'))
 
 function Body() {
     return (
@@ -26,10 +27,11 @@ function Body() {
                         <React.Suspense fallback={<div>loading...</div>}>
                             <main>
                                 <Route exact path="/" component={Home} />
-                                <Route path="/todos" component={todosComponent} />
+                                <Route path="/todos" component={TodosComponent} />
                                 <Route exact path="/sprints" component={SprintsComponent} />
-                                <Route exact path="/events" component={EventsComponent} />
                                 <Route exact path="/sprints/:id" component={SprintDetailsComponent} />
+                                <Route exact path="/events" component={EventsComponent} />
+                                <Route exact path="/overdue" component={OverdueComponent} />
                             </main>
                         </React.Suspense>
                     </EventModalProvider>

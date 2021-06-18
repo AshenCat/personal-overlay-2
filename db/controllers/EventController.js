@@ -244,6 +244,60 @@ const LoadAllEvents = async (e) => {
     }))
 }
 
+const queryOverdueSprints = async (e) => {
+    const overdueSprints = await SprintModel.find({
+        $or: [
+            {$and: [
+                {start: {$lte: new Date()}},
+                {end: null},
+                {status: {$nin: ['done', 'failed']}}
+            ]},
+            {$and: [
+                {end: {$ne: null}},
+                {end: {$lte: new Date()}},
+                {status: {$nin: ['done', 'failed']}}
+            ]},
+            {$and: [
+                {start: {$ne: null}},
+                {status: {$nin: ['done', 'failed']}}
+            ]}
+        ],
+    }).lean().exec();
+    e.sender.send('queryOverdueSprints', overdueSprints.map(sprints => {
+        return {
+            ...sprints,
+            _id: sprints._id.toHexString()
+        }
+    }))
+}
+
+const queryOverdueEvents = async (e) => {
+    const queryOverdueEvents = await EventModel.find({
+        $or: [
+            {$and: [
+                {start: {$lte: new Date()}},
+                {end: null},
+                {status: {$ne:true} }
+            ]},
+            {$and: [
+                {end: {$ne: null}},
+                {end: {$lte: new Date()}},
+                {status: {$ne:true} }
+            ]},
+            {$and: [
+                {start: {$ne: null}},
+                {status: {$ne:true} }
+            ]}
+        ],
+    }).lean().exec();
+    e.sender.send('queryOverdueEvents', queryOverdueEvents.map(events => {
+        return {
+            ...events,
+            _id: events._id.toHexString()
+        }
+    }))
+}
+
 module.exports = {
     onEventAdd,
     onSprintAdd,
@@ -256,5 +310,7 @@ module.exports = {
     LoadEventsWithoutParents,
     ChangeEventStatus,
     ChangeEventStatus1,
-    LoadAllEvents
+    LoadAllEvents,
+    queryOverdueSprints,
+    queryOverdueEvents
 }

@@ -63,33 +63,33 @@ function Events(props) {
             style
         } = propsies;
         const data = eventsFiltered[index];
-        if (data) return    <div key={key} style={style} className={`autosizer-row-container ${data?.status ? 'event-done' : ''}`}>
-                                <div className="autosizer-inside cursor-pointer">
-                                    <div className="col">
-                                        <div className="short row-title">
-                                            <span className={`${data?.status ? 'event-done-text' : ''}`}><h3>{data?.title}</h3></span>
-                                        </div>
-                                        <div className="short row-title"> 
-                                            From: &nbsp;
-                                            <span className={`${data?.status ? 'event-done-text' : ''}`}>
-                                                {data?.groupId?.title}
-                                            </span>
-                                            {!data.groupId ? 'No parent...' : ''}
-                                        </div>
-                                        <div className="short row-title"> - <span className={`${data?.status ? 'event-done-text' : ''}`}>
-                                            <em>"{data?.description}"</em></span>
-                                        </div>
-                                        <div className="row-date">
-                                            <span className={`${data?.status ? 'event-done-text' : ''}`}>{moment(data?.start).format('YYYY MMM DD')}</span>
-                                        </div>
+        if(data) return <div key={key} style={style} className={`autosizer-row-container ${data?.status ? 'event-done' : ''}`}>
+                            <div className="autosizer-inside cursor-pointer">
+                                <div className="col">
+                                    <div className="short row-title">
+                                        <span className={`${data?.status ? 'event-done-text' : ''}`}><h3>{data?.title}</h3></span>
                                     </div>
-                                    <div className="card-actions">
-                                        <Button className="view-btn" onClick={()=>props.history.push(`/todos/${data?.groupId?._id}`)} disabled={!data?.groupId}>View on sprint</Button>
-                                        <Button className={`mark-btn ${data?.status ? 'bg-green' : ''}`} onClick={()=>changeEventStatus(data?._id)}>{data?.status ? 'Finished' : 'Unfinished'}</Button>
-                                        <Button className="danger-btn">Delete</Button>
+                                    <div className="short row-title"> 
+                                        From: &nbsp;
+                                        <span className={`${data?.status ? 'event-done-text' : ''}`}>
+                                            {data?.groupId?.title}
+                                        </span>
+                                        {!data.groupId ? 'No parent...' : ''}
+                                    </div>
+                                    <div className="short row-title"> - <span className={`${data?.status ? 'event-done-text' : ''}`}>
+                                        <em>"{data?.description}"</em></span>
+                                    </div>
+                                    <div className="row-date">
+                                        <span className={`${data?.status ? 'event-done-text' : ''}`}>{moment(data?.start).format('YYYY MMM DD')}</span>
                                     </div>
                                 </div>
+                                <div className="card-actions">
+                                    <Button className="view-btn" onClick={()=>props.history.push(`/todos/${data?.groupId?._id}`)} disabled={!data?.groupId}>View on sprint</Button>
+                                    <Button className={`mark-btn ${data?.status ? 'bg-green' : ''}`} onClick={()=>changeEventStatus(data?._id)}>{data?.status ? 'Finished' : 'Unfinished'}</Button>
+                                    <Button className="danger-btn">Delete</Button>
+                                </div>
                             </div>
+                        </div>
     }
 
     return (
