@@ -1,4 +1,4 @@
-section {
+section.events {
     display: flex;
     width: 100%;
     height: 100%;
@@ -22,5 +22,93 @@ section {
     }
     .events-content{
         flex: 2;
+        .autosizer {
+            &:focus {
+                outline: none;
+            }
+            .autosizer-row-container {
+                position: relative;
+                background-color: #444;
+                border-top: 1px solid #555;
+                border-left: 1px solid #555;
+                transition: .25s all;
+                &:hover {
+                    background-color: #666;
+                }
+                .autosizer-inside {
+                    position: absolute;
+                    top: 8px;
+                    bottom: 8px;
+                    right: 0px;
+                    left: 0px;
+                    padding: 0 16px;
+                    // border-radius: 8px;
+                    overflow: hidden;
+                    .col {
+                        .row-title {
+                            white-space: nowrap;
+                            max-height: 50px;
+                            margin: 0;
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            h3 {
+                                margin: 0;
+                            }
+                        }
+                        .event-done-text {
+                            text-decoration: line-through;
+                        }
+                    }
+                    .card-actions{
+                        display: flex;
+                        justify-content: flex-end;
+                        margin-top: 3px;
+                        button {
+                            margin: 0 3px 0 0;
+                            @media screen and (min-width: 1000px) {
+                                width: 80px;
+                            }
+                            transition: .25s all;
+                        }
+                        .danger-btn {
+                            border: 1px solid #f32617;
+                            background-color: transparent;
+                            color:#f32617;
+                            &:hover {
+                                border: 1px solid #f32617;
+                                background-color:  #f32617;
+                                color:white;
+                            }
+                        }
+                        .mark-btn {
+                            justify-self: flex-start;
+                            margin-right: auto;
+                            min-width: 120px;
+                            background-color: #555;
+                        }
+                        .view-btn {
+                            justify-self: flex-start;
+                            // margin-right: auto;
+                            min-width: 120px;
+                            &:hover {
+                                border: 1px solid #1177bb;
+                                background-color: transparent;
+                                color: white;
+                            }
+                        }
+                    }
+                }
+            }
+            .event-done {
+                border-left: 4px solid #00c875 !important;
+                background-color: #333;
+                border-top: 1px solid #555;
+            }
+        }
     }
+}
+
+.bg-green {
+    background-color: #00c875 !important;
 }

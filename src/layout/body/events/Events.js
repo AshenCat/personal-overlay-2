@@ -5,9 +5,10 @@ import Input from '../../../components/input/inputText/Input';
 import Slider from '../../../components/checkbox/slider/Slider';
 import moment from 'moment';
 import { AutoSizer, List } from 'react-virtualized';
-import SimpleCheckbox from '../../../components/checkbox/simple/SimpleCheckbox';
+import Button from '../../../components/button/Button';
+import { withRouter } from 'react-router';
 
-function Events() {
+function Events(props) {
     const [events, setEvents] = React.useState([]);
     const [eventsFiltered, setEventsFiltered] = React.useState([]);
     const [filteredCount, setFilteredCount] = React.useState(0)
@@ -24,8 +25,12 @@ function Events() {
             setEventsFiltered(data)
             setFilteredCount(data.length)
         })
+        api.recieve('ChangeEventStatus', () => {
+            api.send('LoadAllEvents', {})
+        })
         return () => {
             api.removeAllListeners('LoadAllEvents');
+            api.removeAllListeners('ChangeEventStatus');
         }
     }, [])
 
@@ -48,7 +53,7 @@ function Events() {
     }, [searchFilter, hideFinished, hideWithSprint])
 
     const changeEventStatus = (id) => {
-
+        api.send('ChangeEventStatus', id)
     }
 
     const RowCard = (propsies) => {
@@ -58,22 +63,37 @@ function Events() {
             style
         } = propsies;
         const data = eventsFiltered[index];
-        if (data) return    <div key={key} style={style} className={`autosizer-row-container cursor-pointer ${data?.status ? 'event-done' : ''}`}>
-                                <div className="autosizer-inside">
+        if (data) return    <div key={key} style={style} className={`autosizer-row-container ${data?.status ? 'event-done' : ''}`}>
+                                <div className="autosizer-inside cursor-pointer">
                                     <div className="col">
-                                        <div className="short row-title">Title: <span className={`${data?.status ? 'event-done-text' : ''}`}>{data?.title}</span></div>
-                                        <div className="short row-title">Description: <span className={`${data?.status ? 'event-done-text' : ''}`}>{data?.description}</span></div>
-                                        <div className="row-date">Start: <span className={`${data?.status ? 'event-done-text' : ''}`}>{moment(data?.start).format('YYYY MMM DD')}</span></div>
+                                        <div className="short row-title">
+                                            <span className={`${data?.status ? 'event-done-text' : ''}`}><h3>{data?.title}</h3></span>
+                                        </div>
+                                        <div className="short row-title"> 
+                                            From: &nbsp;
+                                            <span className={`${data?.status ? 'event-done-text' : ''}`}>
+                                                {data?.groupId?.title}
+                                            </span>
+                                            {!data.groupId ? 'No parent...' : ''}
+                                        </div>
+                                        <div className="short row-title"> - <span className={`${data?.status ? 'event-done-text' : ''}`}>
+                                            <em>"{data?.description}"</em></span>
+                                        </div>
+                                        <div className="row-date">
+                                            <span className={`${data?.status ? 'event-done-text' : ''}`}>{moment(data?.start).format('YYYY MMM DD')}</span>
+                                        </div>
                                     </div>
-                                    <div className="event-status">
-                                        <SimpleCheckbox value={data?.status} onClick={()=>changeEventStatus(data._id)}/>
+                                    <div className="card-actions">
+                                        <Button className="view-btn" onClick={()=>props.history.push(`/todos/${data?.groupId?._id}`)} disabled={!data?.groupId}>View on sprint</Button>
+                                        <Button className={`mark-btn ${data?.status ? 'bg-green' : ''}`} onClick={()=>changeEventStatus(data?._id)}>{data?.status ? 'Finished' : 'Unfinished'}</Button>
+                                        <Button className="danger-btn">Delete</Button>
                                     </div>
                                 </div>
                             </div>
     }
 
     return (
-        <section>
+        <section className="events">
             <aside className="events-filter">
                 <h2>Events</h2>
                <Card noButton>
@@ -101,7 +121,7 @@ function Events() {
                                     height={height}
                                     width={width}
                                     overscanRowCount={2}
-                                    rowHeight={240}
+                                    rowHeight={149}
                                     rowCount={filteredCount}
                                     rowRenderer={RowCard}
                                     className="autosizer"
@@ -114,4 +134,4 @@ function Events() {
     )
 }
 
-export default Events
+export default withRouter(Events)

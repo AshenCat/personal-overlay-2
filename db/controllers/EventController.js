@@ -234,12 +234,12 @@ const LoadEventsWithoutParents = async (e) => {
 }
 
 const LoadAllEvents = async (e) => {
-    const events = await EventModel.find().lean().exec();
-    console.log(events)
+    const events = await EventModel.find().populate('groupId').lean().exec();
     e.sender.send('LoadAllEvents', events.map(event=>{
         return {
             ...event,
-            _id: event._id.toHexString()
+            _id: event._id.toHexString(),
+            groupId: event.groupId ? {...event.groupId, _id: event.groupId._id.toHexString()} : null,
         }
     }))
 }
