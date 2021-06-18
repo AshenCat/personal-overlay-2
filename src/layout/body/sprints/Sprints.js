@@ -122,8 +122,8 @@ function Sprints(props) {
             key,
             style
         } = propsies;
-        const eventsCount = data?.events?.length + 1;
         const data = filteredSprints[index]
+        const eventsCount = data?.events?.length;
         const width = propsies?.parent?.props?.width;
         if (data) return  <div key={key} className="sprint" style={style}>
                     <div className="sprint-card">
@@ -146,7 +146,7 @@ function Sprints(props) {
                                 Title: <h4 style={{margin: 0}}>{data?.title ?? <em>No title??</em>}</h4>
                             </div>
                             <div className="card-events-count space-between">
-                                Events: {eventsCount > 1 ? <span>{eventsCount}</span> : <em>No Events</em>}
+                                Events: {eventsCount > 0 ? <span>{eventsCount}</span> : <em>No Events</em>}
                             </div>
                             <div className="card-events-count space-between" style={{position: 'relative'}}>
                                 Status: 
