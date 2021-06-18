@@ -1,12 +1,13 @@
 import React from 'react'
 import Body from './layout/Body'
 import './app.scss'
+import OverdueProvider from './context/OverdueContext/OverdueContext'
 
 function App() {
     return (
-        <>
+        <OverdueProvider>
             <Body />
-        </>
+        </OverdueProvider>
     )
 }
 
