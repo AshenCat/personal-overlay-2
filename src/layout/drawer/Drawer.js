@@ -1,11 +1,15 @@
+import { Badge } from '@material-ui/core';
 import { ArrowBack, EventNote, Home, NotificationImportant, PostAdd, Reorder } from '@material-ui/icons'
 import React from 'react'
 import { withRouter } from 'react-router-dom';
+import { useOverdueContext } from '../../context/OverdueContext/OverdueContext';
 import './drawer.scss'
 
 function Drawer(props) {
+    const {overdueEvents, overdueSprints} = useOverdueContext();
     const [selected, setSelected] = React.useState('home')
     const fontSize=40;
+    const notifCount = overdueEvents.length + overdueSprints.length;
 
     let {location, history} = props
 
@@ -30,6 +34,7 @@ function Drawer(props) {
         history.goBack()
         document.getElementById(selected)?.classList.remove('active');
     }
+
     React.useState(()=>{
         const loc = location?.pathname?.split('/').slice(-2)
         // .join('/')
@@ -85,7 +90,11 @@ function Drawer(props) {
                 </li>
                 <li>
                     <figure className="figure" id="overdue" onClick={()=>onSelect('overdue')}>
-                        <span className="logo"><NotificationImportant style={{fontSize: fontSize}} /></span>
+                        <span className="logo">
+                            {notifCount > 0 ? <Badge badgeContent={notifCount} max={99} color="error">
+                                <NotificationImportant style={{fontSize: fontSize}} />
+                            </Badge> : <NotificationImportant style={{fontSize: fontSize}} />}
+                        </span>
                         {/* <figcaption>Todo</figcaption> */}
                     </figure>
                 </li>
