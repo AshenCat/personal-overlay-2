@@ -1,6 +1,5 @@
 import moment from 'moment';
-import React from 'react'
-import { Calendar } from 'react-multi-date-picker';
+import React from 'react';
 import { withRouter } from 'react-router';
 import { AutoSizer, List } from 'react-virtualized';
 import Button from '../../../components/button/Button';
