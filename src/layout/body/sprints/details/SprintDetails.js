@@ -99,7 +99,7 @@ function SprintDetails(props) {
                 <div className="lower-display-container">
                     <div className="left">
                         <div className="display-title"><b>{sub?.title}</b></div>
-                        <div className="display-date"><div>From:</div> <div>{moment(sub?.start).format('YYYY MMM DD HH:mm:ss')}</div></div>
+                        <div className="display-date"><div>From:</div> <div>{moment(sub?.start).format('YYYY, MMM DD hh:mm a')}</div></div>
                         {/* <div className="display-date"><div>To:</div> <div>{moment(sub?.end).format('YYYY MMM DD HH:mm:ss')}</div></div> */}
                     </div>
                     <div className="right">

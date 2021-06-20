@@ -138,7 +138,7 @@ function ViewSprint({location, history, changeSprintInArray}) {
                                             <span>{event.title}</span>
                                         </div>
                                         <div className="row">
-                                            {moment(event?.start).format('YYYY MMM DD')}
+                                            {moment(event?.start).format('YYYY, MMM DD hh:mm a')}
                                         </div>
                                     </div>
                                     <div className="event-status">
