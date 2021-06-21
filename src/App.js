@@ -2,11 +2,14 @@ import React from 'react'
 import Body from './layout/Body'
 import './app.scss'
 import OverdueProvider from './context/OverdueContext/OverdueContext'
+import SystemNotif from './context/SystemNotif/SystemNotif'
 
 function App() {
     return (
         <OverdueProvider>
-            <Body />
+            <SystemNotif>
+                <Body />
+            </SystemNotif>
         </OverdueProvider>
     )
 }
