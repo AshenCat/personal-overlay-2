@@ -160,3 +160,9 @@ select {
         color: black;
     }
 }
+
+.fc-list-event {
+    &:hover {
+        color: #000;
+    }
+}
