@@ -121,7 +121,9 @@ const {
     ChangeEventStatus1,
     LoadAllEvents,
     queryOverdueSprints,
-    queryOverdueEvents
+    queryOverdueEvents,
+    getSystemNotifSprints,
+    getSystemNotifEvents,
 } = require('./db/controllers/EventController');
 
 ipcMain.on('onEventAdd', (e, data) => onEventAdd(e, data))
@@ -138,6 +140,8 @@ ipcMain.on('ChangeEventStatus1', (e, id) => ChangeEventStatus1(e, id))
 ipcMain.on('LoadAllEvents', LoadAllEvents)
 ipcMain.on('queryOverdueSprints', queryOverdueSprints)
 ipcMain.on('queryOverdueEvents', queryOverdueEvents)
+ipcMain.on('getSystemNotifSprints', getSystemNotifSprints)
+ipcMain.on('getSystemNotifEvents', getSystemNotifEvents)
 
 
 

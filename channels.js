@@ -14,7 +14,9 @@ const rendererToMain = [
     "ChangeEventStatus1", //cant have both channels open in 1 page
     "LoadAllEvents",
     "queryOverdueSprints",
-    "queryOverdueEvents"
+    "queryOverdueEvents",
+    "getSystemNotifSprints",
+    "getSystemNotifEvents",
 ]
 
 const mainToRenderer = [
@@ -32,7 +34,9 @@ const mainToRenderer = [
     "ChangeEventStatus1", //cant have both channels open in 1 page
     "LoadAllEvents",
     "queryOverdueSprints",
-    "queryOverdueEvents"
+    "queryOverdueEvents",
+    "getSystemNotifSprints",
+    "getSystemNotifEvents",
 ]
 
 module.exports = {
