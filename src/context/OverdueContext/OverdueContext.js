@@ -20,13 +20,13 @@ function OverdueProvider(props) {
     }
 
     React.useEffect(() => {
-        api.send('queryOverdueSprints', {});
+        // api.send('queryOverdueSprints', {});
         api.recieve('queryOverdueSprints', data => {
             // console.log('Overdue Sprints:')
             console.log(data)
             setOverdueSprints(data)
         })
-        api.send('queryOverdueEvents', {});
+        // api.send('queryOverdueEvents', {});
         api.recieve('queryOverdueEvents', data => {
             // console.log('Overdue Events:')
             console.log(data)
@@ -35,6 +35,20 @@ function OverdueProvider(props) {
         return () => {
             api.removeAllListeners('queryOverdueSprints')
             api.removeAllListeners('queryOverdueEvents')
+        }
+    }, [])
+
+    React.useEffect(()=>{
+        console.log('Set interval 30 minutes')
+        console.log(new Date())
+        
+        const interval = setInterval(()=>{
+            api.send('queryOverdueSprints', {});
+            api.send('queryOverdueEvents', {});
+            console.log('Querying overdues...')
+        }, 1000 * 60 * 30)
+        return () => {
+            clearInterval(interval)
         }
     }, [])
 
