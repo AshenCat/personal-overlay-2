@@ -2,7 +2,6 @@
 const EventModel = require('../models/Event');
 const SprintModel = require('../models/Sprint');
 const ParticipantModel = require('../models/Participant');
-var moment = require('moment');
 const mongoose = require('mongoose');
 // const PersonModel = require('../models/Peron');
 
@@ -167,20 +166,19 @@ const DeleteSprint = async (e, id) => {
 }
 
 const LoadSprintsToday = async (e) => {
-    const dateToday = moment();
     const sprintsToday = await SprintModel.find({
         
         $or: [
             // date in between start and end
             {$and: [
-                {start: {$lte: new Date(dateToday.format('YYYY-MM-DD'))}},
-                {end: {$gte: new Date(dateToday.format('YYYY-MM-DD'))}},
+                {start: {$lte: new Date()}},
+                {end: {$gte: new Date()}},
             ]},
             // start is between today and tomorrow
             {
                 start: {
-                    $gte: new Date(dateToday.format('YYYY-MM-DD').toString()), 
-                    $lte: new Date(dateToday.add(1, 'day').format('YYYY-MM-DD')),
+                    $gte: new Date(), 
+                    $lte: new Date(new Date(Date.now() + 1000 * 3600 * 24)),
                 }
             },
         ],
@@ -298,6 +296,44 @@ const queryOverdueEvents = async (e) => {
     }))
 }
 
+const getSystemNotifSprints = async (e) => {
+    const sprints = await SprintModel.find({
+        //between day today and tomorrow
+        start: {
+            $gte: new Date(),
+            $lte: new Date(Date.now() + 1000 * 3600 * 24) // tomorrow
+        },
+        status: {
+            $not: {$in: ['done', 'failed']}
+        }
+    }).lean().exec();
+    e.sender.send('getSystemNotifSprints', sprints.map(sprint => {
+        return {
+            ...sprint,
+            _id: sprint._id.toHexString()
+        }
+    }))
+}
+
+const getSystemNotifEvents = async (e) => {
+    const events = await EventModel.find({
+        //between day today and tomorrow
+        start: {
+            $gte: new Date(),
+            $lte: new Date(Date.now() + 1000 * 3600 * 24) // tomorrow
+        },
+        status: {
+            $ne: true
+        }
+    }).lean().exec();
+    e.sender.send('getSystemNotifEvents', events.map(event => {
+        return {
+            ...event,
+            _id: event._id.toHexString()
+        }
+    }))
+}
+
 module.exports = {
     onEventAdd,
     onSprintAdd,
@@ -312,5 +348,7 @@ module.exports = {
     ChangeEventStatus1,
     LoadAllEvents,
     queryOverdueSprints,
-    queryOverdueEvents
+    queryOverdueEvents,
+    getSystemNotifSprints,
+    getSystemNotifEvents,
 }
