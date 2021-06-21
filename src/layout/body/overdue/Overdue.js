@@ -1,6 +1,5 @@
 import moment from 'moment';
-import React from 'react'
-import { Calendar } from 'react-multi-date-picker';
+import React from 'react';
 import { withRouter } from 'react-router';
 import { AutoSizer, List } from 'react-virtualized';
 import Button from '../../../components/button/Button';
@@ -45,10 +44,10 @@ function Overdue(props) {
                                         Events: {eventsCount > 1 ? <span>{eventsCount}</span> : <em>No Events</em>}
                                     </div>
                                     <div className="card-events-count space-between">
-                                        Start: <span>{moment(data.start).format('YYYY MMM DD')}</span>
+                                        Start: <span>{moment(data.start).format('YYYY, MMM DD hh:mm a')}</span>
                                     </div>
                                     <div className="card-events-count space-between">
-                                        End: <span>{moment(data.end).format('YYYY MMM DD')}</span>
+                                        End: <span>{moment(data.end).format('YYYY, MMM DD hh:mm a')}</span>
                                     </div>
                                     <div className="card-events-count space-between" style={{position: 'relative'}}>
                                         Status: 
@@ -108,7 +107,7 @@ function Overdue(props) {
                                         <em>"{data?.description}"</em></span>
                                     </div>
                                     <div className="row-date">
-                                        <span className={`${data?.status ? 'event-done-text' : ''}`}>{moment(data?.start).format('YYYY MMM DD')}</span>
+                                        <span className={`${data?.status ? 'event-done-text' : ''}`}>{moment(data?.start).format('YYYY, MMM DD hh:mm a')}</span>
                                     </div>
                                 </div>
                                 <div className="card-actions">

@@ -258,15 +258,15 @@ const queryOverdueSprints = async (e) => {
                 {status: {$nin: ['done', 'failed']}}
             ]},
             {$and: [
-                {start: {$ne: null}},
+                {start: null},
                 {status: {$nin: ['done', 'failed']}}
             ]}
         ],
     }).lean().exec();
-    e.sender.send('queryOverdueSprints', overdueSprints.map(sprints => {
+    e.sender.send('queryOverdueSprints', overdueSprints.map(sprint => {
         return {
-            ...sprints,
-            _id: sprints._id.toHexString()
+            ...sprint,
+            _id: sprint._id.toHexString()
         }
     }))
 }
@@ -277,23 +277,23 @@ const queryOverdueEvents = async (e) => {
             {$and: [
                 {start: {$lte: new Date()}},
                 {end: null},
-                {status: {$ne:true} }
+                {status: {$ne:true}}
             ]},
             {$and: [
                 {end: {$ne: null}},
                 {end: {$lte: new Date()}},
-                {status: {$ne:true} }
+                {status: {$ne:true}}
             ]},
             {$and: [
-                {start: {$ne: null}},
-                {status: {$ne:true} }
+                {start: null},
+                {status: {$ne:true}}
             ]}
         ],
     }).lean().exec();
-    e.sender.send('queryOverdueEvents', queryOverdueEvents.map(events => {
+    e.sender.send('queryOverdueEvents', queryOverdueEvents.map(event => {
         return {
-            ...events,
-            _id: events._id.toHexString()
+            ...event,
+            _id: event._id.toHexString()
         }
     }))
 }

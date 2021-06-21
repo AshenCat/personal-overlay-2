@@ -80,7 +80,7 @@ function Events(props) {
                                         <em>"{data?.description}"</em></span>
                                     </div>
                                     <div className="row-date">
-                                        <span className={`${data?.status ? 'event-done-text' : ''}`}>{moment(data?.start).format('YYYY MMM DD')}</span>
+                                        <span className={`${data?.status ? 'event-done-text' : ''}`}>{moment(data?.start).format('YYYY, MMM DD hh:mm a')}</span>
                                     </div>
                                 </div>
                                 <div className="card-actions">

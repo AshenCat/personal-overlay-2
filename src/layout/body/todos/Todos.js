@@ -82,7 +82,7 @@ function Todos(props) {
                             <div className="autosizer-inside">
                                 <div className="col">
                                     <div className="short row-title">Title: <span className={`${data?.status ? 'event-done-text' : ''}`}>{data?.title}</span></div>
-                                    <div className="row-date">Start: <span className={`${data?.status ? 'event-done-text' : ''}`}>{moment(data?.start).format('YYYY MMM DD')}</span></div>
+                                    <div className="row-date">Start: <span className={`${data?.status ? 'event-done-text' : ''}`}>{moment(data?.start).format('YYYY, MMM DD hh:mm a')}</span></div>
                                 </div>
                                 <div className="event-status">
                                     <SimpleCheckbox value={data?.status} onClick={()=>changeEventStatus(data._id)}/>
